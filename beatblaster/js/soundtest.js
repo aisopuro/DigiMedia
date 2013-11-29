@@ -13,7 +13,7 @@ var canvas = document.getElementById("testCanvas");
 var inited = false;
 
 var FFTSIZE = 32;
-var soundFile = "";
+var soundFile = "Daft_Punk-Crescendolls.mp3";
 
 var stage, h, w;
 var statusText;
@@ -33,13 +33,25 @@ function init() {
 	w = canvas.width;
 	
 	// luo tekstirivi
-	statusText = new createjs.Text("Loading...", "bold 12px Arial", "#FFFFFF");
+	statusText = new createjs.Text("Loading music file...", "bold 12px Arial", "#FFFFFF");
 	statusText.maxWidth = w;
 	statusText.textAlign = "left";
 	statusText.x = 5;
 	statusText.y = 5;
 	stage.addChild(statusText);
 	
+	stage.update();
+	
+	createjs.Sound.addEventListener("fileload", createjs.proxy(musicLoaded,this));
+	createjs.Sound.registerSound("beatblaster/mp3/"+soundFile);
+
+}
+
+function musicLoaded(evt) {
+	console.log("Music file loaded!");
+	statusText.text = "Click anywhere to start";
+	stage.update();
+	stage.addEventListener("stagemousedown", startTestLoop);
 }
 
 // loopattavat funktiot
@@ -63,7 +75,8 @@ var testRunning = false;
 var runLast = Date.now();
 
 function startTestLoop() {
-	init();
+	stage.removeEventListener("stagemousedown", startTestLoop);
+	stage.removeChild(statusText);
 	testRunning = true;
 	requestAnimFrame(testLoop);
 }
@@ -81,5 +94,5 @@ function testLoop() {
 	requestAnimFrame(testLoop);
 }
 
-startTestLoop();
+init();
 
