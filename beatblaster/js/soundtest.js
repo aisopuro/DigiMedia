@@ -12,8 +12,8 @@ window.requestAnimFrame = (function(){
 var canvas = document.getElementById("testCanvas");
 var inited = false;
 
-var FFTSIZE = 64;
-var FREQBANDS = 32;
+var FFTSIZE = 128;
+var FREQBANDS = 64; // max FFTSIZE/2 ! 
 var soundFile = "beatblaster/mp3/Daft_Punk-Crescendolls.mp3";
 var HEIGHT_FACTOR = 400.0;
 var MIN_HEIGHT = 0;
@@ -64,7 +64,7 @@ function musicLoaded(evt) {
 	var context = createjs.WebAudioPlugin.context;
 	analyserNode = context.createAnalyser();
 	analyserNode.fftSize = FFTSIZE;
-	analyserNode.smoothingTimeConstant = 0.50;
+	analyserNode.smoothingTimeConstant = 0.8;
 	analyserNode.connect(context.destination);
 	// insert the analyzer
 	var dynamicsNode = createjs.WebAudioPlugin.dynamicsCompressorNode;
