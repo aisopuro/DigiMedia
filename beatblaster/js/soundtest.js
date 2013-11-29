@@ -8,10 +8,29 @@ window.requestAnimFrame = (function(){
 	          };
 	})();
 
+// valmistelut testifunktiolle
+var canvas = document.getElementById("testCanvas");
+
+// apufunktiot
+function clear() {
+	var c = canvas.getContext("2d");
+	c.fillStyle = "rgb(0,0,0)";
+	c.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+// loopattavat funktiot
+function logic(delta) {
+	
+}
+
+function draw() {
+	clear();
+}
 
 // testifunktio
 function tick(delta) {
-	console.log(delta);
+	logic(delta);
+	draw();
 }
 
 // looppaus ilman tickeriä
@@ -36,4 +55,6 @@ function testLoop() {
 	runLast = now;
 	requestAnimFrame(testLoop);
 }
+
+startTestLoop();
 
