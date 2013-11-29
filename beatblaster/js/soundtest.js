@@ -14,28 +14,42 @@ var inited = false;
 
 var FFTSIZE = 256;
 var FREQBANDS = 128; // max FFTSIZE/2 ! 
-var soundFile = "beatblaster/mp3/Deadmau5-Channel_42.mp3";
-//var soundFile = "beatblaster/mp3/Daft_Punk-Crescendolls.mp3";
+//var soundFile = "beatblaster/mp3/Deadmau5-Channel_42.mp3";
+var soundFile = "beatblaster/mp3/Daft_Punk-Crescendolls.mp3";
 var HEIGHT_FACTOR = 400.0;
 var MIN_HEIGHT = 0;
+var HISTOGRAM = 20;
 
 var stage, h, w;
-var statusText, beatText;
+var statusText, beatText, trebText;
 var soundInstance;
 var analyserNode;
 var freqFloatData, freqByteData, timeByteData;
 var freqChunk;
 var bands = {};
 
-var beatIntensity = 0.0;
-var beatBands = { "start":0, "end":1 };
-var beatTreshold = 1.3;
-var beatIntensityTreshold = 225;
-var beatPrevious = [];
-for (var i = 0; i < 25; i++) {
-	beatPrevious.push(0);
+var follow = {
+		beat:{
+			Intensity: 0.0,
+			Bands: { "start":0, "end":1 },
+			Treshold: 1.3,
+			IntensityTreshold: 225,
+			IntensityAutoTrigger: 250,
+			Previous: []
+		},
+		treble:{
+			Intensity: 0.0,
+			Bands: { "start":75, "end":100 },
+			Treshold: 1.6,
+			IntensityTreshold: 40,
+			IntensityAutoTrigger: 100,
+			Previous: []
+		}
+};
+for (var i = 0; i < HISTOGRAM; i++) {
+	follow.beat.Previous.push(0);
+	follow.treble.Previous.push(0);
 }
-
 // apufunktiot
 function init() {
 	if (inited) return;
@@ -89,10 +103,33 @@ function musicLoaded(evt) {
 	stage.addEventListener("stagemousedown", startTestLoop);
 }
 
+function checkEnergy(what) {
+	var sum = 0;
+	var obj = what;
+	for(var i=obj.Bands.start; i<obj.Bands.end; i++) {
+		sum += freqByteData[i];
+	}
+	sum /= obj.Bands.end-obj.Bands.start;
+	var tot = 0.0;
+	for(var i=0; i<obj.Previous.length; i++) {
+		tot += obj.Previous[i];
+	}
+	var avg = tot/obj.Previous.length;
+	
+	obj.Previous.shift();
+	obj.Previous.push(sum);
+	
+	obj.Intensity *= 0.9;
+	
+	if (avg > 0) {
+		if (sum >= obj.IntensityAutoTrigger || ( sum/avg >= obj.Treshold && sum >= obj.IntensityTreshold) ) {
+			obj.Intensity = 1.0;
+		}
+	}
+}
+
 // loopattavat funktiot
 function logic(delta) {
-		
-	beatIntensity *= 0.9;
 	
 	analyserNode.getFloatFrequencyData(freqFloatData);  // this gives us the dBs
 	analyserNode.getByteFrequencyData(freqByteData);  // this gives us the frequency
@@ -109,39 +146,24 @@ function logic(delta) {
 		freqSum = freqSum / freqChunk / 255;  // gives us a percentage out of the total possible value
 		timeSum = timeSum / freqChunk / 255;  // gives us a percentage out of the total possible value
 
-		// draw circle
 		var hh = freqSum*HEIGHT_FACTOR + MIN_HEIGHT;
 		var ww = w/FREQBANDS;
-		//var color = createjs.Graphics.getRGB(80,120,70);
-		var g = new createjs.Graphics().beginLinearGradientFill(["rgb(80,120,70)","rgb(30,30,30)"], [0, 1], 0, 480-hh, 0, 480) //.beginFill(color)
+		// fills a rectangle with a gradient
+		var g = new createjs.Graphics().beginLinearGradientFill(["rgb(80,120,70)","rgb(30,30,30)"], [0.5, 1], 0, 480-hh, 0, 480)
 							.drawRect((FREQBANDS-i-1)*ww,480-hh,ww,hh).endFill();
 		bands[i].graphics = g;
 	}
 
-	var beatSum = 0;
-	for(var i=beatBands.start; i<beatBands.end; i++) {
-		beatSum += freqByteData[i];
-	}
-	beatSum /= beatBands.end-beatBands.start;
-	var tot = 0.0;
-	for(var i=0; i<beatPrevious.length; i++) {
-		tot += beatPrevious[i];
-	}
-	var avg = tot/beatPrevious.length;
+	checkEnergy(follow.beat);
+	checkEnergy(follow.treble);
 	
-	beatPrevious.shift();
-	beatPrevious.push(beatSum);
-	
-	if (avg > 0) {
-		if (beatSum/avg > beatTreshold && beatSum > beatIntensityTreshold) {
-			beatIntensity = 1.0;
-			console.log("BEAT "+beatSum);
-		}
-	}
-	
-	var cc = Math.floor(255.0*beatIntensity);
+	var cc = Math.floor(255.0*follow.beat.Intensity);
 	var col = createjs.Graphics.getRGB(cc,cc,cc);
 	beatText.color = col;
+	
+	cc = Math.floor(255.0*follow.treble.Intensity);
+	col = createjs.Graphics.getRGB(cc,cc,cc);
+	trebText.color = col;
 	
 }
 
@@ -165,12 +187,19 @@ function startTestLoop() {
 	stage.removeEventListener("stagemousedown", startTestLoop);
 	stage.removeChild(statusText);
 	
-	beatText = new createjs.Text("BASS", "bold 24px Arial", "#000");
+	beatText = new createjs.Text("SUBBASS", "bold 24px Arial", "#000");
 	beatText.maxWidth = w;
 	beatText.textAlign = "center";
 	beatText.x = 60;
 	beatText.y = 50;
 	stage.addChild(beatText);
+	
+	trebText = new createjs.Text("TREBLE", "bold 24px Arial", "#000");
+	trebText.maxWidth = w;
+	trebText.textAlign = "center";
+	trebText.x = 400;
+	trebText.y = 50;
+	stage.addChild(trebText);
 	
 	stage.update();
 	// start playing
