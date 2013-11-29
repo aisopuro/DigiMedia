@@ -28,8 +28,13 @@ var freqChunk;
 var bands = {};
 
 var beatIntensity = 0.0;
-var beatBands = { "start":0, "end":2 };
-var beatTreshold = 1.0;
+var beatBands = { "start":0, "end":1 };
+var beatTreshold = 1.3;
+var beatIntensityTreshold = 225;
+var beatPrevious = [];
+for (var i = 0; i < 25; i++) {
+	beatPrevious.push(0);
+}
 
 // apufunktiot
 function init() {
@@ -62,14 +67,13 @@ function init() {
 
 function musicLoaded(evt) {
 	// update screen
-	console.log("Music file loaded!");
 	statusText.text = "Click anywhere to start (note: volume might be high!)";
 	stage.update();
 	//initialize the analyzer
 	var context = createjs.WebAudioPlugin.context;
 	analyserNode = context.createAnalyser();
 	analyserNode.fftSize = FFTSIZE;
-	analyserNode.smoothingTimeConstant = 0.9;
+	analyserNode.smoothingTimeConstant = 0;
 	analyserNode.connect(context.destination);
 	// insert the analyzer
 	var dynamicsNode = createjs.WebAudioPlugin.dynamicsCompressorNode;
@@ -104,13 +108,13 @@ function logic(delta) {
 		}
 		freqSum = freqSum / freqChunk / 255;  // gives us a percentage out of the total possible value
 		timeSum = timeSum / freqChunk / 255;  // gives us a percentage out of the total possible value
-		// NOTE in testing it was determined that i 1 thru 4 stay 0's most of the time
 
 		// draw circle
 		var hh = freqSum*HEIGHT_FACTOR + MIN_HEIGHT;
 		var ww = w/FREQBANDS;
-		var color = createjs.Graphics.getRGB(80,120,70);
-		var g = new createjs.Graphics().beginFill(color).drawRect((FREQBANDS-i-1)*ww,480-hh,ww,hh).endFill();
+		//var color = createjs.Graphics.getRGB(80,120,70);
+		var g = new createjs.Graphics().beginLinearGradientFill(["rgb(80,120,70)","rgb(30,30,30)"], [0, 1], 0, 480-hh, 0, 480) //.beginFill(color)
+							.drawRect((FREQBANDS-i-1)*ww,480-hh,ww,hh).endFill();
 		bands[i].graphics = g;
 	}
 
@@ -118,9 +122,21 @@ function logic(delta) {
 	for(var i=beatBands.start; i<beatBands.end; i++) {
 		beatSum += freqByteData[i];
 	}
-	if (beatSum > beatTreshold) {
-		beatIntensity = 1.0;
-		console.log("BEAT "+beatSum);
+	beatSum /= beatBands.end-beatBands.start;
+	var tot = 0.0;
+	for(var i=0; i<beatPrevious.length; i++) {
+		tot += beatPrevious[i];
+	}
+	var avg = tot/beatPrevious.length;
+	
+	beatPrevious.shift();
+	beatPrevious.push(beatSum);
+	
+	if (avg > 0) {
+		if (beatSum/avg > beatTreshold && beatSum > beatIntensityTreshold) {
+			beatIntensity = 1.0;
+			console.log("BEAT "+beatSum);
+		}
 	}
 	
 	var cc = Math.floor(255.0*beatIntensity);
@@ -149,7 +165,7 @@ function startTestLoop() {
 	stage.removeEventListener("stagemousedown", startTestLoop);
 	stage.removeChild(statusText);
 	
-	beatText = new createjs.Text("BEAT", "bold 24px Arial", "#000");
+	beatText = new createjs.Text("BASS", "bold 24px Arial", "#000");
 	beatText.maxWidth = w;
 	beatText.textAlign = "center";
 	beatText.x = 60;
