@@ -12,9 +12,11 @@ window.requestAnimFrame = (function(){
 var canvas = document.getElementById("testCanvas");
 var inited = false;
 
-var FFTSIZE = 32;
-var FREQBANDS = 8;
+var FFTSIZE = 64;
+var FREQBANDS = 32;
 var soundFile = "beatblaster/mp3/Daft_Punk-Crescendolls.mp3";
+var HEIGHT_FACTOR = 400.0;
+var MIN_HEIGHT = 0;
 
 var stage, h, w;
 var statusText;
@@ -22,6 +24,7 @@ var soundInstance;
 var analyserNode;
 var freqFloatData, freqByteData, timeByteData;
 var freqChunk;
+var bands = {};
 
 // apufunktiot
 function init() {
@@ -61,7 +64,7 @@ function musicLoaded(evt) {
 	var context = createjs.WebAudioPlugin.context;
 	analyserNode = context.createAnalyser();
 	analyserNode.fftSize = FFTSIZE;
-	analyserNode.smoothingTimeConstant = 0.85;
+	analyserNode.smoothingTimeConstant = 0.50;
 	analyserNode.connect(context.destination);
 	// insert the analyzer
 	var dynamicsNode = createjs.WebAudioPlugin.dynamicsCompressorNode;
@@ -79,6 +82,30 @@ function musicLoaded(evt) {
 
 // loopattavat funktiot
 function logic(delta) {
+	
+	analyserNode.getFloatFrequencyData(freqFloatData);  // this gives us the dBs
+	analyserNode.getByteFrequencyData(freqByteData);  // this gives us the frequency
+	analyserNode.getByteTimeDomainData(timeByteData);  // this gives us the waveform
+	
+	for(var i=0; i<FREQBANDS; i++) {
+		var freqSum = 0;
+		var timeSum = 0;
+		for(var x = freqChunk; x; x--) {
+			var index = (FREQBANDS-i)*freqChunk-x;
+			freqSum += freqByteData[index];
+			timeSum += timeByteData[index];
+		}
+		freqSum = freqSum / freqChunk / 255;  // gives us a percentage out of the total possible value
+		timeSum = timeSum / freqChunk / 255;  // gives us a percentage out of the total possible value
+		// NOTE in testing it was determined that i 1 thru 4 stay 0's most of the time
+
+		// draw circle
+		var hh = freqSum*HEIGHT_FACTOR + MIN_HEIGHT;
+		var ww = w/FREQBANDS;
+		var color = createjs.Graphics.getRGB(80,120,70);
+		var g = new createjs.Graphics().beginFill(color).drawRect((FREQBANDS-i-1)*ww,480-hh,ww,hh).endFill();
+		bands[i].graphics = g;
+	}
 	
 }
 
@@ -106,6 +133,12 @@ function startTestLoop() {
 	// start playing
 	if(soundInstance) {return;} 
 	soundInstance = createjs.Sound.play(soundFile, {loop:-1});
+	
+	// create the bands
+	for(var i=0; i<FREQBANDS; i++) {
+		var band = bands[i] = new createjs.Shape();
+		stage.addChild(band);
+	}
 	
 	// start loop
 	testRunning = true;
