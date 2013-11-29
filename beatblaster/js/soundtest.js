@@ -10,12 +10,36 @@ window.requestAnimFrame = (function(){
 
 // valmistelut testifunktiolle
 var canvas = document.getElementById("testCanvas");
+var inited = false;
+
+var FFTSIZE = 32;
+var soundFile = "";
+
+var stage, h, w;
+var statusText;
 
 // apufunktiot
-function clear() {
-	var c = canvas.getContext("2d");
-	c.fillStyle = "rgb(0,0,0)";
-	c.fillRect(0, 0, canvas.width, canvas.height);
+function init() {
+	if (inited) return;
+	inited = true;
+	// Web Audio tarkistus
+	if (!createjs.Sound.registerPlugin(createjs.WebAudioPlugin)) {
+		console.log("Unable to start Web Audio");
+		return;
+	}
+	// luo stage
+	stage = new createjs.Stage(canvas);
+	h = canvas.height;
+	w = canvas.width;
+	
+	// luo tekstirivi
+	statusText = new createjs.Text("Loading...", "bold 12px Arial", "#FFFFFF");
+	statusText.maxWidth = w;
+	statusText.textAlign = "left";
+	statusText.x = 5;
+	statusText.y = 5;
+	stage.addChild(statusText);
+	
 }
 
 // loopattavat funktiot
@@ -24,7 +48,7 @@ function logic(delta) {
 }
 
 function draw() {
-	clear();
+	stage.update();
 }
 
 // testifunktio
@@ -39,6 +63,7 @@ var testRunning = false;
 var runLast = Date.now();
 
 function startTestLoop() {
+	init();
 	testRunning = true;
 	requestAnimFrame(testLoop);
 }
