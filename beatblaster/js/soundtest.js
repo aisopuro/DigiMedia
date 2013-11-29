@@ -13,10 +13,15 @@ var canvas = document.getElementById("testCanvas");
 var inited = false;
 
 var FFTSIZE = 32;
-var soundFile = "Daft_Punk-Crescendolls.mp3";
+var FREQBANDS = 8;
+var soundFile = "beatblaster/mp3/Daft_Punk-Crescendolls.mp3";
 
 var stage, h, w;
 var statusText;
+var soundInstance;
+var analyserNode;
+var freqFloatData, freqByteData, timeByteData;
+var freqChunk;
 
 // apufunktiot
 function init() {
@@ -43,14 +48,32 @@ function init() {
 	stage.update();
 	
 	createjs.Sound.addEventListener("fileload", createjs.proxy(musicLoaded,this));
-	createjs.Sound.registerSound("beatblaster/mp3/"+soundFile);
+	createjs.Sound.registerSound(soundFile);
 
 }
 
 function musicLoaded(evt) {
+	// update screen
 	console.log("Music file loaded!");
-	statusText.text = "Click anywhere to start";
+	statusText.text = "Click anywhere to start (note: volume might be high!)";
 	stage.update();
+	//initialize the analyzer
+	var context = createjs.WebAudioPlugin.context;
+	analyserNode = context.createAnalyser();
+	analyserNode.fftSize = FFTSIZE;
+	analyserNode.smoothingTimeConstant = 0.85;
+	analyserNode.connect(context.destination);
+	// insert the analyzer
+	var dynamicsNode = createjs.WebAudioPlugin.dynamicsCompressorNode;
+	dynamicsNode.disconnect();  // disconnect from destination
+	dynamicsNode.connect(analyserNode);
+	// prepare data arrays
+	freqFloatData = new Float32Array(analyserNode.frequencyBinCount);
+	freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
+	timeByteData = new Uint8Array(analyserNode.frequencyBinCount);	
+	// how many array elements per band
+	freqChunk = analyserNode.frequencyBinCount / FREQBANDS;
+	// prepare mouse click
 	stage.addEventListener("stagemousedown", startTestLoop);
 }
 
@@ -75,8 +98,16 @@ var testRunning = false;
 var runLast = Date.now();
 
 function startTestLoop() {
+	// remove status text and listener
 	stage.removeEventListener("stagemousedown", startTestLoop);
 	stage.removeChild(statusText);
+	stage.update();
+	
+	// start playing
+	if(soundInstance) {return;} 
+	soundInstance = createjs.Sound.play(soundFile, {loop:-1});
+	
+	// start loop
 	testRunning = true;
 	requestAnimFrame(testLoop);
 }
