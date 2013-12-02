@@ -9,6 +9,10 @@ function setUpCanvas (canvas) {
         height: HEIGHT
     });
 }
+
+function loadComplete () {
+	console.log("Load Complete");
+}
 // The initializer function. Expects a canvas element as argument.
 function initGame (canvas) {
     // Ensure canvas and parent are jQuery objects
@@ -22,14 +26,15 @@ function initGame (canvas) {
     setUpCanvas(canvas);
 
     // Load resources
-    jQuery.getScript("./beatblaster/js/preloadjs-0.4.0.min.js", function (data, textStatus, jqxhr) {
-    	console.log(textStatus);
-    	console.log(jqxhr);
+    jQuery.getScript("./beatblaster/js/loader.js", function (data, textStatus, jqxhr) {
+    	console.log("Loader: " + textStatus);
     	if (jqxhr.status !== 200) {
     		// Load failed, abort
-    		console.log("Couldn't load preload, status: " + textStatus);
+    		console.log("Couldn't load loader, status: " + textStatus);
     		return;
     	}
+    	// Preloader loaded, initialize
+    	new Loader(loadComplete);
     });
 
 }
