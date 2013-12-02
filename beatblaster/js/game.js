@@ -1,6 +1,6 @@
 /* A central initializer and loop for the Beat Blaster game */
 var HEIGHT = 600;
-var WIDTH = 360;
+var WIDTH = 600;
 var canvas;
 
 function setUpCanvas (canvas) {
@@ -20,4 +20,16 @@ function initGame (canvas) {
     }
 
     setUpCanvas(canvas);
+
+    // Load resources
+    jQuery.getScript("./beatblaster/js/preloadjs-0.4.0.min.js", function (data, textStatus, jqxhr) {
+    	console.log(textStatus);
+    	console.log(jqxhr);
+    	if (jqxhr.status !== 200) {
+    		// Load failed, abort
+    		console.log("Couldn't load preload, status: " + textStatus);
+    		return;
+    	}
+    });
+
 }
