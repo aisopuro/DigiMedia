@@ -1,29 +1,33 @@
 /* A central initializer and loop for the Beat Blaster game */
-var HEIGHT = 600;
-var WIDTH = 600;
-var canvas;
+function Game (canvas) {
+    this.HEIGHT = 600;
+    this.WIDTH = 600;
+    this.canvas = canvas;
+    this.stage;
+    this.loader;
 
-function setUpCanvas (canvas) {
+    this.initGame(this.canvas);
+}
+
+Game.prototype.setUpCanvas = function (canvas) {
     canvas.attr({
-        width: WIDTH,
-        height: HEIGHT
+        width: this.WIDTH,
+        height: this.HEIGHT
     });
 }
 
-function loadComplete () {
+Game.prototype.loadComplete = function () {
 	console.log("Load Complete");
+    this.stage = new createjs.Stage(this.canvas[0]);
 }
 // The initializer function. Expects a canvas element as argument.
-function initGame (canvas) {
-    // Ensure canvas and parent are jQuery objects
+Game.prototype.initGame = function(canvas) {
+    // Ensure canvas is a jQuery object
     if (!(canvas instanceof jQuery)) {
         canvas = jQuery(canvas);
     }
-    if (!(parent instanceof jQuery)) {
-    	parent = jQuery(parent);
-    }
 
-    setUpCanvas(canvas);
+    this.setUpCanvas(canvas);
 
     // Load resources
     jQuery.getScript("./beatblaster/js/loader.js", function (data, textStatus, jqxhr) {
@@ -34,7 +38,7 @@ function initGame (canvas) {
     		return;
     	}
     	// Preloader loaded, initialize
-    	new Loader(loadComplete);
+    	this.loader = new Loader(this.loadComplete);
     });
 
 }

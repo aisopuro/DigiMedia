@@ -6,8 +6,8 @@ jQuery(document).ready(function($) {
         var canvas = jQuery('<canvas></canvas>');
         jQuery('#gameCanvasContainer').append(canvas);
         jQuery.getScript('./beatblaster/js/game.js', function(data, textStatus) {
-            // Get an initializer from game and pass canvas as an argument
-            initGame(canvas);
+            // Start up game script
+            new Game(canvas);
         });
         
     }
