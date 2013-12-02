@@ -9,11 +9,14 @@ function setUpCanvas (canvas) {
         height: HEIGHT
     });
 }
-// The initializer function. Expects a canvas element as argument
+// The initializer function. Expects a canvas element as argument.
 function initGame (canvas) {
-    // Ensure canvas is a jQuery object
+    // Ensure canvas and parent are jQuery objects
     if (!(canvas instanceof jQuery)) {
         canvas = jQuery(canvas);
+    }
+    if (!(parent instanceof jQuery)) {
+    	parent = jQuery(parent);
     }
 
     setUpCanvas(canvas);
