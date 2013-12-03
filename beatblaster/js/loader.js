@@ -86,7 +86,6 @@ Loader.prototype.assetLoaded = function( event ) {
     console.log( event.item );
     if (event.item.type === createjs.LoadQueue.IMAGE) {
         console.log("Loaded image");
-        
     }
 };
 
