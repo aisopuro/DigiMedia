@@ -14,7 +14,6 @@ function Game (canvas, id) {
 
 Game.prototype.setUpCanvas = function (canvas) {
     canvas.attr({
-        id: this.id,
         width: this.WIDTH,
         height: this.HEIGHT
     });
@@ -23,8 +22,8 @@ Game.prototype.setUpCanvas = function (canvas) {
 Game.prototype.loadComplete = function () {
 	console.log("Load Complete");
     console.log(this.canvas[0]);
-    console.log(this.id);
     this.stage = new createjs.Stage(this.canvas[0]);
+    console.log(this.stage);
 }
 // The initializer function. Expects a canvas element as argument.
 Game.prototype.initGame = function(canvas) {
