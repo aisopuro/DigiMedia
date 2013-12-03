@@ -24,7 +24,6 @@ Game.prototype.loadComplete = function (loadQueue) {
     console.log(this.canvas[0]);
     this.stage = new createjs.Stage(this.canvas[0]);
     console.log(this.stage);
-    console.log(loadQueue);
 }
 // The initializer function. Expects a canvas element as argument.
 Game.prototype.initGame = function(canvas) {
