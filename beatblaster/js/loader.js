@@ -84,8 +84,18 @@ Loader.prototype.loadAssets = function() {
 
 Loader.prototype.assetLoaded = function( event ) {
     console.log( event.item );
-    if (event.item.type === createjs.LoadQueue.IMAGE) {
+    var item = event.item;
+    var data = item.data;
+    if (data === undefined || data === null) {
+        data = {
+            type: ""
+        }
+    }
+    if (item.type === createjs.LoadQueue.IMAGE) {
         console.log("Loaded image");
+        if (data.type === "spritesheet") {
+            console.log("Image was a spritesheet");
+        }
     }
 };
 
