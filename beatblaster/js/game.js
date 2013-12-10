@@ -31,6 +31,7 @@ Game.prototype.loadComplete = function( loadedAssets ) {
 Game.prototype.buildComplete = function( stage ) {
     console.log( "Builder done" );
     console.log( stage );
+    
 };
 
 // The initializer function. Expects a canvas element as argument.
