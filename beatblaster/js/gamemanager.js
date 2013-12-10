@@ -43,6 +43,7 @@ GameManager.prototype.setUpListeners = function() {
 GameManager.prototype.frameTick = function( event ) {
     this.movePlayer();
     this.processBuffer();
+    this.moveProjectiles();
     this.stage.update();
 };
 
@@ -57,6 +58,14 @@ GameManager.prototype.movePlayer = function() {
         this.player.x += Constants.PLAYER_SPEED;
 
 }
+
+GameManager.prototype.moveProjectiles = function() {
+    jQuery.each(this.projectiles, function(projectile) {
+        if (outOfBounds(projectile.img.getBounds())) {
+            // Remove from array
+        }
+    });
+};
 
 GameManager.prototype.processBuffer = function() {
     // Ensure that we don't process events that might arrive during processing
@@ -114,5 +123,27 @@ GameManager.prototype.setRight = function( isKeyDown ) {
 };
 
 GameManager.prototype.spawnProjectile = function(entity, beatType) {
-    
+    jQuery.each(entity.projectiles, function(projectile) {
+         if (projectile.beatType === beatType) {
+            this.drawProjectile(entity, projectile);
+         }
+    }).bid(this);
+};
+
+GameManager.prototype.drawProjectile = function(entity, projectile) {
+    var coords = {
+        entity.img.x,
+        entity.img.y
+    }
+    this.spawnImage(coords, projectile.img.clone(), projectile.nextPoint);
+};
+
+GameManager.prototype.spawnImage = function(coordinates, image, next) {
+    image.x = coordinates.x;
+    image.y = coordinates.y;
+
+    this.projectiles.push({
+        img: image,
+        nextPoint : next
+    });
 };
