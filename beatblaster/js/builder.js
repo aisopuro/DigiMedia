@@ -32,6 +32,8 @@ Builder.prototype.build = function() {
 
     }.bind( this ) );
 
+    var laser = createjs.Rectangle(0,0, 10, 100);
+
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );
 };
