@@ -4,7 +4,7 @@ function GameManager( stage, entities, fps ) {
     this.stage = stage;
     this.entities = entities;
     this.unpackEntities();
-    console.log(this.entities);
+    console.log( this.entities );
     this.player = this.entities.player;
     this.projectiles = [];
     this.fps = fps;
@@ -24,7 +24,7 @@ function GameManager( stage, entities, fps ) {
     this.DOWN = 83;
     this.RIGHT = 68;
 
-
+    this.testCounter = 0;
     this.setUpListeners();
 }
 
@@ -35,7 +35,7 @@ GameManager.prototype.unpackEntities = function() {
 GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keydown( this.keyDown.bind( this ) );
     jQuery( document ).keyup( this.keyUp.bind( this ) );
-    console.log(this.player);
+    console.log( this.player );
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
@@ -60,11 +60,21 @@ GameManager.prototype.movePlayer = function() {
 }
 
 GameManager.prototype.moveProjectiles = function() {
-    jQuery.each(this.projectiles, function(projectile) {
-        if (outOfBounds(projectile.img.getBounds())) {
+    jQuery.each( this.projectiles, function( projectile ) {
+        if ( this.outOfBounds( projectile.img.getBounds() ) ) {
             // Remove from array
+        } else {
+            var image = projectile.img;
+            var newXY = projectile.nextPoint( image.x, image.y );
+            image.x = newXY.x;
+            image.y = newXY.y;
         }
-    });
+    }.bind( this ) );
+};
+
+GameManager.prototype.outOfBounds = function( bounds ) {
+    // Calculate whether given bounds are inside canvas
+    return false;
 };
 
 GameManager.prototype.processBuffer = function() {
@@ -77,8 +87,8 @@ GameManager.prototype.processBuffer = function() {
 
 GameManager.prototype.beatHandler = function( event ) {
     console.log( event );
-    if (true) {
-        this.spawnProjectile(this.player, 0);
+    if ( true ) {
+        this.spawnProjectile( this.player, 0 );
     }
 };
 
@@ -122,28 +132,29 @@ GameManager.prototype.setRight = function( isKeyDown ) {
     this.inputVector.right = isKeyDown;
 };
 
-GameManager.prototype.spawnProjectile = function(entity, beatType) {
-    jQuery.each(entity.projectiles, function(projectile) {
-         if (projectile.beatType === beatType) {
-            this.drawProjectile(entity, projectile);
-         }
-    }).bid(this);
+GameManager.prototype.spawnProjectile = function( entity, beatType ) {
+    jQuery.each( entity.projectiles, function( projectile ) {
+        if ( projectile.beatType === beatType ) {
+            this.drawProjectile( entity, projectile );
+        }
+    } ).bid( this );
 };
 
-GameManager.prototype.drawProjectile = function(entity, projectile) {
+GameManager.prototype.drawProjectile = function( entity, projectile ) {
     var coords = {
-        entity.img.x,
-        entity.img.y
+        x: entity.img.x,
+        y: entity.img.y
     }
-    this.spawnImage(coords, projectile.img.clone(), projectile.nextPoint);
+    this.spawnImage( coords, projectile.img.clone(), projectile.nextPoint );
 };
 
-GameManager.prototype.spawnImage = function(coordinates, image, next) {
+GameManager.prototype.spawnImage = function( coordinates, image, next ) {
     image.x = coordinates.x;
     image.y = coordinates.y;
 
-    this.projectiles.push({
+    this.projectiles.push( {
         img: image,
-        nextPoint : next
-    });
+        nextPoint: next
+    } );
+    this.stage.addChild( image );
 };
