@@ -22,12 +22,16 @@ Builder.prototype.build = function() {
 
         if ( item.type === createjs.LoadQueue.IMAGE ) {
             var img = new createjs.Bitmap( item.src );
-            if (item.id = "playerSpriteSheet")
-            this.stage.addChild( new createjs.Bitmap( item.src ) );
+            if (item.id === Constants.IMAGE_ID_PLAYER) {
+                console.log("playerImage:");
+                this.entities.player = img;
+                console.log(this.entities.player);
+            }
+            this.stage.addChild( img );
         }
 
     }.bind( this ) );
 
     // Building complete, return finished stage to caller
-    this.complete( this.stage );
+    this.complete( this.stage, this.entities );
 };
