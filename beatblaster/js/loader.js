@@ -53,6 +53,11 @@ Loader.prototype.loadLibraries = function() {
         id: "soundjs",
         src: "./beatblaster/js/soundjs-0.5.0.min.js",
         type: createjs.LoadQueue.JAVASCRIPT
+    }, 
+    {
+        id: "soundhandler",
+        src: "./beatblaster/js/soundhandler.js",
+        type: createjs.LoadQueue.JAVASCRIPT
     } ] );
     console.log( "Queue built" );
 };
