@@ -7,6 +7,7 @@ function GameManager( stage, entities, fps ) {
     this.fps = fps;
     this.mspf = 1000 / fps; // ms per 
     this.queue = new Queue(); // soundEvent queue
+    this.soundHandler = new SoundHandler(this.stage, {}/*this.entities.musicTimelineData*/);
     this.inputVector = {
         up: false,
         left: false,
