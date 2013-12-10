@@ -1,7 +1,7 @@
 // Builder class for constructing the necessary assets and linking them to a stage
-function Builder (stage, loadQueue, completionCallback) {
+function Builder( stage, loadedAssets, completionCallback ) {
     this.stage = stage;
-    this.queue = loadQueue;
+    this.assets = loadedAssets;
     this.complete = completionCallback;
 
     this.build()
@@ -9,6 +9,23 @@ function Builder (stage, loadQueue, completionCallback) {
 
 // main build function for putting everything together
 Builder.prototype.build = function() {
-    console.log(this.stage);
-    console.log(this.queue);
+    console.log( "Building..." );
+    console.log( this.stage );
+    console.log( this.assets );
+
+    // Extract assets from asset list
+    jQuery.each( this.assets, function( index, item ) {
+        console.log( index );
+        console.log( item );
+        var data = item.data;
+
+        if ( item.type === createjs.LoadQueue.IMAGE ) {
+            
+            this.stage.addChild( new createjs.Bitmap( item.src ) );
+        }
+
+    }.bind( this ) );
+
+    // Building complete, return finished stage to caller
+    this.complete( this.stage );
 };
