@@ -22,17 +22,28 @@ Builder.prototype.build = function() {
 
         if ( item.type === createjs.LoadQueue.IMAGE ) {
             var img = new createjs.Bitmap( item.src );
-            if (item.id === Constants.IMAGE_ID_PLAYER) {
-                console.log("playerImage:");
+            if ( item.id === Constants.IMAGE_ID_PLAYER ) {
+                console.log( "playerImage:" );
+                // Contruct player object
+                var player = {};
+                player.img = img;
+                player.projectiles = [ {
+                    img: new createjs.Shape().graphics.beginFill( "#ff0000" ).drawRect( 0, 0, 10, 100 ),
+                    beatType: 0,
+                    nextPoint: function( x, y ) {
+                        return {
+                            x: x,
+                            y: y - 10
+                        }
+                    }
+                } ]
                 this.entities.player = img;
-                console.log(this.entities.player);
+                console.log( this.entities.player );
             }
             this.stage.addChild( img );
         }
 
     }.bind( this ) );
-
-    var laser = createjs.Rectangle(0,0, 10, 100);
 
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );

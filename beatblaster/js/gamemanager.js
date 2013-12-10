@@ -41,6 +41,13 @@ GameManager.prototype.setUpListeners = function() {
 };
 
 GameManager.prototype.frameTick = function( event ) {
+    if (this.testCounter === 10) {
+        this.stage.dispatchEvent("musicevent");
+        this.testCounter = 0;
+    }
+    else {
+        this.testCounter++;
+    }
     this.movePlayer();
     this.processBuffer();
     this.moveProjectiles();
@@ -93,7 +100,7 @@ GameManager.prototype.beatHandler = function( event ) {
 };
 
 GameManager.prototype.musicEventReceiver = function( event ) {
-    this.buffer.enbuffer( event );
+    this.buffer.enqueue( event );
 };
 
 GameManager.prototype.keyDown = function( event ) {
