@@ -60,7 +60,7 @@ Loader.prototype.loadLibraries = function() {
             "constants.js",
             "gamemanager.js",
             "Queue.compressed.js"
-        ], 
+        ],
         true,
         basepath );
     console.log( "Queue built" );
@@ -82,9 +82,10 @@ Loader.prototype.loadAssets = function() {
         id: Constants.IMAGE_ID_PLAYER,
         src: Constants.PATH_TO_PLAYER_IMAGE,
         type: createjs.LoadQueue.IMAGE,
+        // Data needed for processing the image
         data: {
-            // Data about the sprite sheet (frame size, animations)
-            type: "spritesheet"
+            // Data for correct handling of the entity this item represents
+            entityData: {}
         }
     } ] );
 
@@ -101,10 +102,7 @@ Loader.prototype.assetLoaded = function( event ) {
     }
     if ( item.type === createjs.LoadQueue.IMAGE ) {
         console.log( "Loaded image" );
-        if ( data.type === "spritesheet" ) {
-            console.log( "Image was a spritesheet" );
-            this.loadedAssets.push( item );
-        }
+        this.loadedAssets.push( item );
     } else if ( item.type === createjs.LoadQueue.SOUND ) {
         // Loaded sound
         this.loadedAssets.push( item );
