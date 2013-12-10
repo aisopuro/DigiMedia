@@ -3,6 +3,7 @@ function Builder( stage, loadedAssets, completionCallback ) {
     this.stage = stage;
     this.assets = loadedAssets;
     this.complete = completionCallback;
+    this.entities = {};
 
     this.build()
 }
@@ -20,7 +21,8 @@ Builder.prototype.build = function() {
         var data = item.data;
 
         if ( item.type === createjs.LoadQueue.IMAGE ) {
-            
+            var img = new createjs.Bitmap( item.src );
+            if (item.id = "playerSpriteSheet")
             this.stage.addChild( new createjs.Bitmap( item.src ) );
         }
 
