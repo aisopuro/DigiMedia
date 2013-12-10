@@ -32,6 +32,11 @@ GameManager.prototype.setUpListeners = function() {
 };
 
 GameManager.prototype.frameTick = function( event ) {
+    this.movePlayer();
+    this.stage.update();
+};
+
+GameManager.prototype.movePlayer = function() {
     if ( this.inputVector.up )
         this.player.y -= Constants.PLAYER_SPEED;
     if ( this.inputVector.left )
@@ -40,15 +45,8 @@ GameManager.prototype.frameTick = function( event ) {
         this.player.y += Constants.PLAYER_SPEED;
     if ( this.inputVector.right )
         this.player.x += Constants.PLAYER_SPEED;
-    this.stage.update();
-};
 
-GameManager.prototype.movePlayer = function() {
 }
-
-GameManager.prototype.movePlayer = function() {
-    // body...
-};
 
 GameManager.prototype.keyDown = function( event ) {
     this.keyToggle( event.keyCode, true );
