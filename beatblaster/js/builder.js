@@ -7,6 +7,7 @@ function Builder (stage, loadQueue, completionCallback) {
     this.build()
 }
 
+// main build function for putting everything together
 Builder.prototype.build = function() {
     console.log(this.stage);
     console.log(this.queue);
