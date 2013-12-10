@@ -9,6 +9,9 @@ function Game( canvas, id ) {
     this.stage;
     this.loader;
     this.builder;
+    this.manager;
+
+    FPS = 30;
 
     this.initGame( this.canvas );
 }
@@ -28,10 +31,10 @@ Game.prototype.loadComplete = function( loadedAssets ) {
     this.builder = new Builder( this.stage, loadedAssets, this.buildComplete );
 }
 
-Game.prototype.buildComplete = function( stage ) {
+Game.prototype.buildComplete = function( stage, entities ) {
     console.log( "Builder done" );
     console.log( stage );
-    
+    this.manager = new GameManager(stage, entities, FPS);
 };
 
 // The initializer function. Expects a canvas element as argument.

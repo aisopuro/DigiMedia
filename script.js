@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 
     // Global variable to determine if site is run from server
-    var ON_SERVER = false;
+    var ON_SERVER = true;
     // Check if the page is correct here (ie project.html)
     var pageCorrect = true;
     if (pageCorrect) {
