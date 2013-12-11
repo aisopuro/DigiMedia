@@ -27,8 +27,9 @@ Builder.prototype.build = function() {
                 // Contruct player object
                 var player = {};
                 player.img = img;
-                player.projectiles = [ {
-                    img: new createjs.Shape().graphics.beginFill( "#ff0000" ).drawRect( 0, 0, 10, 100 ),
+                player.projectiles = [];
+                var temp =  {
+                    img: new createjs.Shape(),
                     beatType: 0,
                     nextPoint: function( x, y ) {
                         return {
@@ -36,8 +37,12 @@ Builder.prototype.build = function() {
                             y: y - 10
                         }
                     }
-                } ]
-                this.entities.player = img;
+                };
+                temp.img.graphics.beginFill( "#ff0000" ).drawRect( 0, 0, 10, 100 );
+                temp.img.setBounds( 0, 0, 100, 100 );
+                player.projectiles.push(temp);
+
+                this.entities.player = player;
                 console.log( this.entities.player );
             }
             this.stage.addChild( img );
