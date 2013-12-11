@@ -12,7 +12,7 @@ function GameManager( stage, entities, fps ) {
     this.fps = fps;
     this.mspf = 1000 / fps; // ms per frame
     this.buffer = new Queue(); // soundEvent buffer
-    this.soundHandler = new SoundHandler( this.stage, {} /*this.entities.musicTimelineData*/ );
+    this.soundHandler = new SoundHandler( this.stage, {} ); // Maybe do this in builder
     this.inputVector = {
         up: false,
         left: false,
@@ -39,6 +39,7 @@ GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
+    createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
 
@@ -72,9 +73,20 @@ GameManager.prototype.movePlayer = function() {
 GameManager.prototype.moveProjectiles = function() {
     console.log( this.projectiles.length );
     console.log( this.stage.children.length );
-    jQuery.each( this.projectiles, function( index, projectile ) {
+    // Loop through every projectile type
+    jQuery.each( this.player.projectiles, function( index, projectileType ) {
+        var next = projectileType.nextPoint;
+        // Loop through every image in the type
+        jQuery.each( projectileType.images, function( index, image ) {
+            if ( image.active ) {
+                var newXY = next( image.x, image.y );
+                image.x = newXY.x;
+                image.y = newXY.y;
+            }
+        } );
+        /*
         var out = this.outOfBounds( projectile.img );
-        console.log(out);
+        console.log( out );
         if ( out ) {
             // Remove from array
             this.projectiles = this.projectiles.splice( index, 1 );
@@ -84,30 +96,32 @@ GameManager.prototype.moveProjectiles = function() {
             var newXY = projectile.nextPoint( image.x, image.y );
             image.x = newXY.x;
             image.y = newXY.y;
-        }
+        }*/
     }.bind( this ) );
 };
 
 GameManager.prototype.outOfBounds = function( image ) {
     // Calculate whether given bounds are inside canvas
-    dim = image.getBounds();
+    var dim = image.getBounds();
     bounds = {
         up: image.y,
         left: image.x,
         down: image.y + dim.height,
         right: image.x + dim.width
     }
-    return !this.covers( this.stage, bounds );
+    console.log( bounds );
+    return !this.covers( this.stage.getBounds(), bounds );
 };
 
-GameManager.prototype.covers = function( coverer, edges ) {
-    // test if any corner elicits a hit on coverer
+GameManager.prototype.covers = function( bounds, edges ) {
+    // test if the edges are within the bounds given
     return (
-        coverer.hitTest( edges.left, edges.up ) ||
-        coverer.hitTest( edges.right, edges.up ) ||
-        coverer.hitTest( edges.left, edges.down ) ||
-        coverer.hitTest( edges.right, edges.down )
+        ( bounds.x <= edges.left && edges.left <= bounds.width ) ||
+        ( bounds.x <= edges.right && edges.right <= bounds.width ) ||
+        ( bounds.y <= edges.up && edges.up <= bounds.height ) ||
+        ( bounds.y <= edges.down && edges.down <= bounds.height )
     );
+
 };
 
 GameManager.prototype.processBuffer = function() {
@@ -179,15 +193,19 @@ GameManager.prototype.drawProjectile = function( entity, projectile ) {
         x: entity.img.x,
         y: entity.img.y
     }
-    var image = projectile.img.clone();
+
+    // Get next image from the set of projectiles
+    var image = this.getNextProjectileImage( projectile );
     image.x = coordinates.x;
     image.y = coordinates.y;
 
-    this.projectiles.push( {
-        img: image,
-        nextPoint: projectile.nextPoint
-    } );
-    this.stage.addChild( image );
-    this.projectileIndexes.push( this.stage.getChildIndex( image ) );
+};
 
+GameManager.prototype.getNextProjectileImage = function( projectile ) {
+    if ( projectile.cursor >= projectile.imageCount )
+        projectile.cursor = 0;
+    var image = projectile.images[ projectile.cursor ];
+    projectile.cursor++;
+    image.active = true;
+    return image;
 };
