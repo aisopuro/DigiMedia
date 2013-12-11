@@ -28,18 +28,30 @@ Builder.prototype.build = function() {
                 var player = {};
                 player.img = img;
                 player.projectiles = [];
+                // Lasers
                 var temp =  {
-                    img: new createjs.Shape(),
                     beatType: 0,
                     nextPoint: function( x, y ) {
                         return {
                             x: x,
                             y: y - 10
                         }
-                    }
+                    },
+                    cursor: 0,
+                    imageCount: Constants.PROJECTILE_ARRAY_SIZE_LASER,
+                    images: []
                 };
-                temp.img.graphics.beginFill( "#ff0000" ).drawRect( 0, 0, 10, 100 );
-                temp.img.setBounds( 0, 0, 100, 100 );
+                var image = new createjs.Shape();
+                image.graphics.beginFill( "#ff0000" ).drawRect( 0, 0, 10, 100 );
+                image.setBounds( 0, 0, 100, 100 );
+                image.x = -1000;
+                image.y = -1000;
+                for (var i = 0; i < Constants.PROJECTILE_ARRAY_SIZE_LASER; i++) {
+                    var currentClone = image.clone();
+                    currentClone.active = false;
+                    temp.images.push(currentClone);
+                    this.stage.addChild(currentClone);
+                }
                 player.projectiles.push(temp);
 
                 this.entities.player = player;

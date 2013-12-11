@@ -3,6 +3,7 @@ Constants = {
     PLAYER: 1,
     TYPE_IMAGE: "image",
     ENTITY_TYPE_PROJECTILE: 0,
+    PROJECTILE_ARRAY_SIZE_LASER: 5,
     IMAGE_ID_PLAYER: "playerImage",
     PATH_TO_PLAYER_IMAGE: "./beatblaster/img/neonship.png",
     // Speed in pixels per frame
