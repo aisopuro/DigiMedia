@@ -56,18 +56,18 @@ GameManager.prototype.frameTick = function( event ) {
 
 GameManager.prototype.movePlayer = function() {
     if ( this.inputVector.up )
-        this.player.y -= Constants.PLAYER_SPEED;
+        this.player.img.y -= Constants.PLAYER_SPEED;
     if ( this.inputVector.left )
-        this.player.x -= Constants.PLAYER_SPEED;
+        this.player.img.x -= Constants.PLAYER_SPEED;
     if ( this.inputVector.down )
-        this.player.y += Constants.PLAYER_SPEED;
+        this.player.img.y += Constants.PLAYER_SPEED;
     if ( this.inputVector.right )
-        this.player.x += Constants.PLAYER_SPEED;
+        this.player.img.x += Constants.PLAYER_SPEED;
 
 }
 
 GameManager.prototype.moveProjectiles = function() {
-    jQuery.each( this.projectiles, function( projectile ) {
+    jQuery.each( this.projectiles, function( index, projectile ) {
         if ( this.outOfBounds( projectile.img.getBounds() ) ) {
             // Remove from array
         } else {
@@ -86,14 +86,14 @@ GameManager.prototype.outOfBounds = function( bounds ) {
 
 GameManager.prototype.processBuffer = function() {
     // Ensure that we don't process events that might arrive during processing
-    var limit = this.buffer.length;
+    var limit = this.buffer.getLength();
     for ( var i = 0; i < limit; i++ ) {
         this.beatHandler( this.buffer.dequeue() );
     }
 };
 
+// function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-    console.log( event );
     if ( true ) {
         this.spawnProjectile( this.player, 0 );
     }
@@ -140,28 +140,27 @@ GameManager.prototype.setRight = function( isKeyDown ) {
 };
 
 GameManager.prototype.spawnProjectile = function( entity, beatType ) {
-    jQuery.each( entity.projectiles, function( projectile ) {
+    jQuery.each( entity.projectiles, function( index, projectile ) {
         if ( projectile.beatType === beatType ) {
             this.drawProjectile( entity, projectile );
         }
-    } ).bid( this );
+    }.bind( this ));
 };
 
 GameManager.prototype.drawProjectile = function( entity, projectile ) {
-    var coords = {
+    // Relate spawn point to owning entity's coordinates
+    var coordinates = {
         x: entity.img.x,
         y: entity.img.y
     }
-    this.spawnImage( coords, projectile.img.clone(), projectile.nextPoint );
-};
-
-GameManager.prototype.spawnImage = function( coordinates, image, next ) {
+    var image = projectile.img.clone();
     image.x = coordinates.x;
     image.y = coordinates.y;
 
     this.projectiles.push( {
         img: image,
-        nextPoint: next
+        nextPoint: projectile.nextPoint
     } );
     this.stage.addChild( image );
+
 };
