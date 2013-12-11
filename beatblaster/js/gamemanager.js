@@ -8,8 +8,9 @@ function GameManager( stage, entities, fps ) {
     console.log( this.entities );
     this.player = this.entities.player;
     this.projectiles = [];
+    this.projectileIndexes = [];
     this.fps = fps;
-    this.mspf = 1000 / fps; // ms per 
+    this.mspf = 1000 / fps; // ms per frame
     this.buffer = new Queue(); // soundEvent buffer
     this.soundHandler = new SoundHandler( this.stage, {} /*this.entities.musicTimelineData*/ );
     this.inputVector = {
@@ -69,12 +70,15 @@ GameManager.prototype.movePlayer = function() {
 }
 
 GameManager.prototype.moveProjectiles = function() {
-    console.log(this.projectiles);
+    console.log( this.projectiles.length );
+    console.log( this.stage.children.length );
     jQuery.each( this.projectiles, function( index, projectile ) {
-        if ( this.outOfBounds( projectile.img.getBounds() ) ) {
+        var out = this.outOfBounds( projectile.img );
+        console.log(out);
+        if ( out ) {
             // Remove from array
-            this.projectiles = this.projectiles.splice(index, 1);
-            this.stage.removeChild(projectile);
+            this.projectiles = this.projectiles.splice( index, 1 );
+            this.stage.removeChild( projectile.img );
         } else {
             var image = projectile.img;
             var newXY = projectile.nextPoint( image.x, image.y );
@@ -84,22 +88,25 @@ GameManager.prototype.moveProjectiles = function() {
     }.bind( this ) );
 };
 
-GameManager.prototype.outOfBounds = function( bounds ) {
+GameManager.prototype.outOfBounds = function( image ) {
     // Calculate whether given bounds are inside canvas
+    dim = image.getBounds();
+    bounds = {
+        up: image.y,
+        left: image.x,
+        down: image.y + dim.height,
+        right: image.x + dim.width
+    }
     return !this.covers( this.stage, bounds );
 };
 
-GameManager.prototype.covers = function( coverer, coveree ) {
-    var left = coveree.x,
-        up = coveree.y;
-    var right = left + coveree.width,
-        down = up + coveree.height;
+GameManager.prototype.covers = function( coverer, edges ) {
     // test if any corner elicits a hit on coverer
     return (
-        coverer.hitTest( left, up ) ||
-        coverer.hitTest( right, up ) ||
-        coverer.hitTest( left, down ) ||
-        coverer.hitTest( right, down )
+        coverer.hitTest( edges.left, edges.up ) ||
+        coverer.hitTest( edges.right, edges.up ) ||
+        coverer.hitTest( edges.left, edges.down ) ||
+        coverer.hitTest( edges.right, edges.down )
     );
 };
 
@@ -181,5 +188,6 @@ GameManager.prototype.drawProjectile = function( entity, projectile ) {
         nextPoint: projectile.nextPoint
     } );
     this.stage.addChild( image );
+    this.projectileIndexes.push( this.stage.getChildIndex( image ) );
 
 };
