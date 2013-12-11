@@ -71,8 +71,6 @@ GameManager.prototype.movePlayer = function() {
 }
 
 GameManager.prototype.moveProjectiles = function() {
-    console.log( this.projectiles.length );
-    console.log( this.stage.children.length );
     // Loop through every projectile type
     jQuery.each( this.player.projectiles, function( index, projectileType ) {
         var next = projectileType.nextPoint;
