@@ -2,6 +2,7 @@
 function GameManager( stage, entities, fps ) {
     console.log( "manager" );
     this.stage = stage;
+    this.bounds = this.stage.getBounds();
     this.entities = entities;
     this.unpackEntities();
     console.log( this.entities );
@@ -41,11 +42,10 @@ GameManager.prototype.setUpListeners = function() {
 };
 
 GameManager.prototype.frameTick = function( event ) {
-    if (this.testCounter === 10) {
-        this.stage.dispatchEvent("musicevent");
+    if ( this.testCounter === 10 ) {
+        this.stage.dispatchEvent( "musicevent" );
         this.testCounter = 0;
-    }
-    else {
+    } else {
         this.testCounter++;
     }
     this.movePlayer();
@@ -55,6 +55,8 @@ GameManager.prototype.frameTick = function( event ) {
 };
 
 GameManager.prototype.movePlayer = function() {
+    var oldX = this.player.img.x;
+    var oldY = this.player.img.y;
     if ( this.inputVector.up )
         this.player.img.y -= Constants.PLAYER_SPEED;
     if ( this.inputVector.left )
@@ -67,9 +69,12 @@ GameManager.prototype.movePlayer = function() {
 }
 
 GameManager.prototype.moveProjectiles = function() {
+    console.log(this.projectiles);
     jQuery.each( this.projectiles, function( index, projectile ) {
         if ( this.outOfBounds( projectile.img.getBounds() ) ) {
             // Remove from array
+            this.projectiles = this.projectiles.splice(index, 1);
+            this.stage.removeChild(projectile);
         } else {
             var image = projectile.img;
             var newXY = projectile.nextPoint( image.x, image.y );
@@ -81,7 +86,21 @@ GameManager.prototype.moveProjectiles = function() {
 
 GameManager.prototype.outOfBounds = function( bounds ) {
     // Calculate whether given bounds are inside canvas
-    return false;
+    return !this.covers( this.stage, bounds );
+};
+
+GameManager.prototype.covers = function( coverer, coveree ) {
+    var left = coveree.x,
+        up = coveree.y;
+    var right = left + coveree.width,
+        down = up + coveree.height;
+    // test if any corner elicits a hit on coverer
+    return (
+        coverer.hitTest( left, up ) ||
+        coverer.hitTest( right, up ) ||
+        coverer.hitTest( left, down ) ||
+        coverer.hitTest( right, down )
+    );
 };
 
 GameManager.prototype.processBuffer = function() {
@@ -144,7 +163,7 @@ GameManager.prototype.spawnProjectile = function( entity, beatType ) {
         if ( projectile.beatType === beatType ) {
             this.drawProjectile( entity, projectile );
         }
-    }.bind( this ));
+    }.bind( this ) );
 };
 
 GameManager.prototype.drawProjectile = function( entity, projectile ) {
