@@ -22,6 +22,8 @@ Builder.prototype.build = function() {
 
         if ( item.type === createjs.LoadQueue.IMAGE ) {
             var img = new createjs.Bitmap( item.src );
+            //var img = new createjs.Shape();
+
             if ( item.id === Constants.IMAGE_ID_PLAYER ) {
                 console.log( "playerImage:" );
                 // Contruct player object
@@ -42,7 +44,7 @@ Builder.prototype.build = function() {
                     images: []
                 };
                 var image = new createjs.Shape();
-                image.graphics.beginFill( "#ff0000" ).drawRect( 0, 0, 10, 100 );
+                image.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
                 image.setBounds( 0, 0, 100, 100 );
                 image.x = -1000;
                 image.y = -1000;
