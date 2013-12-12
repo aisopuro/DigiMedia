@@ -22,16 +22,17 @@ Builder.prototype.build = function() {
 
         if ( item.type === createjs.LoadQueue.IMAGE ) {
             var img = new createjs.Bitmap( item.src );
-            //var img = new createjs.Shape();
 
             if ( item.id === Constants.IMAGE_ID_PLAYER ) {
                 console.log( "playerImage:" );
                 // Contruct player object
+                img = new createjs.Shape();
+                img.graphics.beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90 );
                 var player = {};
                 player.img = img;
                 player.projectiles = [];
                 // Lasers
-                var temp =  {
+                var temp = {
                     beatType: 0,
                     nextPoint: function( x, y ) {
                         return {
@@ -48,13 +49,13 @@ Builder.prototype.build = function() {
                 image.setBounds( 0, 0, 100, 100 );
                 image.x = -1000;
                 image.y = -1000;
-                for (var i = 0; i < Constants.PROJECTILE_ARRAY_SIZE_LASER; i++) {
+                for ( var i = 0; i < Constants.PROJECTILE_ARRAY_SIZE_LASER; i++ ) {
                     var currentClone = image.clone();
                     currentClone.active = false;
-                    temp.images.push(currentClone);
-                    this.stage.addChild(currentClone);
+                    temp.images.push( currentClone );
+                    this.stage.addChild( currentClone );
                 }
-                player.projectiles.push(temp);
+                player.projectiles.push( temp );
 
                 this.entities.player = player;
                 console.log( this.entities.player );
