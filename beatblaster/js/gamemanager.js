@@ -45,7 +45,9 @@ GameManager.prototype.setUpListeners = function() {
 
 GameManager.prototype.frameTick = function( event ) {
     if ( this.testCounter === 10 ) {
-        this.stage.dispatchEvent( "musicevent" );
+        var ev = new createjs.Event( "musicevent", true, true );
+        ev.note = Constants.NOTE_BASS;
+        this.stage.dispatchEvent( ev );
         this.testCounter = 0;
     } else {
         this.testCounter++;
@@ -73,28 +75,14 @@ GameManager.prototype.movePlayer = function() {
 GameManager.prototype.moveProjectiles = function() {
     // Loop through every projectile type
     jQuery.each( this.player.projectiles, function( index, projectileType ) {
-        var next = projectileType.nextPoint;
+        // Get the movement function for the projectile type
+        var move = projectileType.move;
         // Loop through every image in the type
         jQuery.each( projectileType.images, function( index, image ) {
             if ( image.active ) {
-                var newXY = next( image.x, image.y );
-                image.x = newXY.x;
-                image.y = newXY.y;
+                move( image );
             }
         } );
-        /*
-        var out = this.outOfBounds( projectile.img );
-        console.log( out );
-        if ( out ) {
-            // Remove from array
-            this.projectiles = this.projectiles.splice( index, 1 );
-            this.stage.removeChild( projectile.img );
-        } else {
-            var image = projectile.img;
-            var newXY = projectile.nextPoint( image.x, image.y );
-            image.x = newXY.x;
-            image.y = newXY.y;
-        }*/
     }.bind( this ) );
 };
 
@@ -132,8 +120,8 @@ GameManager.prototype.processBuffer = function() {
 
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-    if ( true ) {
-        this.spawnProjectile( this.player, 0 );
+    if ( event.note !== undefined ) {
+        this.spawnProjectile( this.player, event.note );
     }
 };
 
@@ -187,10 +175,7 @@ GameManager.prototype.spawnProjectile = function( entity, beatType ) {
 
 GameManager.prototype.drawProjectile = function( entity, projectile ) {
     // Relate spawn point to owning entity's coordinates
-    var coordinates = {
-        x: entity.img.x,
-        y: entity.img.y
-    }
+    var coordinates = entity.getGunLocation();
 
     // Get next image from the set of projectiles
     var image = this.getNextProjectileImage( projectile );

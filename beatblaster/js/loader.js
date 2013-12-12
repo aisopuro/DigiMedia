@@ -59,7 +59,8 @@ Loader.prototype.loadLibraries = function() {
             "builder.js",
             "constants.js",
             "gamemanager.js",
-            "Queue.compressed.js"
+            "Queue.compressed.js",
+            "projectilebuilder.js"
         ],
         true,
         basepath );

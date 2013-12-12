@@ -30,37 +30,24 @@ Builder.prototype.build = function() {
                 img.graphics.beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90 );
                 var player = {};
                 player.img = img;
+                this.stage.addChild( img );
                 player.projectiles = [];
                 // Lasers
-                var temp = {
-                    beatType: 0,
-                    nextPoint: function( x, y ) {
-                        return {
-                            x: x,
-                            y: y - 10
-                        }
-                    },
-                    cursor: 0,
-                    imageCount: Constants.PROJECTILE_ARRAY_SIZE_LASER,
-                    images: []
-                };
-                var image = new createjs.Shape();
-                image.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
-                image.setBounds( 0, 0, 100, 100 );
-                image.x = -1000;
-                image.y = -1000;
-                for ( var i = 0; i < Constants.PROJECTILE_ARRAY_SIZE_LASER; i++ ) {
-                    var currentClone = image.clone();
-                    currentClone.active = false;
-                    temp.images.push( currentClone );
-                    this.stage.addChild( currentClone );
-                }
+                player.getGunLocation = function() {
+                    return {
+                        x: this.img.x + 94,
+                        y: this.img.y + 10
+                    }
+                }.bind(player);
+                var temp = ProjectileBuilder.build(Constants.NOTE_BASS, player.img, this.stage);
                 player.projectiles.push( temp );
 
                 this.entities.player = player;
                 console.log( this.entities.player );
             }
-            this.stage.addChild( img );
+        }
+        else if (item.id === Constants.TIMELINE_ID) {
+            // Timeline JSON
         }
 
     }.bind( this ) );
