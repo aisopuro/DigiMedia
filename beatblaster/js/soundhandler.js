@@ -49,7 +49,6 @@ SoundHandler.prototype.registerMusic = function( music ) {
 };
 
 SoundHandler.prototype.startMusic = function() {
-	console.log("SoundHandler.startMusic called");
 	if (!this.ready) {
 		console.log("SoundHandler.startMusic called, but music not registered! (call registerMusic first)");
 		return;

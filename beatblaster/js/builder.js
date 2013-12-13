@@ -15,6 +15,7 @@ Builder.prototype.build = function() {
     console.log( this.assets );
 	
 	this.entities.bg = new Background(this.stage, 25, 4);
+	createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.FlashPlugin]);
 	
     // Extract assets from asset list
     jQuery.each( this.assets, function( index, item ) {
@@ -41,6 +42,7 @@ Builder.prototype.build = function() {
             this.entities.soundHandler = new SoundHandler( this.stage, item.data );
         } else if ( item.id === Constants.BGMUSIC_ID ) {
 			if (this.entities.soundHandler) {
+				console.log("sound", createjs.Sound.isReady());
 				this.entities.soundHandler.registerMusic(Constants.BGMUSIC_ID);
 			} else {
 				console.log("no sound handler present, bug?");
