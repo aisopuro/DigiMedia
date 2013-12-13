@@ -7,6 +7,7 @@ function GameManager( stage, entities, fps ) {
     console.log( this.entities );
     this.player = this.entities.player;
     this.dummyEnemy; // @TEST
+    this.enemies = [];
     this.projectiles = [];
     this.projectileIndexes = [];
     this.fps = fps;
@@ -19,14 +20,14 @@ function GameManager( stage, entities, fps ) {
         down: false,
         right: false
     }
-	
+
     // Keycodes
     this.UP = 87;
     this.LEFT = 65;
     this.DOWN = 83;
     this.RIGHT = 68;
-	
-	this.bg = this.entities.bg;
+
+    this.bg = this.entities.bg;
     this.setUpListeners();
 
     // maybe move this somewhere else
@@ -54,7 +55,8 @@ GameManager.prototype.frameTick = function( event ) {
     this.processBuffer();
     this.processEnemies();
     this.moveProjectiles();
-	this.bg.updateStars(this.player.img.x, this.player.img.y);
+    this.checkCollisions();
+    this.bg.updateStars( this.player.img.x, this.player.img.y );
     this.stage.update();
 };
 
@@ -70,10 +72,19 @@ GameManager.prototype.moveProjectiles = function() {
         if ( projectile && projectile.img ) {
             // first check if needs to be removed
             if ( this.outOfBounds( projectile.img ) ) {
-                // remove from stage
-                this.stage.removeChild( projectile.img );
-                // remove from array
-                this.projectiles.splice( i, 1 );
+                this.removeProjectile( projectile, i );
+            } else {
+                // Otherwise check if the projectile hits an enemy
+                var projectileBounds = this.getTranslatedEdges( projectile.img );
+                for ( var j in this.enemies ) {
+                    var enemy = this.enemies[ j ];
+                    var enemyBounds = this.getTranslatedEdges( enemy.img );
+                    if ( this.covers( enemyBounds, projectileBounds ) ) {
+                        // Projectile is within enemy, hit
+                        this.removeProjectile( projectile, i );
+                        this.hitEnemy( enemy, projectile );
+                    }
+                }
             }
             // process the rest AFTER or else indexes go wrong
             projectile.move( projectile.img );
@@ -81,19 +92,25 @@ GameManager.prototype.moveProjectiles = function() {
     }
 };
 
+GameManager.prototype.removeProjectile = function( projectile, index ) {
+    // remove from stage
+    this.stage.removeChild( projectile.img );
+    // remove from array
+    this.projectiles.splice( index, 1 );
+};
+
+GameManager.prototype.hitEnemy = function( enemy, projectile ) {
+    console.log( "hit" );
+};
+
 GameManager.prototype.outOfBounds = function( image ) {
     // Calculate whether given bounds are inside canvas
-    var dim = image.getTransformedBounds();
-    edges = {
-        left: dim.x,
-        up: dim.y,
-        right: dim.x + dim.width,
-        down: dim.y + dim.height
-    }
+    var edges = this.getTranslatedEdges( image );
     return !this.contains( this.stage.getBounds(), edges );
 };
 
 GameManager.prototype.contains = function( bounds, edges ) {
+    // Tests if the given edges are completely contained by the bounds
     return (
         bounds.x <= edges.left &&
         bounds.y <= edges.up &&
@@ -103,7 +120,7 @@ GameManager.prototype.contains = function( bounds, edges ) {
 };
 
 GameManager.prototype.covers = function( bounds, edges ) {
-    // test if the edges are within the bounds given
+    // test if any of the edges are within the bounds given
     return (
         ( bounds.x <= edges.left && edges.left <= bounds.width ) ||
         ( bounds.x <= edges.right && edges.right <= bounds.width ) ||
@@ -111,6 +128,17 @@ GameManager.prototype.covers = function( bounds, edges ) {
         ( bounds.y <= edges.down && edges.down <= bounds.height )
     );
 
+};
+
+// Get an object containing the edge-coordinates of an image on the stage
+GameManager.prototype.getTranslatedEdges = function( image ) {
+    var dim = image.getTransformedBounds();
+    return {
+        left: dim.x,
+        up: dim.y,
+        right: dim.x + dim.width,
+        down: dim.y + dim.height
+    }
 };
 
 GameManager.prototype.processBuffer = function() {
@@ -125,15 +153,15 @@ GameManager.prototype.processBuffer = function() {
 GameManager.prototype.beatHandler = function( event ) {
     if ( event.note !== undefined && event.data == "start" ) {
         var proj = this.player.fireGuns( event.note );
-		if ($.isArray(proj)) {
-			for (var i = 0; i < proj.length; i++) {
-				this.stage.addChild( proj[i].img );
-				this.projectiles.push( proj[i] );
-			}
-		} else {
-			this.stage.addChild( proj.img );
-			this.projectiles.push( proj );
-		}
+        if ( $.isArray( proj ) ) {
+            for ( var i = 0; i < proj.length; i++ ) {
+                this.stage.addChild( proj[ i ].img );
+                this.projectiles.push( proj[ i ] );
+            }
+        } else {
+            this.stage.addChild( proj.img );
+            this.projectiles.push( proj );
+        }
     }
 };
 
@@ -206,11 +234,16 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 };
 
 GameManager.prototype.processEnemies = function() {
+    if ( this.enemies === undefined || this.enemies.length === 0 ) {
+        this.enemies = EnemyFactory.getNextWave( this.stage );
+    }
     this.dummyEnemy.move();
     if ( this.dummyEnemy.outOfBounds() ) {
-        console.log(this.dummyEnemy);
         this.stage.removeChild( this.dummyEnemy.img );
         this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
-        console.log(this.dummyEnemy);
     }
+};
+
+GameManager.prototype.checkCollisions = function() {
+
 };
