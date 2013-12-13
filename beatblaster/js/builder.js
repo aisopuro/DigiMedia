@@ -4,6 +4,7 @@ function Builder( stage, loadedAssets, completionCallback ) {
     this.assets = loadedAssets;
     this.complete = completionCallback;
     this.entities = {};
+	this.bitmaps = {};
 
     this.build()
 }
@@ -35,7 +36,16 @@ Builder.prototype.build = function() {
                 player.projectiles = []; // Patch
 
                 this.entities.player = player;
-            }
+            } 
+			if (  item.id === Constants.ENEMY1_ID 
+				||item.id === Constants.ENEMY2_ID 
+				||item.id === Constants.ENEMY3_ID 
+				||item.id === Constants.ENEMY4_ID ) {
+				// do something?
+			}
+			
+			this.bitmaps[item.id] = img;
+			
         } else if ( item.id === Constants.TIMELINE_ID ) {
             // Timeline JSON
             this.entities.soundHandler = new SoundHandler( this.stage, item.data );
@@ -50,5 +60,5 @@ Builder.prototype.build = function() {
     }.bind( this ) );
 
     // Building complete, return finished stage to caller
-    this.complete( this.stage, this.entities );
+    this.complete( this.stage, this.entities, this.bitmaps );
 };
