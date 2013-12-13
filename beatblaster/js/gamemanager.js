@@ -40,9 +40,6 @@ GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
     console.log( this.buffer );
-    //@TEST
-    this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
-    console.log( this.dummyEnemy );
 
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     createjs.Ticker.setFPS( this.fps );
@@ -55,7 +52,6 @@ GameManager.prototype.frameTick = function( event ) {
     this.processBuffer();
     this.processEnemies();
     this.moveProjectiles();
-    this.checkCollisions();
     this.bg.updateStars( this.player.img.x, this.player.img.y );
     this.stage.update();
 };
@@ -72,7 +68,7 @@ GameManager.prototype.moveProjectiles = function() {
         if ( projectile && projectile.img ) {
             // first check if needs to be removed
             if ( this.outOfBounds( projectile.img ) ) {
-                this.removeProjectile( projectile, i );
+                this.removeEntity( this.projectiles, projectile, i );
             } else {
                 // Otherwise check if the projectile hits an enemy
                 var projectileBounds = this.getTranslatedEdges( projectile.img );
@@ -81,7 +77,7 @@ GameManager.prototype.moveProjectiles = function() {
                     var enemyBounds = this.getTranslatedEdges( enemy.img );
                     if ( this.covers( enemyBounds, projectileBounds ) ) {
                         // Projectile is within enemy, hit
-                        this.removeProjectile( projectile, i );
+                        this.removeEntity( this.projectiles, projectile, i );
                         this.hitEnemy( enemy, projectile );
                     }
                 }
@@ -92,11 +88,11 @@ GameManager.prototype.moveProjectiles = function() {
     }
 };
 
-GameManager.prototype.removeProjectile = function( projectile, index ) {
+GameManager.prototype.removeEntity = function( array, entity, index ) {
     // remove from stage
-    this.stage.removeChild( projectile.img );
+    this.stage.removeChild( entity.img );
     // remove from array
-    this.projectiles.splice( index, 1 );
+    array.splice( index, 1 );
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
@@ -234,16 +230,17 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 };
 
 GameManager.prototype.processEnemies = function() {
+    console.log( this.enemies.length );
     if ( this.enemies === undefined || this.enemies.length === 0 ) {
         this.enemies = EnemyFactory.getNextWave( this.stage );
     }
-    this.dummyEnemy.move();
-    if ( this.dummyEnemy.outOfBounds() ) {
-        this.stage.removeChild( this.dummyEnemy.img );
-        this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
+    var enemy;
+    for ( var i in this.enemies ) {
+        enemy = this.enemies[i];
+        enemy.move();
+        if (enemy.outOfBounds()) {
+            this.removeEntity(this.enemies, enemy, i);
+        }
+        
     }
-};
-
-GameManager.prototype.checkCollisions = function() {
-
 };

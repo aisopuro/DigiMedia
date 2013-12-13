@@ -8,7 +8,7 @@ EnemyFactory = {
             var img = new createjs.Shape();
             img.graphics.beginFill( "FF0" ).drawRoundRect( 0, 0, 100, 100, 3 );
             img.setBounds( 0, 0, 100, 100 );
-            enemy = new Entity( stage, img, undefined, 
+            enemy = new Entity( stage, img, undefined,
                 100 + startOffsetX, -100 + startOffsetY );
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
@@ -34,10 +34,11 @@ EnemyFactory = {
         return enemy;
 
     },
-    getNextWave: function(stage) {
+    getNextWave: function( stage ) {
         var wave = [];
-        for (var i = 0; i < 3; i++) {
-            wave.push(this.buildEnemy(this.BASIC_ENEMY, stage, 200 * i, -50 * i));
+        for ( var i = 0; i < 3; i++ ) {
+            wave.push( this.buildEnemy( this.BASIC_ENEMY, stage, 200 * i, -50 * i ) );
         }
+        return wave;
     }
 }
