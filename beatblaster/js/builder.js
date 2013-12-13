@@ -58,7 +58,9 @@ Builder.prototype.build = function() {
 		}
 
     }.bind( this ) );
-
+	
+	EnemyFactory.bitmaps = this.bitmaps;
+	
     // Building complete, return finished stage to caller
-    this.complete( this.stage, this.entities, this.bitmaps );
+    this.complete( this.stage, this.entities );
 };

@@ -8,7 +8,6 @@ function Game( canvas, id ) {
     this.loader;
     this.builder;
     this.manager;
-	this.bitmaps;
 	
     this.FPS = 30;
 
@@ -48,10 +47,9 @@ Game.prototype.loadingMode = function( canvas ) {
 	c2.fillText("Loading...", this.WIDTH/2, this.HEIGHT/2);
 };
 
-Game.prototype.buildComplete = function( stage, entities, bitmaps ) {
+Game.prototype.buildComplete = function( stage, entities ) {
     console.log( "Builder done" );
     console.log( stage );
-	this.bitmaps = bitmaps;
     this.waitToStart( stage, entities );
 };
 
@@ -84,7 +82,7 @@ Game.prototype.startGame = function(entities) {
 	this.stage.removeAllEventListeners("click");
 	this.stage.removeChild(this.starttext);
 	clearInterval(this.timeout);
-	this.manager = new GameManager( this.stage, this.entities, this.FPS, this.bitmaps );
+	this.manager = new GameManager( this.stage, this.entities, this.FPS );
 }
 
 // The initializer function. Expects a canvas element as argument.
