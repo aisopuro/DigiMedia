@@ -43,7 +43,7 @@ GameManager.prototype.frameTick = function( event ) {
     if ( this.testCounter === 10 ) {
         var ev = new createjs.Event( "musicevent", true, true );
         ev.note = SoundHandler.BASS;
-        //this.stage.dispatchEvent( ev );
+        this.stage.dispatchEvent( ev );
         this.testCounter = 0;
     } else {
         this.testCounter++;
@@ -131,7 +131,7 @@ GameManager.prototype.processBuffer = function() {
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
     if ( event.note !== undefined ) {
-        this.spawnProjectile( this.player, event.note );
+        this.spawnProjectile(this.player, event.note);
     }
 };
 

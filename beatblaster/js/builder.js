@@ -25,39 +25,28 @@ Builder.prototype.build = function() {
 
             if ( item.id === Constants.IMAGE_ID_PLAYER ) {
                 console.log( "playerImage:" );
-                // Contruct player object
-                img = new createjs.Shape();
-                // Blue triangle
-                img.graphics.beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90 );
-                img.setBounds(55, 50, 90, 80);
-                var player = new PlayerEntity(this.stage, img, 0, 0);
-                player.img = img;
-                this.stage.addChild( img );
-                player.projectiles = [];
-                // Lasers
-                player.getGunLocation = function() {
-                    return {
-                        x: this.img.x + 94,
-                        y: this.img.y + 10
-                    }
-                }.bind(player);
-                var temp = ProjectileBuilder.build(SoundHandler.BASS, player.img, this.stage);
-                player.projectiles.push( temp );
+                var player = EntityBuilder.build( true, {
+                    stage: this.stage,
+                    startX: 0,
+                    startY: 0
+                } );
+                player.projectiles = []; // Patch
 
                 this.entities.player = player;
-                console.log( this.entities.player );
             }
-        }
-        else if (item.id === Constants.TIMELINE_ID) {
+        } else if ( item.id === Constants.TIMELINE_ID ) {
             // Timeline JSON
-            this.entities.soundHandler = new SoundHandler(this.stage, item.data);
+            this.entities.soundHandler = new SoundHandler( this.stage, item.data );
         }
 
     }.bind( this ) );
 
     // Build enemy
-    var enemy = {};
-    enemy.img = 
+    var enemy = EntityBuilder.build( false, {
+        stage: this.stage,
+        startX: 0,
+        startY: 0
+    } );
 
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );
