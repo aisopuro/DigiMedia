@@ -32,9 +32,8 @@ function SoundHandler( stage, data ) {
     this.musicfile = 0;
     this.ready = false;
     this.timerstart = Date.now();
-    this.timeline = data;
+    this.timeline = data.timeline;
     this.eventStage = stage;
-
 }
 // Beat type constants
 SoundHandler.BASS = 0;
@@ -54,6 +53,7 @@ SoundHandler.prototype.startMusic = function() {
 		return;
 	}
     this.timerstart = Date.now();
+	createjs.Sound.setVolume(0.3);
     createjs.Sound.play( this.musicfile );
 };
 

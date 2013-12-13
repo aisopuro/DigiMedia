@@ -26,7 +26,6 @@ function GameManager( stage, entities, fps ) {
     this.DOWN = 83;
     this.RIGHT = 68;
 
-    this.testCounter = 0;
     this.setUpListeners();
 
     // maybe move this somewhere else
@@ -49,6 +48,7 @@ GameManager.prototype.setUpListeners = function() {
 };
 
 GameManager.prototype.frameTick = function( event ) {
+<<<<<<< HEAD
     if ( this.testCounter === 10 ) {
         var ev = new createjs.Event( "musicevent", true, true );
         ev.note = SoundHandler.BASS;
@@ -58,6 +58,9 @@ GameManager.prototype.frameTick = function( event ) {
         this.testCounter++;
     }
     this.soundHandler.tick();
+=======
+	this.soundHandler.tick();
+>>>>>>> 55ba6f3045b2957d96a8ae9bbf7e39bacbaa6eea
     this.movePlayer();
     this.processBuffer();
     this.processEnemies();
@@ -130,7 +133,7 @@ GameManager.prototype.processBuffer = function() {
 
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-    if ( event.note !== undefined ) {
+    if ( event.note === SoundHandler.BASS && event.data == "start" ) {
         var proj = this.player.fireGuns( event.note );
         this.stage.addChild( proj.img );
         this.projectiles.push( proj );
