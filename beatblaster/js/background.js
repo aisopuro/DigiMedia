@@ -26,14 +26,14 @@ function Background( stage, starcount, layers ) {
 	
 }
 
-Background.prototype.updateStars = function(playerX, playerY){
+Background.prototype.updateStars = function(playerX, playerY) {
 	var lc = this.layers.length;
 	for (var l = 0; l < lc; l++) {
 		for (var s = 0; s < this.layers[l].length; s++) {
 			var star = this.layers[l][s];
 			var dampening = (1/lc) * l * this.globaldampen;
-			star.x = ( star.origx - (playerX * dampening) ) % this.bounds.width;
-			star.y = ( star.origy - (playerY * dampening) ) % this.bounds.height;
+			star.x = Math.floor( star.origx - (playerX * dampening) + this.bounds.width) % this.bounds.width;
+			star.y = Math.floor( star.origy - (playerY * dampening) + this.bounds.height) % this.bounds.height;
 		}
 	}
 }
