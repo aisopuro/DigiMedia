@@ -16,7 +16,7 @@ function Background( stage, starcount, layers ) {
 		this.layers[l] = [];
 		for (var s = 0; s < (starcount/(l+1)); s++) {
 			var star = new createjs.Shape();
-			star.graphics.beginFill("#FFF").drawCircle(0, 0, 1);
+			star.graphics.beginFill("#FFF").drawRect(0, 0, 1, 1);
 			star.x = star.origx = getRandomInt(0, this.bounds.width);
 			star.y = star.origy = getRandomInt(0, this.bounds.height);
 			stage.addChild(star);
