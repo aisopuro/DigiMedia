@@ -48,6 +48,8 @@ Builder.prototype.build = function() {
         startY: 0
     } );
 
+    this.entities.dummyEnemy = enemy;
+
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );
 };

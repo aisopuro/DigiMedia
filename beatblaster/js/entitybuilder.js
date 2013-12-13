@@ -5,7 +5,7 @@ EntityBuilder = {
         if ( buildPlayer ) {
             // Build a player entity
             // Contruct player object
-            img = new createjs.Shape();
+            var img = new createjs.Shape();
             // Blue triangle
             img.graphics.beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90 );
             // EaselJS doesn't support automatic boundary calculation for Shape, 
@@ -16,9 +16,12 @@ EntityBuilder = {
 
         } else {
             // build an enemyentity
-            img = createjs.Shape();
-            img.graphicsbeginFill("FF0").drawRectangle(0,0,100,100);
-            img.setBounds(0,0,100,100);
+            var img = new createjs.Shape();
+            img.graphics.beginFill( "FF0" ).drawRoundRect( 0, 0, 100, 100, 2 );
+            img.setBounds( 0, 0, 100, 100 );
+
+            entity = new Entity( specs.stage, img, undefined, specs.startX,
+                specs.startY );
         }
         return entity;
     }

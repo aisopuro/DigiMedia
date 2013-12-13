@@ -6,6 +6,7 @@ function GameManager( stage, entities, fps ) {
     this.entities = entities;
     console.log( this.entities );
     this.player = this.entities.player;
+    this.dummyEnemy = this.entities.dummyEnemy;
     this.projectiles = [];
     this.projectileIndexes = [];
     this.fps = fps;
@@ -51,6 +52,7 @@ GameManager.prototype.frameTick = function( event ) {
     }
     this.movePlayer();
     this.processBuffer();
+    this.processEnemies();
     this.moveProjectiles();
 	this.bg.updateStars(this.player.img.x, this.player.img.y);
     this.stage.update();
@@ -209,4 +211,8 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
     projectile.cursor++;
     image.active = true;
     return image;
+};
+
+GameManager.prototype.processEnemies = function() {
+    this.stage.addChild(this.dummyEnemy.img);
 };
