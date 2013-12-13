@@ -6,7 +6,7 @@ function GameManager( stage, entities, fps ) {
     this.entities = entities;
     console.log( this.entities );
     this.player = this.entities.player;
-    this.dummyEnemy = this.entities.dummyEnemy;
+    this.dummyEnemy; // @TEST
     this.projectiles = [];
     this.projectileIndexes = [];
     this.fps = fps;
@@ -28,10 +28,10 @@ function GameManager( stage, entities, fps ) {
 	
 	this.bg = this.entities.bg;
     this.setUpListeners();
-	
-	// maybe move this somewhere else
-	this.soundHandler.startMusic();
-	
+
+    // maybe move this somewhere else
+    this.soundHandler.startMusic();
+
 }
 
 GameManager.prototype.setUpListeners = function() {
@@ -39,13 +39,29 @@ GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
     console.log( this.buffer );
+    //@TEST
+    this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
+    console.log( this.dummyEnemy );
+
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
 
 GameManager.prototype.frameTick = function( event ) {
+<<<<<<< HEAD
+    if ( this.testCounter === 10 ) {
+        var ev = new createjs.Event( "musicevent", true, true );
+        ev.note = SoundHandler.BASS;
+        this.stage.dispatchEvent( ev );
+        this.testCounter = 0;
+    } else {
+        this.testCounter++;
+    }
+    this.soundHandler.tick();
+=======
 	this.soundHandler.tick();
+>>>>>>> 55ba6f3045b2957d96a8ae9bbf7e39bacbaa6eea
     this.movePlayer();
     this.processBuffer();
     this.processEnemies();
@@ -55,22 +71,7 @@ GameManager.prototype.frameTick = function( event ) {
 };
 
 GameManager.prototype.movePlayer = function() {
-    var oldX = this.player.img.x;
-    var oldY = this.player.img.y;
-    if ( this.inputVector.up )
-        this.player.img.y -= Constants.PLAYER_SPEED;
-    if ( this.inputVector.left )
-        this.player.img.x -= Constants.PLAYER_SPEED;
-    if ( this.inputVector.down )
-        this.player.img.y += Constants.PLAYER_SPEED;
-    if ( this.inputVector.right )
-        this.player.img.x += Constants.PLAYER_SPEED;
-    if ( this.outOfBounds( this.player.img ) ) {
-        // Player out of bounds, don't allow movement
-        console.log( "outOfBounds" );
-        this.player.img.x = oldX;
-        this.player.img.y = oldY;
-    }
+    this.player.moveFunction( this.inputVector );
 
 }
 
@@ -210,5 +211,9 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 };
 
 GameManager.prototype.processEnemies = function() {
-    this.stage.addChild( this.dummyEnemy.img );
+    this.dummyEnemy.move();
+    if ( this.outOfBounds( this.dummyEnemy.img ) ) {
+        this.stage.removeChild( this.dummyEnemy.img );
+        this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
+    }
 };

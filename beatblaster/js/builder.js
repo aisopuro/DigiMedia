@@ -49,15 +49,6 @@ Builder.prototype.build = function() {
 
     }.bind( this ) );
 
-    // Build enemy
-    var enemy = EntityBuilder.build( false, {
-        stage: this.stage,
-        startX: 0,
-        startY: 0
-    } );
-
-    this.entities.dummyEnemy = enemy;
-
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );
 };
