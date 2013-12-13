@@ -46,6 +46,9 @@ function PlayerEntity( stage, image, startX, startY ) {
 		this.img.y += this.speedY;   
 		
         this.correctBoundaries();
+		
+		this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90+(this.speedX) );
+		
     }
     //Entity.call( this, stage, image, moveFunction, startX, startY );
     this.guns = [];
