@@ -14,7 +14,7 @@ function Background( stage, starcount, layers ) {
 	
 	for (var l = 0; l < layers; l++) {
 		this.layers[l] = [];
-		for (var s = 0; s < starcount; s++) {
+		for (var s = 0; s < (starcount/(l+1)); s++) {
 			var star = new createjs.Shape();
 			star.graphics.beginFill("#FFF").drawCircle(0, 0, 1+l);
 			star.x = star.origx = getRandomInt(0, this.bounds.width);
@@ -26,14 +26,14 @@ function Background( stage, starcount, layers ) {
 	
 }
 
-Background.prototype.updateStars = function(playerX, playerY){
+Background.prototype.updateStars = function(playerX, playerY) {
 	var lc = this.layers.length;
-	for (var l = 0; l < lc; l++) {
+	for (var l = 1; l < lc; l++) {
 		for (var s = 0; s < this.layers[l].length; s++) {
 			var star = this.layers[l][s];
 			var dampening = (1/lc) * l * this.globaldampen;
-			star.x = ( star.origx - (playerX * dampening) ) % this.bounds.width;
-			star.y = ( star.origy - (playerY * dampening) ) % this.bounds.height;
+			star.x = Math.floor( star.origx - (playerX * dampening) + this.bounds.width) % this.bounds.width;
+			star.y = Math.floor( star.origy - (playerY * dampening) + this.bounds.height) % this.bounds.height;
 		}
 	}
 }

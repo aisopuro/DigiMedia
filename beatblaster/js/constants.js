@@ -7,6 +7,9 @@ Constants = {
     PATH_TO_PLAYER_IMAGE: "./beatblaster/img/neonship.png",
     // Speed in pixels per frame
     PLAYER_SPEED: 5,
+	PLAYER_ACCELERATION: 1.5,
+	PLAYER_FRICTION: 0.8,
+	
     TIMELINE_ID: "timeline",
     TIMELINE_SRC: "./beatblaster/js/timeline.json",
 	
