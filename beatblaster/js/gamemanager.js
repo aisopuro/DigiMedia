@@ -48,14 +48,6 @@ GameManager.prototype.setUpListeners = function() {
 };
 
 GameManager.prototype.frameTick = function( event ) {
-    if ( this.testCounter === 10 ) {
-        var ev = new createjs.Event( "musicevent", true, true );
-        ev.note = SoundHandler.BASS;
-        this.stage.dispatchEvent( ev );
-        this.testCounter = 0;
-    } else {
-        this.testCounter++;
-    }
     this.soundHandler.tick();
     this.movePlayer();
     this.processBuffer();
