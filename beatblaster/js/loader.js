@@ -83,7 +83,10 @@ Loader.prototype.loadAssets = function() {
     this.queue.addEventListener( "fileload", this.assetLoaded.bind( this ) );
     this.queue.addEventListener( "error", this.loadError.bind( this ) );
     this.queue.addEventListener( "complete", this.assetsLoaded.bind( this ) );
-
+	
+	createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.FlashPlugin]);
+	this.queue.installPlugin(createjs.Sound);
+	
     this.queue.loadManifest( [ {
         id: Constants.IMAGE_ID_PLAYER,
         src: Constants.PATH_TO_PLAYER_IMAGE,
@@ -119,6 +122,7 @@ Loader.prototype.assetLoaded = function( event ) {
         this.loadedAssets.push( item );
     } else if ( item.type === createjs.LoadQueue.SOUND ) {
         // Loaded sound
+		item.data = event.result;
         this.loadedAssets.push( item );
     } else if ( item.type === createjs.LoadQueue.JSON ) {
         // Loaded json

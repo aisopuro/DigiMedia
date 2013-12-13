@@ -54,6 +54,7 @@ SoundHandler.prototype.startMusic = function() {
 		return;
 	}
     this.timerstart = Date.now();
+	console.log(this.musicfile);
     createjs.Sound.play( this.musicfile );
 };
 
