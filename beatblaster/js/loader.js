@@ -97,6 +97,10 @@ Loader.prototype.loadAssets = function() {
         id: Constants.TIMELINE_ID,
         src: Constants.TIMELINE_SRC,
         type: createjs.LoadQueue.JSON
+    }, {
+        id: Constants.BGMUSIC_ID,
+        src: Constants.BGMUSIC_SRC,
+        type: createjs.LoadQueue.SOUND
     } ] );
 
 };
