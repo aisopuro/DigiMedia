@@ -67,9 +67,9 @@ EnemyFactory = {
             );
             return bool;
         }.bind( enemy );
-        
-        enemy.hitBy = function(projectile) {
-            this.hp -= projectile.damageValue;
+
+        enemy.hitBy = function( projectile ) {
+            this.hp -= projectile.img.damageValue;
             return this.hp <= 0;
         }
 
