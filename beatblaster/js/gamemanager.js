@@ -49,6 +49,7 @@ GameManager.prototype.frameTick = function( event ) {
     this.processBuffer();
     this.processEnemies();
     this.moveProjectiles();
+	this.bg.updateStars(this.player.img.x, this.player.img.y);
     this.stage.update();
 };
 
