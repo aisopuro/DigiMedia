@@ -18,6 +18,7 @@ function GameManager( stage, entities, fps ) {
         down: false,
         right: false
     }
+	this.bg = new Background(this.stage, 10, 3);
 
     // Keycodes
     this.UP = 87;
@@ -51,6 +52,7 @@ GameManager.prototype.frameTick = function( event ) {
     this.movePlayer();
     this.processBuffer();
     this.moveProjectiles();
+	this.bg.updateStars(this.player.img.x, this.player.img.y);
     this.stage.update();
 };
 

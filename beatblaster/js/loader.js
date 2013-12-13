@@ -63,7 +63,8 @@ Loader.prototype.loadLibraries = function() {
             "projectilebuilder.js",
             "entitybuilder.js",
             "entity.js",
-            "gun.js"
+            "gun.js",
+			"background.js"
         ],
         true,
         basepath );
