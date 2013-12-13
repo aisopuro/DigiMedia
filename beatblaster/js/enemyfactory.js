@@ -1,11 +1,14 @@
 // A class for managing enemy types and spawning EnemyEntities
 EnemyFactory = {
     MARGIN_MULTIPLIER: 2,
-    BASIC_ENEMY: 0,
+    EASY_ENEMY: 0,
+	BASIC_ENEMY: 1,
+	MEDIUM_ENEMY: 2,
+	HARD_ENEMY: 3,
     buildEnemy: function( enemyType, stage, startOffsetX, startOffsetY ) {
         var enemy = {};
         enemy.hp = 1;
-        if ( enemyType === this.BASIC_ENEMY ) {
+        if ( enemyType === this.EASY_ENEMY ) {
             var img = EnemyFactory.bitmaps[Constants.ENEMY1_ID].clone();
             img.setBounds( 0, 0, 60, 60 );
             enemy = new Entity( stage, img, undefined,
@@ -13,6 +16,39 @@ EnemyFactory = {
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.hp = 2;
+            enemy.move = function() {
+                this.img.y += 7;
+            }.bind( enemy );
+        } else if ( enemyType === this.BASIC_ENEMY ) {
+            var img = EnemyFactory.bitmaps[Constants.ENEMY2_ID].clone();
+            img.setBounds( 0, 0, 60, 60 );
+            enemy = new Entity( stage, img, undefined,
+                100 + startOffsetX, -100 + startOffsetY );
+
+            enemy.margin = this.MARGIN_MULTIPLIER * 100;
+            enemy.hp = 10;
+            enemy.move = function() {
+                this.img.y += 7;
+            }.bind( enemy );
+        } else if ( enemyType === this.MEDIUM_ENEMY ) {
+            var img = EnemyFactory.bitmaps[Constants.ENEMY3_ID].clone();
+            img.setBounds( 0, 0, 60, 60 );
+            enemy = new Entity( stage, img, undefined,
+                100 + startOffsetX, -100 + startOffsetY );
+
+            enemy.margin = this.MARGIN_MULTIPLIER * 100;
+            enemy.hp = 20;
+            enemy.move = function() {
+                this.img.y += 7;
+            }.bind( enemy );
+        } else if ( enemyType === this.HARD_ENEMY ) {
+            var img = EnemyFactory.bitmaps[Constants.ENEMY4_ID].clone();
+            img.setBounds( 0, 0, 60, 60 );
+            enemy = new Entity( stage, img, undefined,
+                100 + startOffsetX, -100 + startOffsetY );
+
+            enemy.margin = this.MARGIN_MULTIPLIER * 100;
+            enemy.hp = 40;
             enemy.move = function() {
                 this.img.y += 7;
             }.bind( enemy );
