@@ -1,3 +1,33 @@
+/*
+
+SoundHandler usage: 
+
+Constructor:
+
+	var sh = new SoundHandler( stage, data );
+		stage: a target to send the music events for
+		data: an array containing the music events timeline
+	
+	
+Music registration saves the music id (call this when the music file load event fires):
+
+	sh.registerMusic( music );
+		music: string identifier of the preloaded music file for SoundJS
+	
+	
+Starts to play the music and resets the timeline counter:
+	
+	sh.startMusic();
+	
+
+Call this every tick (after startMusic has been called) so the events get sent:
+
+	sh.tick();
+	
+
+*/
+
+
 function SoundHandler( stage, data ) {
     this.musicfile = 0;
     this.ready = false;
