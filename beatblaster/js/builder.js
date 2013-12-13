@@ -54,6 +54,10 @@ Builder.prototype.build = function() {
 
     }.bind( this ) );
 
+    // Build enemy
+    var enemy = {};
+    enemy.img = 
+
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );
 };

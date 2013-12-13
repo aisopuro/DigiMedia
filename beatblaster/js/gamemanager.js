@@ -33,7 +33,7 @@ GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keydown( this.keyDown.bind( this ) );
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
-    console.log( this.stage.getBounds() );
+    console.log( this.buffer );
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );

@@ -10,6 +10,8 @@ function Entity( stage, image, moveFunction, startX, startY ) {
     }
     this.img.x = startX;
     this.img.y = startY;
+    this.stage = stage;
+    this.stage.addChild( this.img );
 }
 
 // PlayerEntity inherits Entity
@@ -31,26 +33,44 @@ function PlayerEntity( stage, image, startX, startY ) {
         this.correctBoundaries();
     }
     Entity.call( this, stage, image, moveFunction, startX, startY );
+    this.guns = [];
+    this.setUpGuns();
 }
 
 PlayerEntity.prototype.correctBoundaries = function() {
     var boundaries = this.stage.getBounds();
     var edges = this.img.getTransformedBounds();
-    if (edges.x < boundaries.x) {
+    if ( edges.x < boundaries.x ) {
         // Past left edge
         this.img.x = boundaries.x;
     }
-    if (edges.y < boundaries.y) {
+    if ( edges.y < boundaries.y ) {
         // Past upper edge
         this.img.y = boundaries.y;
     }
-    if ((boundaries.x + boundaries.width) < (edges.x + edges.width)) {
+    if ( ( boundaries.x + boundaries.width ) < ( edges.x + edges.width ) ) {
         // Past right edge
-        this.img.x = (boundaries.x + boundaries.width - edges.width);
+        this.img.x = ( boundaries.x + boundaries.width - edges.width );
     }
-    if ((boundaries.y + boundaries.height) < (edges.y + edges.height)) {
+    if ( ( boundaries.y + boundaries.height ) < ( edges.y + edges.height ) ) {
         // Past right edge
-        this.img.y = (boundaries.y + boundaries.height - edges.height);
+        this.img.y = ( boundaries.y + boundaries.height - edges.height );
     }
 
+};
+
+PlayerEntity.prototype.setUpGuns = function() {
+    // Bass
+    // Create projectile image
+    var image = new createjs.Shape();
+    image.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
+    image.setBounds( 0, 0, 10, 50 );
+
+    var gunBass = new Gun( this.img, image, undefined );
+
+    // The function for determining the shoot pattern
+    var shoot = function() {
+        // Because of the bind at the end, this refers to the owning gun, 
+        // not this entity
+    }.bind( gunBass )
 };
