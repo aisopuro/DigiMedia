@@ -32,7 +32,7 @@ EnemyFactory = {
             return bool;
         }.bind( enemy );
         
-        enemy.hitBy(projectile) {
+        enemy.hitBy = function(projectile) {
             this.hp -= projectile.damageValue;
             return this.hp <= 0;
         }

@@ -96,7 +96,10 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
-    console.log( "hit" );
+    if (enemy.hitBy(projectile)) {
+        // Enemy was killed
+        this.destroy(enemy);
+    }
 };
 
 GameManager.prototype.outOfBounds = function( image ) {
@@ -249,4 +252,8 @@ GameManager.prototype.processEnemies = function() {
         }
 
     }
+};
+
+GameManager.prototype.destroy = function(enemy) {
+    this.removeEntity(this.enemies, enemy, this.enemies.indexOf(enemy));
 };
