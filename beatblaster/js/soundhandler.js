@@ -46,16 +46,17 @@ SoundHandler.SYNTH3 = 4;
 SoundHandler.prototype.registerMusic = function( music ) {
     this.musicfile = music;
     this.ready = true;
-}
+};
 
 SoundHandler.prototype.startMusic = function() {
+	console.log("SoundHandler.startMusic called");
 	if (!this.ready) {
 		console.log("SoundHandler.startMusic called, but music not registered! (call registerMusic first)");
 		return;
 	}
     this.timerstart = Date.now();
     createjs.Sound.play( this.musicfile );
-}
+};
 
 SoundHandler.prototype.peek = function() {
     if ( this.timeline.length > 0 ) {
@@ -63,7 +64,7 @@ SoundHandler.prototype.peek = function() {
     } else {
         return false;
     }
-}
+};
 
 SoundHandler.prototype.pop = function() {
 	if ( this.timeline.length > 0 ) {
@@ -71,7 +72,7 @@ SoundHandler.prototype.pop = function() {
 	} else {
         return false;
     }
-}
+};
 
 SoundHandler.prototype.process = function( e ) {
 	if (!this.ready) return;
@@ -81,7 +82,7 @@ SoundHandler.prototype.process = function( e ) {
         ev.data = e.data;
         this.eventStage.dispatchEvent( ev );
     }
-}
+};
 
 SoundHandler.prototype.tick = function() {
 	if (!this.ready) return;
@@ -92,4 +93,4 @@ SoundHandler.prototype.tick = function() {
         el = this.peek();
     }
 
-}
+};

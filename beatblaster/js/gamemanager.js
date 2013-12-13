@@ -30,6 +30,7 @@ function GameManager( stage, entities, fps ) {
     this.setUpListeners();
 	
 	// maybe move this somewhere else
+	console.log("soundhandle", this.soundHandler.startMusic);
 	this.soundHandler.startMusic();
 	
 }
