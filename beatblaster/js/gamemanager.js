@@ -118,10 +118,10 @@ GameManager.prototype.contains = function( bounds, edges ) {
 GameManager.prototype.covers = function( bounds, edges ) {
     // test if any of the edges are within the bounds given
     return (
-        ( bounds.x <= edges.left && edges.left <= bounds.width ) ||
-        ( bounds.x <= edges.right && edges.right <= bounds.width ) ||
-        ( bounds.y <= edges.up && edges.up <= bounds.height ) ||
-        ( bounds.y <= edges.down && edges.down <= bounds.height )
+        ( bounds.left <= edges.left && edges.left <= bounds.right ) ||
+        ( bounds.left <= edges.right && edges.right <= bounds.right ) ||
+        ( bounds.left <= edges.up && edges.up <= bounds.right ) ||
+        ( bounds.left <= edges.down && edges.down <= bounds.right )
     );
 
 };
@@ -148,15 +148,15 @@ GameManager.prototype.processBuffer = function() {
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
     if ( event.note !== undefined && event.data == "start" ) {
-        var proj = this.player.fireGuns( event.note );
-        if ( $.isArray( proj ) ) {
-            for ( var i = 0; i < proj.length; i++ ) {
-                this.stage.addChild( proj[ i ].img );
-                this.projectiles.push( proj[ i ] );
+        var projectile = this.player.fireGuns( event.note );
+        if ( $.isArray( projectile ) ) {
+            for ( var i = 0; i < projectile.length; i++ ) {
+                this.stage.addChild( projectile[ i ].img );
+                this.projectiles.push( projectile[ i ] );
             }
         } else {
-            this.stage.addChild( proj.img );
-            this.projectiles.push( proj );
+            this.stage.addChild( projectile.img );
+            this.projectiles.push( projectile );
         }
     }
 };
@@ -236,11 +236,11 @@ GameManager.prototype.processEnemies = function() {
     }
     var enemy;
     for ( var i in this.enemies ) {
-        enemy = this.enemies[i];
+        enemy = this.enemies[ i ];
         enemy.move();
-        if (enemy.outOfBounds()) {
-            this.removeEntity(this.enemies, enemy, i);
+        if ( enemy.outOfBounds() ) {
+            this.removeEntity( this.enemies, enemy, i );
         }
-        
+
     }
 };
