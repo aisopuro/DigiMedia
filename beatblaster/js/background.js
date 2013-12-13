@@ -9,7 +9,7 @@ function Background( stage, starcount, layers ) {
 	stage.addChild(bg);
 	this.back = bg;	
 	
-	this.globaldampen = 0.3;	
+	this.globaldampen = 0.2;	
 	this.layers = [];
 	
 	for (var l = 0; l < layers; l++) {
@@ -32,8 +32,8 @@ Background.prototype.updateStars = function(playerX, playerY){
 		for (var s = 0; s < this.layers[l].length; s++) {
 			var star = this.layers[l][s];
 			var dampening = (1/lc) * l * this.globaldampen;
-			star.x = ( star.origx + (-playerX * dampening) ) % this.bounds.width;
-			star.y = ( star.origy + (-playerY * dampening) ) % this.bounds.height;
+			star.x = ( star.origx - (playerX * dampening) ) % this.bounds.width;
+			star.y = ( star.origy - (playerY * dampening) ) % this.bounds.height;
 		}
 	}
 }
