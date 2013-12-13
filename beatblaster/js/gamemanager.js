@@ -4,7 +4,6 @@ function GameManager( stage, entities, fps ) {
     this.stage = stage;
     this.bounds = this.stage.getBounds();
     this.entities = entities;
-    this.unpackEntities();
     console.log( this.entities );
     this.player = this.entities.player;
     this.projectiles = [];
@@ -30,14 +29,11 @@ function GameManager( stage, entities, fps ) {
     this.setUpListeners();
 }
 
-GameManager.prototype.unpackEntities = function() {
-    this.player = this.entities.player;
-};
-
 GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keydown( this.keyDown.bind( this ) );
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
+    console.log( this.stage.getBounds() );
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
@@ -69,6 +65,12 @@ GameManager.prototype.movePlayer = function() {
         this.player.img.y += Constants.PLAYER_SPEED;
     if ( this.inputVector.right )
         this.player.img.x += Constants.PLAYER_SPEED;
+    if ( this.outOfBounds( this.player.img ) ) {
+        // Player out of bounds, don't allow movement
+        console.log( "outOfBounds" );
+        this.player.img.x = oldX;
+        this.player.img.y = oldY;
+    }
 
 }
 
@@ -88,15 +90,23 @@ GameManager.prototype.moveProjectiles = function() {
 
 GameManager.prototype.outOfBounds = function( image ) {
     // Calculate whether given bounds are inside canvas
-    var dim = image.getBounds();
+    var dim = image.getTransformedBounds();
     bounds = {
-        up: image.y,
-        left: image.x,
-        down: image.y + dim.height,
-        right: image.x + dim.width
+        left: dim.x,
+        up: dim.y,
+        right: dim.x + dim.width,
+        down: dim.y + dim.height
     }
-    console.log( bounds );
-    return !this.covers( this.stage.getBounds(), bounds );
+    return !this.contains( this.stage.getBounds(), bounds );
+};
+
+GameManager.prototype.contains = function( bounds, edges ) {
+    return (
+        bounds.x <= edges.left &&
+        bounds.y <= edges.up &&
+        edges.right <= bounds.width &&
+        edges.down <= bounds.height
+    );
 };
 
 GameManager.prototype.covers = function( bounds, edges ) {
