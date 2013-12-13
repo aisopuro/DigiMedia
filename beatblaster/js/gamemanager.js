@@ -28,6 +28,10 @@ function GameManager( stage, entities, fps ) {
 
     this.testCounter = 0;
     this.setUpListeners();
+	
+	// maybe move this somewhere else
+	this.soundHandler.startMusic();
+	
 }
 
 GameManager.prototype.setUpListeners = function() {
@@ -49,6 +53,7 @@ GameManager.prototype.frameTick = function( event ) {
     } else {
         this.testCounter++;
     }
+	this.soundHandler.tick();
     this.movePlayer();
     this.processBuffer();
     this.processEnemies();

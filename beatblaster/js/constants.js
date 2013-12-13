@@ -9,6 +9,9 @@ Constants = {
     PLAYER_SPEED: 5,
     TIMELINE_ID: "timeline",
     TIMELINE_SRC: "./beatblaster/js/timeline.json",
+	
+	BGMUSIC_ID: "bgmusic",
+	BGMUSIC_SRC: "./beatblaster/mp3/tracing.mp3",
 
     // Player icon boundaries
     PLAYER_BOUND_LEFT: 55,

@@ -97,6 +97,10 @@ Loader.prototype.loadAssets = function() {
         id: Constants.TIMELINE_ID,
         src: Constants.TIMELINE_SRC,
         type: createjs.LoadQueue.JSON
+    }, {
+        id: Constants.BGMUSIC_ID,
+        src: Constants.BGMUSIC_SRC,
+        type: createjs.LoadQueue.SOUND
     } ] );
 
 };
@@ -116,7 +120,12 @@ Loader.prototype.assetLoaded = function( event ) {
     } else if ( item.type === createjs.LoadQueue.SOUND ) {
         // Loaded sound
         this.loadedAssets.push( item );
+    } else if ( item.type === createjs.LoadQueue.JSON ) {
+        // Loaded json
+		item.data = event.result;
+        this.loadedAssets.push( item );
     }
+	
 };
 
 Loader.prototype.assetsLoaded = function( event ) {
