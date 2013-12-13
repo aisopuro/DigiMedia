@@ -24,22 +24,37 @@ function PlayerEntity( stage, image, startX, startY ) {
     this.img.y = startY;
     this.stage = stage;
     this.stage.addChild( this.img );
+	this.speedX = 0;
+	this.speedY = 0;
     this.moveFunction = function( inputVector ) {
         var oldX = this.img.x;
         var oldY = this.img.y;
+		
+		this.speedX *= Constants.PLAYER_FRICTION;
+		this.speedY *= Constants.PLAYER_FRICTION;
+		
         if ( inputVector.up )
-            this.img.y -= Constants.PLAYER_SPEED;
+            this.speedY -= Constants.PLAYER_ACCELERATION;
         if ( inputVector.left )
-            this.img.x -= Constants.PLAYER_SPEED;
+            this.speedX -= Constants.PLAYER_ACCELERATION;
         if ( inputVector.down )
-            this.img.y += Constants.PLAYER_SPEED;
+            this.speedY += Constants.PLAYER_ACCELERATION;
         if ( inputVector.right )
-            this.img.x += Constants.PLAYER_SPEED;
+			this.speedX += Constants.PLAYER_ACCELERATION;
+		
+        this.img.x += this.speedX;
+		this.img.y += this.speedY;   
+		
         this.correctBoundaries();
     }
     //Entity.call( this, stage, image, moveFunction, startX, startY );
     this.guns = [];
     this.setUpGuns();
+}
+
+PlayerEntity.prototype.stop = function() {
+	this.speedX = 0;
+	this.speedY = 0;
 }
 
 PlayerEntity.prototype.correctBoundaries = function() {
@@ -49,18 +64,22 @@ PlayerEntity.prototype.correctBoundaries = function() {
     if ( edges.x < boundaries.x ) {
         // Past left edge
         this.img.x = boundaries.x - Constants.PLAYER_BOUND_LEFT;
+		this.stop();
     }
     if ( edges.y < boundaries.y ) {
         // Past upper edge
         this.img.y = boundaries.y - Constants.PLAYER_BOUND_UP;
+		this.stop();
     }
     if ( ( boundaries.x + boundaries.width ) < ( edges.x + edges.width ) ) {
         // Past right edge
         this.img.x = ( boundaries.x + boundaries.width - edges.width - Constants.PLAYER_BOUND_LEFT);
+		this.stop();
     }
     if ( ( boundaries.y + boundaries.height ) < ( edges.y + edges.height ) ) {
         // Past right edge
         this.img.y = ( boundaries.y + boundaries.height - edges.height - Constants.PLAYER_BOUND_UP);
+		this.stop();
     }
 
 };
