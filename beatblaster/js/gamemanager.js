@@ -1,9 +1,10 @@
 // A class for managing the basic gameplay loop
-function GameManager( stage, entities, fps ) {
+function GameManager( stage, entities, fps, bitmaps ) {
     console.log( "manager" );
     this.stage = stage;
     this.bounds = this.stage.getBounds();
     this.entities = entities;
+	this.bitmaps = bitmaps;
     console.log( this.entities );
     this.player = this.entities.player;
     this.dummyEnemy; // @TEST
