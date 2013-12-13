@@ -10,7 +10,7 @@ EnemyFactory = {
             img.setBounds( 0, 0, 100, 100 );
             enemy = new Entity( stage, img, undefined, 250, -50 );
 
-            enemy.margin = this.MARGIN_MULTIPLIER * 200;
+            enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.move = function() {
                 this.img.y += 7;
             }.bind( enemy );
@@ -25,12 +25,12 @@ EnemyFactory = {
             console.log( this.stageBounds );
             console.log( this.margin );
             var bool = !(
-                ( edges.x <= (this.stageBounds.x - this.margin) ) &&
-                ( edges.y <= (this.stageBounds.y - this.margin) ) &&
-                ( edges.x + (edges.width <= this.stageBounds.x + this.stageBounds.width + this.margin) ) &&
-                ( edges.y + (edges.height <= this.stageBounds.y + this.stageBounds.height + this.margin) )
+                edges.x >= this.stageBounds.x - this.margin &&
+                edges.y >= this.stageBounds.y - this.margin &&
+                edges.x + edges.width <= this.stageBounds.x + this.stageBounds.width + this.margin &&
+                edges.y + edges.height <= this.stageBounds.y + this.stageBounds.height + this.margin
             );
-            console.log(bool);
+            console.log( bool );
             return bool;
         }.bind( enemy );
 
