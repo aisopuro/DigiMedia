@@ -27,7 +27,9 @@ Builder.prototype.build = function() {
                 console.log( "playerImage:" );
                 // Contruct player object
                 img = new createjs.Shape();
+                // Blue triangle
                 img.graphics.beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90 );
+                img.setBounds(55, 50, 90, 80);
                 var player = {};
                 player.img = img;
                 this.stage.addChild( img );
