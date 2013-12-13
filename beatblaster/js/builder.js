@@ -42,6 +42,8 @@ Builder.prototype.build = function() {
         } else if ( item.id === Constants.BGMUSIC_ID ) {
 			if (this.entities.soundHandler) {
 				this.entities.soundHandler.registerMusic(Constants.BGMUSIC_ID);
+			} else {
+				console.log("no sound handler present, bug?");
 			}
 		}
 
