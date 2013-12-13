@@ -132,7 +132,7 @@ GameManager.prototype.processBuffer = function() {
 
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-    if ( event.note === SoundHandler.BASS ) {
+    if ( event.note === SoundHandler.BASS && event.data == "start" ) {
         var proj = this.player.fireGuns( event.note );
         this.stage.addChild( proj.img );
         this.projectiles.push( proj );
