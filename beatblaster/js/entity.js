@@ -146,8 +146,8 @@ PlayerEntity.prototype.setUpGuns = function() {
         // not this entity
         var copy = this.image.clone();
 		var copy2 = this.image.clone();
-        var offX = 89;
-		var offX2 = 109;
+        var offX = 87;
+		var offX2 = 107;
         var offY = 60;
 		
         copy.x = this.ownerImage.x + offX;
@@ -181,8 +181,8 @@ PlayerEntity.prototype.setUpGuns = function() {
 		copy.speedX = -10;
 		var copy2 = this.image.clone();
 		copy2.speedX = 10;
-        var offX = 89;
-		var offX2 = 109;
+        var offX = 90;
+		var offX2 = 110;
         var offY = 60;
 		
         copy.x = this.ownerImage.x + offX;
@@ -217,8 +217,8 @@ PlayerEntity.prototype.setUpGuns = function() {
         // not this entity
         var copy = this.image.clone();
 		copy.speedY = -1; 
-        var offX = 94;
-        var offY = 60;
+        var offX = 98;
+        var offY = 58;
 		
         copy.x = this.ownerImage.x + offX;
         copy.y = this.ownerImage.y + offY;
