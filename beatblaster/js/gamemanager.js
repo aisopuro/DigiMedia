@@ -11,7 +11,7 @@ function GameManager( stage, entities, fps ) {
     this.fps = fps;
     this.mspf = 1000 / fps; // ms per frame
     this.buffer = new Queue(); // soundEvent buffer
-    this.soundHandler = new SoundHandler( this.stage, {} ); // Maybe do this in builder
+    this.soundHandler = this.entities.soundHandler; // Maybe do this in builder
     this.inputVector = {
         up: false,
         left: false,
@@ -42,7 +42,7 @@ GameManager.prototype.setUpListeners = function() {
 GameManager.prototype.frameTick = function( event ) {
     if ( this.testCounter === 10 ) {
         var ev = new createjs.Event( "musicevent", true, true );
-        ev.note = Constants.NOTE_BASS;
+        ev.note = SoundHandler.BASS;
         //this.stage.dispatchEvent( ev );
         this.testCounter = 0;
     } else {
