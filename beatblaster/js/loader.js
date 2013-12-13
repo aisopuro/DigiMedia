@@ -60,7 +60,9 @@ Loader.prototype.loadLibraries = function() {
             "constants.js",
             "gamemanager.js",
             "Queue.compressed.js",
-            "projectilebuilder.js"
+            "projectilebuilder.js",
+            "entitybuilder.js",
+            "entity.js"
         ],
         true,
         basepath );
@@ -88,6 +90,10 @@ Loader.prototype.loadAssets = function() {
             // Data for correct handling of the entity this item represents
             entityData: {}
         }
+    }, {
+        id: Constants.TIMELINE_ID,
+        src: Constants.TIMELINE_SRC,
+        type: createjs.LoadQueue.JSON
     } ] );
 
 };

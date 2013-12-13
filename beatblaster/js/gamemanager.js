@@ -91,13 +91,13 @@ GameManager.prototype.moveProjectiles = function() {
 GameManager.prototype.outOfBounds = function( image ) {
     // Calculate whether given bounds are inside canvas
     var dim = image.getTransformedBounds();
-    bounds = {
+    edges = {
         left: dim.x,
         up: dim.y,
         right: dim.x + dim.width,
         down: dim.y + dim.height
     }
-    return !this.contains( this.stage.getBounds(), bounds );
+    return !this.contains( this.stage.getBounds(), edges );
 };
 
 GameManager.prototype.contains = function( bounds, edges ) {
