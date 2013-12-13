@@ -88,22 +88,40 @@ PlayerEntity.prototype.correctBoundaries = function() {
 };
 
 PlayerEntity.prototype.setUpGuns = function() {
-    // Bass
-    // Create projectile image
-    var image = new createjs.Shape();
-    image.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
-    image.setBounds( 0, 0, 10, 50 );
-
-    var gunBass = new Gun( this.img, image );
+    
+	
+    // Create projectile images
+	
+    var imageBass = new createjs.Shape();
+    imageBass.graphics.beginFill( "#ffdc88" ).drawRoundRect( 0, 0, 6, 12, 2 );
+    imageBass.setBounds( 0, 0, 6, 12 );
+	
+	var imageSnare= new createjs.Shape();
+    imageSnare.graphics.beginFill( "#ffff00" ).drawCircle( 0, 0, 5 );
+    imageSnare.setBounds( -5, -5, 5, 5 );
+	
+	var imageNote1 = new createjs.Shape();
+    imageNote1.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
+    imageNote1.setBounds( 0, 0, 10, 50 );
+	
+	var imageNote2 = new createjs.Shape();
+    imageNote2.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
+    imageNote2.setBounds( 0, 0, 10, 50 );
+	
+	var imageNote3 = new createjs.Shape();
+    imageNote3.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
+    imageNote3.setBounds( 0, 0, 10, 50 );
+	
+	// Bass
+    var gunBass = new Gun( this.img, imageBass );
     gunBass.fireLeft = false;
-
     // The function for determining the shoot pattern
     var shoot = function() {
         // Because of the bind at the end, 'this' refers to the owning gun, 
         // not this entity
         var copy = this.image.clone();
         var offX = 104;
-        var offY = 15;
+        var offY = 60;
         if ( this.fireLeft ) {
             offX = 84;
         }
@@ -119,7 +137,41 @@ PlayerEntity.prototype.setUpGuns = function() {
         }
     }.bind( gunBass );
     gunBass.shoot = shoot;
+	
+	// Snare
+	var gunSnare = new Gun( this.img, imageSnare );
+    // The function for determining the shoot pattern
+    var shoot = function() {
+        // Because of the bind at the end, 'this' refers to the owning gun, 
+        // not this entity
+        var copy = this.image.clone();
+		var copy2 = this.image.clone();
+        var offX = 89;
+		var offX2 = 109;
+        var offY = 60;
+		
+        copy.x = this.ownerImage.x + offX;
+        copy.y = this.ownerImage.y + offY;
+		copy2.x = this.ownerImage.x + offX2;
+        copy2.y = this.ownerImage.y + offY;
 
+        return [{
+            img: copy,
+            move: function( image ) {
+                image.y -= 10;
+				image.x -= 4;
+            }
+        },{
+            img: copy2,
+            move: function( image ) {
+                image.y -= 10;
+				image.x += 4;
+            }
+        }];
+    }.bind( gunSnare );
+    gunSnare.shoot = shoot;
+	
+	this.guns[ SoundHandler.SNARE ] = gunSnare;
     this.guns[ SoundHandler.BASS ] = gunBass;
 };
 

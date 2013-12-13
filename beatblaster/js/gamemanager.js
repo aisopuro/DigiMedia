@@ -123,10 +123,17 @@ GameManager.prototype.processBuffer = function() {
 
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-    if ( event.note === SoundHandler.BASS && event.data == "start" ) {
+    if ( (event.note === SoundHandler.BASS || event.note === SoundHandler.SNARE ) && event.data == "start" ) {
         var proj = this.player.fireGuns( event.note );
-        this.stage.addChild( proj.img );
-        this.projectiles.push( proj );
+		if ($.isArray(proj)) {
+			for (var i = 0; i < proj.length; i++) {
+				this.stage.addChild( proj[i].img );
+				this.projectiles.push( proj[i] );
+			}
+		} else {
+			this.stage.addChild( proj.img );
+			this.projectiles.push( proj );
+		}
     }
 };
 
