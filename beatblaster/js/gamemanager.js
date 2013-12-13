@@ -208,7 +208,9 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 GameManager.prototype.processEnemies = function() {
     this.dummyEnemy.move();
     if ( this.dummyEnemy.outOfBounds() ) {
+        console.log(this.dummyEnemy);
         this.stage.removeChild( this.dummyEnemy.img );
         this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
+        console.log(this.dummyEnemy);
     }
 };
