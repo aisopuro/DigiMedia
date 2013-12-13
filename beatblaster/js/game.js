@@ -8,7 +8,7 @@ function Game( canvas, id ) {
     this.loader;
     this.builder;
     this.manager;
-
+	
     this.FPS = 30;
 
     this.initGame( this.canvas );

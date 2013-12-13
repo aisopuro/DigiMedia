@@ -16,6 +16,19 @@ Constants = {
 	BGMUSIC_ID: "bgmusic",
 	BGMUSIC_SRC: "./beatblaster/mp3/tracing.mp3",
 
+	ENEMY1_ID: "enemy1",
+	ENEMY1_SRC: "./beatblaster/img/enemy1.png",
+	
+	ENEMY2_ID: "enemy2",
+	ENEMY2_SRC: "./beatblaster/img/enemy2.png",
+	
+	ENEMY3_ID: "enemy3",
+	ENEMY3_SRC: "./beatblaster/img/enemy3.png",
+	
+	ENEMY4_ID: "enemy4",
+	ENEMY4_SRC: "./beatblaster/img/enemy4.png",
+	
+	
     // Player icon boundaries
     PLAYER_BOUND_LEFT: 75,
     PLAYER_BOUND_UP: 75,
