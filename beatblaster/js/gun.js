@@ -5,4 +5,10 @@ function Gun( ownerImage, projectileImage, shoot ) {
     this.ownerImage = ownerImage;
     this.image = projectileImage;
     this.shoot = shoot;
+    if (this.shoot === undefined) {
+        // Do nothing
+        this.shoot = function() {
+            
+        }
+    }
 }

@@ -66,11 +66,28 @@ PlayerEntity.prototype.setUpGuns = function() {
     image.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
     image.setBounds( 0, 0, 10, 50 );
 
-    var gunBass = new Gun( this.img, image, undefined );
+    var gunBass = new Gun( this.img, image );
+    gunBass.fireLeft = false;
 
     // The function for determining the shoot pattern
     var shoot = function() {
-        // Because of the bind at the end, this refers to the owning gun, 
+        // Because of the bind at the end, 'this' refers to the owning gun, 
         // not this entity
-    }.bind( gunBass )
+        var copy = this.image.clone();
+        var offX = 104;
+        var offY = 15;
+        if (this.fireLeft) {
+            offX = 84;
+        } 
+        this.fireLeft = !this.fireLeft;
+        copy.x = this.ownerImage.x + offX;
+        copy.y = this.ownerImage.y + offY;
+
+        return {
+            img: copy,
+            move: function(image) {
+                image.y -= 10;
+            }
+        }
+    }.bind( gunBass );
 };
