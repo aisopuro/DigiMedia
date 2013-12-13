@@ -8,6 +8,10 @@ function SoundHandler( stage, data ) {
 }
 // Beat type constants
 SoundHandler.BASS = 0;
+SoundHandler.SNARE = 1;
+SoundHandler.SYNTH1 = 2;
+SoundHandler.SYNTH2 = 3;
+SoundHandler.SYNTH3 = 4;
 
 SoundHandler.prototype.registerMusic = function( music ) {
     this.musicfile = music;
