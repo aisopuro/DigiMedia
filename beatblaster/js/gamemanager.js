@@ -57,22 +57,7 @@ GameManager.prototype.frameTick = function( event ) {
 };
 
 GameManager.prototype.movePlayer = function() {
-    var oldX = this.player.img.x;
-    var oldY = this.player.img.y;
-    if ( this.inputVector.up )
-        this.player.img.y -= Constants.PLAYER_SPEED;
-    if ( this.inputVector.left )
-        this.player.img.x -= Constants.PLAYER_SPEED;
-    if ( this.inputVector.down )
-        this.player.img.y += Constants.PLAYER_SPEED;
-    if ( this.inputVector.right )
-        this.player.img.x += Constants.PLAYER_SPEED;
-    if ( this.outOfBounds( this.player.img ) ) {
-        // Player out of bounds, don't allow movement
-        console.log( "outOfBounds" );
-        this.player.img.x = oldX;
-        this.player.img.y = oldY;
-    }
+    this.player.moveFunction(this.inputVector);
 
 }
 

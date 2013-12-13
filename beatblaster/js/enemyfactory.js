@@ -1,5 +1,5 @@
 // A class for managing enemy types and spawning EnemyEntities
-EnemyFactory {
+EnemyFactory =  {
     BASIC_ENEMY: 0,
     buildEnemy: function( enemyType, stage ) {
         var enemy;

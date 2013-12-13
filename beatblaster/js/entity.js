@@ -25,8 +25,8 @@ function PlayerEntity( stage, image, startX, startY ) {
     this.stage = stage;
     this.stage.addChild( this.img );
     this.moveFunction = function( inputVector ) {
-        var oldX = this.player.img.x;
-        var oldY = this.player.img.y;
+        var oldX = this.img.x;
+        var oldY = this.img.y;
         if ( inputVector.up )
             this.img.y -= Constants.PLAYER_SPEED;
         if ( inputVector.left )
