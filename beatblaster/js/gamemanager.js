@@ -26,7 +26,6 @@ function GameManager( stage, entities, fps ) {
     this.DOWN = 83;
     this.RIGHT = 68;
 
-    this.testCounter = 0;
     this.setUpListeners();
 	
 	// maybe move this somewhere else
@@ -45,14 +44,6 @@ GameManager.prototype.setUpListeners = function() {
 };
 
 GameManager.prototype.frameTick = function( event ) {
-    if ( this.testCounter === 10 ) {
-        var ev = new createjs.Event( "musicevent", true, true );
-        ev.note = SoundHandler.BASS;
-        this.stage.dispatchEvent( ev );
-        this.testCounter = 0;
-    } else {
-        this.testCounter++;
-    }
 	this.soundHandler.tick();
     this.movePlayer();
     this.processBuffer();
