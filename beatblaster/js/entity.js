@@ -109,8 +109,8 @@ PlayerEntity.prototype.setUpGuns = function() {
     imageNote2.setBounds( 0, 0, 4, 10 );
 	
 	var imageNote3 = new createjs.Shape();
-    imageNote3.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
-    imageNote3.setBounds( 0, 0, 10, 50 );
+    imageNote3.graphics.beginFill( "#00ddff" ).drawRect( 0, 0, 8, 8);
+    imageNote3.setBounds( 0, 0, 8, 8 );
 	
 	// Bass
     var gunBass = new Gun( this.img, imageBass );
@@ -158,14 +158,14 @@ PlayerEntity.prototype.setUpGuns = function() {
         return [{
             img: copy,
             move: function( image ) {
-                image.y -= 10;
-				image.x -= 4;
+                image.y -= 11;
+				image.x -= 5;
             }
         },{
             img: copy2,
             move: function( image ) {
-                image.y -= 10;
-				image.x += 4;
+                image.y -= 11;
+				image.x += 5;
             }
         }];
     }.bind( gunSnare );
@@ -208,7 +208,7 @@ PlayerEntity.prototype.setUpGuns = function() {
     }.bind( gunNote1 );
     gunNote1.shoot = shoot;
 	
-	// Bass
+	// Second note type
     var gunNote2 = new Gun( this.img, imageNote2 );
     gunNote2.fireLeft = false;
     // The function for determining the shoot pattern
@@ -216,7 +216,7 @@ PlayerEntity.prototype.setUpGuns = function() {
         // Because of the bind at the end, 'this' refers to the owning gun, 
         // not this entity
         var copy = this.image.clone();
-		copy.speedY = -1; 
+		copy.speedY = 0; 
         var offX = 98;
         var offY = 58;
 		
@@ -227,16 +227,47 @@ PlayerEntity.prototype.setUpGuns = function() {
             img: copy,
             move: function( image ) {
                 image.y += image.speedY;
-				image.speedY -= 0.5; 
-				image.graphics.clear().beginFill( "#00ff00" ).drawRect( 0, 0, 4, 10 + (-image.speedY)*3);
-				image.setBounds( 0, 0, 4, 10 + image.speedY*3 );
+				image.speedY -= 0.6; 
             }
         }
     }.bind( gunNote2 );
     gunNote2.shoot = shoot;
 	
+	// Third note type
+    var gunNote3 = new Gun( this.img, imageNote3 );
+    gunNote3.fireLeft = false;
+    // The function for determining the shoot pattern
+    var shoot = function() {
+        // Because of the bind at the end, 'this' refers to the owning gun, 
+        // not this entity
+        var copy = this.image.clone();
+		copy.speedX = -12; 
+		copy.accX = 2.0;
+        var offX = 96;
+        var offY = 58;
+		
+        copy.x = this.ownerImage.x + offX;
+        copy.y = this.ownerImage.y + offY;
+
+        return {
+            img: copy,
+            move: function( image ) {
+                image.y -= 4;
+				image.x += image.speedX; 
+				image.speedX += copy.accX;
+				if (image.speedX > 10) {
+					copy.accX = -2.0;
+				}
+				if (image.speedX < -10) {
+					copy.accX = 2.0;
+				}
+            }
+        }
+    }.bind( gunNote3 );
+    gunNote3.shoot = shoot;
 	
-	this.guns[ SoundHandler.SYNTH3 ] = gunNote1;
+	
+	this.guns[ SoundHandler.SYNTH3 ] = gunNote3;
 	this.guns[ SoundHandler.SYNTH2 ] = gunNote2;
 	this.guns[ SoundHandler.SYNTH1 ] = gunNote1;
 	this.guns[ SoundHandler.SNARE ] = gunSnare;
