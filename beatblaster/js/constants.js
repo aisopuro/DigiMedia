@@ -11,5 +11,6 @@ Constants = {
     TIMELINE_SRC: "./beatblaster/js/timeline.json",
 
     // musicevent.note codes
-    NOTE_BASS: 0
+    NOTE_BASS: 0,
+    NOTE_SNARE: 1
 }

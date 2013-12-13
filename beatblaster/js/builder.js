@@ -30,7 +30,7 @@ Builder.prototype.build = function() {
                 // Blue triangle
                 img.graphics.beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90 );
                 img.setBounds(55, 50, 90, 80);
-                var player = {};
+                var player = new PlayerEntity(this.stage, img, 0, 0);
                 player.img = img;
                 this.stage.addChild( img );
                 player.projectiles = [];
@@ -41,7 +41,7 @@ Builder.prototype.build = function() {
                         y: this.img.y + 10
                     }
                 }.bind(player);
-                var temp = ProjectileBuilder.build(Constants.NOTE_BASS, player.img, this.stage);
+                var temp = ProjectileBuilder.build(SoundHandler.BASS, player.img, this.stage);
                 player.projectiles.push( temp );
 
                 this.entities.player = player;
@@ -50,6 +50,7 @@ Builder.prototype.build = function() {
         }
         else if (item.id === Constants.TIMELINE_ID) {
             // Timeline JSON
+            this.entities.soundHandler = new SoundHandler(this.stage, item.data);
         }
 
     }.bind( this ) );

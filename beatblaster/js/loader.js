@@ -62,7 +62,8 @@ Loader.prototype.loadLibraries = function() {
             "Queue.compressed.js",
             "projectilebuilder.js",
             "entitybuilder.js",
-            "entity.js"
+            "entity.js",
+            "gun.js"
         ],
         true,
         basepath );
