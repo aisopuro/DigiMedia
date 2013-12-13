@@ -13,9 +13,12 @@ EntityBuilder = {
             img.setBounds( 55, 50, 90, 80 );
             entity = new PlayerEntity( specs.stage, img, specs.startX,
                 specs.startY );
-            
+
         } else {
             // build an enemyentity
+            img = createjs.Shape();
+            img.graphicsbeginFill("FF0").drawRectangle(0,0,100,100);
+            img.setBounds(0,0,100,100);
         }
         return entity;
     }

@@ -11,7 +11,7 @@ function GameManager( stage, entities, fps ) {
     this.fps = fps;
     this.mspf = 1000 / fps; // ms per frame
     this.buffer = new Queue(); // soundEvent buffer
-    this.soundHandler = new SoundHandler( this.stage, {} ); // Maybe do this in builder
+    this.soundHandler = this.entities.soundHandler; // Maybe do this in builder
     this.inputVector = {
         up: false,
         left: false,
