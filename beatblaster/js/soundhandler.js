@@ -32,7 +32,7 @@ function SoundHandler( stage, data ) {
     this.musicfile = 0;
     this.ready = false;
     this.timerstart = Date.now();
-    this.timeline = data.timeline;
+    this.timeline = data.timeline.slice(); // makes a new copy
     this.eventStage = stage;
 }
 // Beat type constants
