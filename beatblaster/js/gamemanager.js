@@ -6,7 +6,7 @@ function GameManager( stage, entities, fps ) {
     this.entities = entities;
     console.log( this.entities );
     this.player = this.entities.player;
-    this.dummyEnemy = this.entities.dummyEnemy;
+    this.dummyEnemy; // @TEST
     this.projectiles = [];
     this.projectileIndexes = [];
     this.fps = fps;
@@ -28,10 +28,10 @@ function GameManager( stage, entities, fps ) {
 
     this.testCounter = 0;
     this.setUpListeners();
-	
-	// maybe move this somewhere else
-	this.soundHandler.startMusic();
-	
+
+    // maybe move this somewhere else
+    this.soundHandler.startMusic();
+
 }
 
 GameManager.prototype.setUpListeners = function() {
@@ -39,6 +39,10 @@ GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
     console.log( this.buffer );
+    //@TEST
+    this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
+    console.log( this.dummyEnemy );
+
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
@@ -53,7 +57,7 @@ GameManager.prototype.frameTick = function( event ) {
     } else {
         this.testCounter++;
     }
-	this.soundHandler.tick();
+    this.soundHandler.tick();
     this.movePlayer();
     this.processBuffer();
     this.processEnemies();
@@ -62,7 +66,7 @@ GameManager.prototype.frameTick = function( event ) {
 };
 
 GameManager.prototype.movePlayer = function() {
-    this.player.moveFunction(this.inputVector);
+    this.player.moveFunction( this.inputVector );
 
 }
 
@@ -202,5 +206,9 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 };
 
 GameManager.prototype.processEnemies = function() {
-    this.stage.addChild( this.dummyEnemy.img );
+    this.dummyEnemy.move();
+    if ( this.outOfBounds( this.dummyEnemy.img ) ) {
+        this.stage.removeChild( this.dummyEnemy.img );
+        this.dummyEnemy = EnemyFactory.buildEnemy( EnemyFactory.BASIC_ENEMY, this.stage );
+    }
 };
