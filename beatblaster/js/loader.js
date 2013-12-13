@@ -91,11 +91,6 @@ Loader.prototype.loadAssets = function() {
         id: Constants.IMAGE_ID_PLAYER,
         src: Constants.PATH_TO_PLAYER_IMAGE,
         type: createjs.LoadQueue.IMAGE,
-        // Data needed for processing the image
-        data: {
-            // Data for correct handling of the entity this item represents
-            entityData: {}
-        }
     }, {
         id: Constants.TIMELINE_ID,
         src: Constants.TIMELINE_SRC,
@@ -104,6 +99,22 @@ Loader.prototype.loadAssets = function() {
         id: Constants.BGMUSIC_ID,
         src: Constants.BGMUSIC_SRC,
         type: createjs.LoadQueue.SOUND
+    }, {
+        id: Constants.ENEMY1_ID,
+        src: Constants.ENEMY1_SRC,
+        type: createjs.LoadQueue.IMAGE
+    }, {
+        id: Constants.ENEMY2_ID,
+        src: Constants.ENEMY2_SRC,
+        type: createjs.LoadQueue.IMAGE
+    }, {
+        id: Constants.ENEMY3_ID,
+        src: Constants.ENEMY3_SRC,
+        type: createjs.LoadQueue.IMAGE
+    }, {
+        id: Constants.ENEMY4_ID,
+        src: Constants.ENEMY4_SRC,
+        type: createjs.LoadQueue.IMAGE
     } ] );
 
 };
@@ -111,14 +122,8 @@ Loader.prototype.loadAssets = function() {
 Loader.prototype.assetLoaded = function( event ) {
     console.log( event.item );
     var item = event.item;
-    var data = item.data;
-    if ( data === undefined || data === null ) {
-        data = {
-            type: ""
-        }
-    }
     if ( item.type === createjs.LoadQueue.IMAGE ) {
-        console.log( "Loaded image" );
+		item.data = event.result;
         this.loadedAssets.push( item );
     } else if ( item.type === createjs.LoadQueue.SOUND ) {
         // Loaded sound
