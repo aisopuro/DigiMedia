@@ -11,7 +11,7 @@ function GameManager( stage, entities, fps ) {
     this.fps = fps;
     this.mspf = 1000 / fps; // ms per frame
     this.buffer = new Queue(); // soundEvent buffer
-    this.soundHandler = this.entities.soundHandler; // Maybe do this in builder
+    this.soundHandler = new SoundHandler( this.stage, {} ); // Maybe do this in builder
     this.inputVector = {
         up: false,
         left: false,
@@ -131,7 +131,7 @@ GameManager.prototype.processBuffer = function() {
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
     if ( event.note !== undefined ) {
-        this.spawnProjectile(this.player, event.note);
+        this.spawnProjectile( this.player, event.note );
     }
 };
 
