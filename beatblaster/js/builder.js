@@ -13,7 +13,9 @@ Builder.prototype.build = function() {
     console.log( "Building..." );
     console.log( this.stage );
     console.log( this.assets );
-
+	
+	this.entities.bg = new Background(this.stage, 10, 3);
+	
     // Extract assets from asset list
     jQuery.each( this.assets, function( index, item ) {
         console.log( index );

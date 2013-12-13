@@ -1,8 +1,10 @@
 
 function Background( stage, starcount, layers ) {
-	this.back = new createjs.Shape();
+	var bg = new createjs.Shape();
 	this.bounds = stage.getBounds();
-	this.back.graphics.beginFill("#000").drawRect(0, 0, this.bounds.width, this.bounds.height);
+	bg.graphics.beginFill("#000").drawRect(0, 0, this.bounds.width, this.bounds.height);
+	stage.addChild(bg);
+	this.back = bg;	
 }
 
 Background.prototype.updateStars = function(playerX, playerY){
