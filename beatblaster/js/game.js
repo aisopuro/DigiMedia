@@ -1,11 +1,9 @@
 /* A central initializer and loop for the Beat Blaster game */
 function Game( canvas, id ) {
-    console.log( canvas );
     this.HEIGHT = 600;
     this.WIDTH = 600;
     this.canvas = canvas;
     this.id = id;
-    console.log( this.canvas );
     this.stage;
     this.loader;
     this.builder;
@@ -27,6 +25,7 @@ Game.prototype.loadComplete = function( loadedAssets ) {
     console.log( "Load Complete" );
     console.log( this.canvas[ 0 ] );
     this.stage = new createjs.Stage( this.canvas[ 0 ] );
+    this.stage.setBounds( 0, 0, this.WIDTH, this.HEIGHT );
     console.log( this.stage );
     this.builder = new Builder( this.stage, loadedAssets, this.buildComplete );
 }
@@ -34,7 +33,7 @@ Game.prototype.loadComplete = function( loadedAssets ) {
 Game.prototype.buildComplete = function( stage, entities ) {
     console.log( "Builder done" );
     console.log( stage );
-    this.manager = new GameManager(stage, entities, FPS);
+    this.manager = new GameManager( stage, entities, FPS );
 };
 
 // The initializer function. Expects a canvas element as argument.
