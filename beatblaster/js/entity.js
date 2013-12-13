@@ -47,7 +47,7 @@ function PlayerEntity( stage, image, startX, startY ) {
 		
         this.correctBoundaries();
 		
-		this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 50, 3, 0, -90+(this.speedX) );
+		this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 30, 3, 0, -90+(this.speedX) );
 		
     }
     //Entity.call( this, stage, image, moveFunction, startX, startY );
