@@ -75,17 +75,21 @@ GameManager.prototype.movePlayer = function() {
 }
 
 GameManager.prototype.moveProjectiles = function() {
-    // Loop through every projectile type
-    jQuery.each( this.player.projectiles, function( index, projectileType ) {
-        // Get the movement function for the projectile type
-        var move = projectileType.move;
-        // Loop through every image in the type
-        jQuery.each( projectileType.images, function( index, image ) {
-            if ( image.active ) {
-                move( image );
-            }
-        } );
-    }.bind( this ) );
+    // loop through all projectiles
+	for (var i in this.projectiles) {
+		var el = this.projectiles[i];
+		if (el && el.img) {
+		// first check if needs to be removed
+		if (this.outOfBounds(el.img)) {
+			// remove from stage
+			this.stage.removeChild(el.img);
+			// remove from array
+			this.projectiles.splice(i,1);
+		}
+		// process the rest AFTER or else indexes go wrong
+		el.move(el.img);
+		}
+	}
 };
 
 GameManager.prototype.outOfBounds = function( image ) {
@@ -130,8 +134,10 @@ GameManager.prototype.processBuffer = function() {
 
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-    if ( event.note !== undefined ) {
-        this.spawnProjectile( this.player, event.note );
+	if ( event.note !== undefined ) {
+		var proj = this.player.fireGuns(event.note);
+		this.stage.addChild(proj.img);
+		this.projectiles.push(proj);
     }
 };
 
