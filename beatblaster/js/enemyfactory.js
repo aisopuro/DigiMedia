@@ -4,6 +4,7 @@ EnemyFactory = {
     BASIC_ENEMY: 0,
     buildEnemy: function( enemyType, stage, startOffsetX, startOffsetY ) {
         var enemy = {};
+        enemy.hp = 1;
         if ( enemyType === this.BASIC_ENEMY ) {
             var img = EnemyFactory.bitmaps[Constants.ENEMY1_ID].clone();
             img.setBounds( 0, 0, 60, 60 );
@@ -11,6 +12,7 @@ EnemyFactory = {
                 100 + startOffsetX, -100 + startOffsetY );
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
+            enemy.hp = 2;
             enemy.move = function() {
                 this.img.y += 7;
             }.bind( enemy );
@@ -29,6 +31,11 @@ EnemyFactory = {
             );
             return bool;
         }.bind( enemy );
+        
+        enemy.hitBy(projectile) {
+            this.hp -= projectile.damageValue;
+            return this.hp <= 0;
+        }
 
         return enemy;
 
