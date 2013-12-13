@@ -120,6 +120,7 @@ PlayerEntity.prototype.setUpGuns = function() {
         // Because of the bind at the end, 'this' refers to the owning gun, 
         // not this entity
         var copy = this.image.clone();
+		copy.damageValue = 2;
         var offX = 104;
         var offY = 60;
         if ( this.fireLeft ) {
@@ -146,6 +147,8 @@ PlayerEntity.prototype.setUpGuns = function() {
         // not this entity
         var copy = this.image.clone();
 		var copy2 = this.image.clone();
+		copy.damageValue = 4;
+		copy2.damageValue = 4;
         var offX = 87;
 		var offX2 = 107;
         var offY = 60;
@@ -179,8 +182,10 @@ PlayerEntity.prototype.setUpGuns = function() {
         // not this entity
         var copy = this.image.clone();
 		copy.speedX = -10;
+		copy.damageValue = 3;
 		var copy2 = this.image.clone();
 		copy2.speedX = 10;
+		copy2.damageValue = 3;
         var offX = 90;
 		var offX2 = 110;
         var offY = 60;
@@ -217,6 +222,7 @@ PlayerEntity.prototype.setUpGuns = function() {
         // not this entity
         var copy = this.image.clone();
 		copy.speedY = 0; 
+		copy.damageValue = 8;
         var offX = 98;
         var offY = 58;
 		
@@ -241,6 +247,7 @@ PlayerEntity.prototype.setUpGuns = function() {
         // Because of the bind at the end, 'this' refers to the owning gun, 
         // not this entity
         var copy = this.image.clone();
+		copy.damageValue = 5;
 		copy.speedX = -12; 
 		copy.accX = 2.0;
         var offX = 96;
