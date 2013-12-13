@@ -29,8 +29,8 @@ Builder.prototype.build = function() {
                 console.log( "playerImage:" );
                 var player = EntityBuilder.build( true, {
                     stage: this.stage,
-                    startX: 0,
-                    startY: 0
+                    startX: 200,
+                    startY: 400
                 } );
                 player.projectiles = []; // Patch
 

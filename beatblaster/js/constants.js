@@ -17,8 +17,8 @@ Constants = {
 	BGMUSIC_SRC: "./beatblaster/mp3/tracing.mp3",
 
     // Player icon boundaries
-    PLAYER_BOUND_LEFT: 55,
-    PLAYER_BOUND_UP: 50,
-    PLAYER_BOUND_RIGHT: 90,
-    PLAYER_BOUND_DOWN: 75
+    PLAYER_BOUND_LEFT: 75,
+    PLAYER_BOUND_UP: 75,
+    PLAYER_BOUND_RIGHT: 50,
+    PLAYER_BOUND_DOWN: 40
 }
