@@ -10,7 +10,9 @@ Constants = {
     TIMELINE_ID: "timeline",
     TIMELINE_SRC: "./beatblaster/js/timeline.json",
 
-    // musicevent.note codes
-    NOTE_BASS: 0,
-    NOTE_SNARE: 1
+    // Player icon boundaries
+    PLAYER_BOUND_LEFT: 55,
+    PLAYER_BOUND_UP: 50,
+    PLAYER_BOUND_RIGHT: 90,
+    PLAYER_BOUND_DOWN: 75
 }

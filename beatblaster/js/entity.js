@@ -45,21 +45,22 @@ function PlayerEntity( stage, image, startX, startY ) {
 PlayerEntity.prototype.correctBoundaries = function() {
     var boundaries = this.stage.getBounds();
     var edges = this.img.getTransformedBounds();
+    //var offsets = this.img.getBounds();
     if ( edges.x < boundaries.x ) {
         // Past left edge
-        this.img.x = boundaries.x;
+        this.img.x = boundaries.x - Constants.PLAYER_BOUND_LEFT;
     }
     if ( edges.y < boundaries.y ) {
         // Past upper edge
-        this.img.y = boundaries.y;
+        this.img.y = boundaries.y - Constants.PLAYER_BOUND_UP;
     }
     if ( ( boundaries.x + boundaries.width ) < ( edges.x + edges.width ) ) {
         // Past right edge
-        this.img.x = ( boundaries.x + boundaries.width - edges.width );
+        this.img.x = ( boundaries.x + boundaries.width - edges.width - Constants.PLAYER_BOUND_LEFT);
     }
     if ( ( boundaries.y + boundaries.height ) < ( edges.y + edges.height ) ) {
         // Past right edge
-        this.img.y = ( boundaries.y + boundaries.height - edges.height );
+        this.img.y = ( boundaries.y + boundaries.height - edges.height - Constants.PLAYER_BOUND_UP);
     }
 
 };
