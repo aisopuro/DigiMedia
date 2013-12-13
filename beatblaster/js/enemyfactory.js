@@ -3,6 +3,8 @@ EnemyFactory {
     BASIC_ENEMY: 0,
     buildEnemy: function( enemyType, stage ) {
         var enemy;
+        enemy.stageBounds = stage.getBounds();
+        
         if ( enemyType === BASIC_ENEMY ) {
             var img = new createjs.Shape();
             img.graphics.beginFill( "FF0" ).drawRoundRect( 0, 0, 100, 100, 3 );

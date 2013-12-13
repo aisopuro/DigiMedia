@@ -19,7 +19,6 @@ function GameManager( stage, entities, fps ) {
         down: false,
         right: false
     }
-	this.bg = this.entities.bg;
 
     // Keycodes
     this.UP = 87;
@@ -54,7 +53,6 @@ GameManager.prototype.frameTick = function( event ) {
     this.processBuffer();
     this.processEnemies();
     this.moveProjectiles();
-	this.bg.updateStars(this.player.img.x, this.player.img.y);
     this.stage.update();
 };
 
@@ -80,20 +78,20 @@ GameManager.prototype.movePlayer = function() {
 
 GameManager.prototype.moveProjectiles = function() {
     // loop through all projectiles
-	for (var i in this.projectiles) {
-		var el = this.projectiles[i];
-		if (el && el.img) {
-		// first check if needs to be removed
-		if (this.outOfBounds(el.img)) {
-			// remove from stage
-			this.stage.removeChild(el.img);
-			// remove from array
-			this.projectiles.splice(i,1);
-		}
-		// process the rest AFTER or else indexes go wrong
-		el.move(el.img);
-		}
-	}
+    for ( var i in this.projectiles ) {
+        var projectile = this.projectiles[ i ];
+        if ( projectile && projectile.img ) {
+            // first check if needs to be removed
+            if ( this.outOfBounds( projectile.img ) ) {
+                // remove from stage
+                this.stage.removeChild( projectile.img );
+                // remove from array
+                this.projectiles.splice( i, 1 );
+            }
+            // process the rest AFTER or else indexes go wrong
+            projectile.move( projectile.img );
+        }
+    }
 };
 
 GameManager.prototype.outOfBounds = function( image ) {
@@ -138,10 +136,10 @@ GameManager.prototype.processBuffer = function() {
 
 // function for determining the appropriate action to take on a beat
 GameManager.prototype.beatHandler = function( event ) {
-	if ( event.note !== undefined ) {
-		var proj = this.player.fireGuns(event.note);
-		this.stage.addChild(proj.img);
-		this.projectiles.push(proj);
+    if ( event.note !== undefined ) {
+        var proj = this.player.fireGuns( event.note );
+        this.stage.addChild( proj.img );
+        this.projectiles.push( proj );
     }
 };
 
@@ -214,5 +212,5 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 };
 
 GameManager.prototype.processEnemies = function() {
-    this.stage.addChild(this.dummyEnemy.img);
+    this.stage.addChild( this.dummyEnemy.img );
 };
