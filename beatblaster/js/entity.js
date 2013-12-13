@@ -105,8 +105,8 @@ PlayerEntity.prototype.setUpGuns = function() {
     imageNote1.setBounds( -6, -6, 6, 6 );
 	
 	var imageNote2 = new createjs.Shape();
-    imageNote2.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
-    imageNote2.setBounds( 0, 0, 10, 50 );
+    imageNote2.graphics.beginFill( "#00ff00" ).drawRect( 0, 0, 4, 10);
+    imageNote2.setBounds( 0, 0, 4, 10 );
 	
 	var imageNote3 = new createjs.Shape();
     imageNote3.graphics.beginFill( "#ff0000" ).drawRoundRect( 0, 0, 10, 50, 5 );
@@ -178,7 +178,9 @@ PlayerEntity.prototype.setUpGuns = function() {
         // Because of the bind at the end, 'this' refers to the owning gun, 
         // not this entity
         var copy = this.image.clone();
+		copy.speedX = -10;
 		var copy2 = this.image.clone();
+		copy2.speedX = 10;
         var offX = 89;
 		var offX2 = 109;
         var offY = 60;
@@ -191,21 +193,51 @@ PlayerEntity.prototype.setUpGuns = function() {
         return [{
             img: copy,
             move: function( image ) {
-                image.y -= 10;
-				image.x -= 4;
+                image.y -= 13;
+				image.x += image.speedX;
+				image.speedX += 0.7;
             }
         },{
             img: copy2,
             move: function( image ) {
-                image.y -= 10;
-				image.x += 4;
+                image.y -= 13;
+				image.x += image.speedX;
+				image.speedX -= 0.7;
             }
         }];
     }.bind( gunNote1 );
     gunNote1.shoot = shoot;
 	
+	// Bass
+    var gunNote2 = new Gun( this.img, imageNote2 );
+    gunNote2.fireLeft = false;
+    // The function for determining the shoot pattern
+    var shoot = function() {
+        // Because of the bind at the end, 'this' refers to the owning gun, 
+        // not this entity
+        var copy = this.image.clone();
+		copy.speedY = -1; 
+        var offX = 94;
+        var offY = 60;
+		
+        copy.x = this.ownerImage.x + offX;
+        copy.y = this.ownerImage.y + offY;
+
+        return {
+            img: copy,
+            move: function( image ) {
+                image.y += image.speedY;
+				image.speedY -= 0.5; 
+				image.graphics.clear().beginFill( "#00ff00" ).drawRect( 0, 0, 4, 10 + (-image.speedY)*3);
+				image.setBounds( 0, 0, 4, 10 + image.speedY*3 );
+            }
+        }
+    }.bind( gunNote2 );
+    gunNote2.shoot = shoot;
+	
+	
 	this.guns[ SoundHandler.SYNTH3 ] = gunNote1;
-	this.guns[ SoundHandler.SYNTH2 ] = gunNote1;
+	this.guns[ SoundHandler.SYNTH2 ] = gunNote2;
 	this.guns[ SoundHandler.SYNTH1 ] = gunNote1;
 	this.guns[ SoundHandler.SNARE ] = gunSnare;
     this.guns[ SoundHandler.BASS ] = gunBass;
