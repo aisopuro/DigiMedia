@@ -5,9 +5,8 @@ EnemyFactory = {
     buildEnemy: function( enemyType, stage, startOffsetX, startOffsetY ) {
         var enemy = {};
         if ( enemyType === this.BASIC_ENEMY ) {
-            var img = new createjs.Shape();
-            img.graphics.beginFill( "FF0" ).drawRoundRect( 0, 0, 100, 100, 3 );
-            img.setBounds( 0, 0, 100, 100 );
+            var img = EnemyFactory.bitmaps[Constants.ENEMY1_ID].clone();
+            img.setBounds( 0, 0, 60, 60 );
             enemy = new Entity( stage, img, undefined,
                 100 + startOffsetX, -100 + startOffsetY );
 
