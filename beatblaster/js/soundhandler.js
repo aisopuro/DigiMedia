@@ -19,6 +19,10 @@ SoundHandler.prototype.registerMusic = function( music ) {
 }
 
 SoundHandler.prototype.startMusic = function() {
+	if (!this.ready) {
+		console.log("SoundHandler.startMusic called, but music not registered! (call registerMusic first)");
+		return;
+	}
     this.timerstart = Date.now();
     createjs.Sound.play( this.musicfile );
 }
@@ -32,10 +36,15 @@ SoundHandler.prototype.peek = function() {
 }
 
 SoundHandler.prototype.pop = function() {
-    return this.timeline.shift();
+	if ( this.timeline.length > 0 ) {
+		return this.timeline.shift();
+	} else {
+        return false;
+    }
 }
 
 SoundHandler.prototype.process = function( e ) {
+	if (!this.ready) return;
     if ( e.event == "musicevent" ) {
         var ev = new createjs.Event( "musicevent", true, true );
         ev.note = e.note;
@@ -45,6 +54,7 @@ SoundHandler.prototype.process = function( e ) {
 }
 
 SoundHandler.prototype.tick = function() {
+	if (!this.ready) return;
     var difference = ( Date.now() - this.timerstart ) / 1000;
     var el = this.peek();
     while ( el && el.timestamp < difference ) {
