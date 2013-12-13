@@ -120,7 +120,12 @@ Loader.prototype.assetLoaded = function( event ) {
     } else if ( item.type === createjs.LoadQueue.SOUND ) {
         // Loaded sound
         this.loadedAssets.push( item );
+    } else if ( item.type === createjs.LoadQueue.JSON ) {
+        // Loaded json
+		item.data = event.result;
+        this.loadedAssets.push( item );
     }
+	
 };
 
 Loader.prototype.assetsLoaded = function( event ) {
