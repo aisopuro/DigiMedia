@@ -116,12 +116,18 @@ GameManager.prototype.contains = function( bounds, edges ) {
 };
 
 GameManager.prototype.covers = function( bounds, edges ) {
-    // test if any of the edges are within the bounds given
+    // test for intersection
     return (
+        /*
         ( bounds.left <= edges.left && edges.left <= bounds.right ) ||
         ( bounds.left <= edges.right && edges.right <= bounds.right ) ||
         ( bounds.left <= edges.up && edges.up <= bounds.right ) ||
         ( bounds.left <= edges.down && edges.down <= bounds.right )
+        */
+        (edges.left < bounds.right) &&
+        (edges.right > bounds.left) &&
+        (edges.up < bounds.down) &&
+        (edges.down > bounds.up)
     );
 
 };
