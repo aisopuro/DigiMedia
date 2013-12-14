@@ -62,7 +62,7 @@ SoundHandler.prototype.startMusic = function() {
     this.timerstart = Date.now();
 	createjs.Sound.setVolume(0.3);
     var instance = createjs.Sound.play( this.musicfile );
-	instance.addEventListener("complete", this.startMusic.bind(this));
+	instance.addEventListener("complete", this.completeMusic.bind(this));
 };
 
 SoundHandler.prototype.peek = function() {
