@@ -252,11 +252,11 @@ GameManager.prototype.processEnemies = function() {
             this.removeEntity( this.enemies, enemy, i );
         } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
             // Collision with player
-            console.log("Crash!");
-			this.player.freeze(2500);
-			this.explosion( this.player.img.x+100, this.player.img.y+100 );
-			this.player.img.x = Constants.PLAYER_START_X;
-			this.player.img.y = Constants.PLAYER_START_Y;
+			if (this.player.freeze(2500)) { 
+				this.explosion( this.player.img.x+100, this.player.img.y+100 );
+				this.player.img.x = Constants.PLAYER_START_X;
+				this.player.img.y = Constants.PLAYER_START_Y;
+			}
         }
 
     }

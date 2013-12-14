@@ -93,11 +93,12 @@ PlayerEntity.prototype.correctBoundaries = function() {
 };
 
 PlayerEntity.prototype.freeze = function( milliseconds ) {
-	if (this.frozen) return;
+	if (this.frozen) return false;
 	this.frozen = true;
 	this.stop();
 	this.img.graphics.clear();
 	setTimeout( this.unfreeze.bind(this), milliseconds );
+	return true;
 };
 
 PlayerEntity.prototype.unfreeze = function() {
