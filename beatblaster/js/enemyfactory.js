@@ -1,6 +1,6 @@
 // A class for managing enemy types and spawning EnemyEntities
 EnemyFactory = {
-    MARGIN_MULTIPLIER: 2,
+    MARGIN_MULTIPLIER: 4,
     EASY_ENEMY: 0,
 	BASIC_ENEMY: 1,
 	MEDIUM_ENEMY: 2,
@@ -103,6 +103,9 @@ EnemyFactory = {
 		[{mtype:3,count:3}],
 		[{mtype:3,count:4},{mtype:3,count:4}],
 		[{mtype:3,count:6},{mtype:3,count:6}],
+		[{mtype:0,count:6},{mtype:1,count:6},{mtype:2,count:6},{mtype:3,count:6}],
+		[{mtype:1,count:6},{mtype:2,count:6},{mtype:1,count:6},{mtype:0,count:6}],
+		[{mtype:3,count:4},{mtype:3,count:5},{mtype:3,count:6}]
 	],
     getNextWave: function( stage ) {
 		var stageBounds = stage.getBounds();
