@@ -292,13 +292,13 @@ GameManager.prototype.restartGame = function() {
 	this.player.img.y = Constants.PLAYER_START_Y;
 	this.player.unfreeze();
 	this.score = 0;
-	for ( var i in this.enemies ) {
-		enemy = this.enemies[ i ];
-		this.removeEntity( this.enemies, enemy, i );
+	while ( this.enemies.lenght > 0 ) {
+		enemy = this.enemies[ 0 ];
+		this.removeEntity( this.enemies, enemy, 0 );
 	}
-	for ( var i in this.projectiles ) {
-		proj = this.projectiles[ i ];
-		this.removeEntity( this.projectiles, proj, i );
+	while ( this.projectiles.lenght > 0 ) {
+		proj = this.projectiles[ 0 ];
+		this.removeEntity( this.projectiles, proj, 0 );
 	}
 	this.enemies = [];
 	EnemyFactory.LastSentWave = 0;
