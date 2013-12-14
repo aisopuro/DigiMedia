@@ -243,8 +243,6 @@ GameManager.prototype.setRight = function( isKeyDown ) {
 
 // Function for processing all active enemies on screen
 GameManager.prototype.processEnemies = function() {
-    if ( this.enemies === undefined || this.enemies.length === 0 ) {
-        // There are no more enemies on screen, get the next wave
     if ( this.gameover == false && (this.enemies === undefined || this.enemies.length === 0) ) {
         this.enemies = EnemyFactory.getNextWave( this.stage );
     }
