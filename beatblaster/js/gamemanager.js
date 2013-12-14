@@ -293,10 +293,21 @@ GameManager.prototype.endEventReceiver = function( event ) {
 	this.stage.addChild(this.endScreen);
 	this.gameover = true;
 	this.stage.addEventListener("click",  this.restartGame.bind(this) );
+	EnemyFactory.LastSentWave = 0;
+	this.score = 0;
 };
 
 GameManager.prototype.restartGame = function() {
-	console.log( "Dummy restart" );
+	this.stage.removeAllEventListeners("click");
+	this.player.img.x = Constants.PLAYER_START_X;
+	this.player.img.y = Constants.PLAYER_START_Y;
+	this.player.unfreeze();
+	this.score = 0;
+	for ( var i in this.enemies ) {
+		enemy = this.enemies[ i ];
+		this.removeEntity( this.enemies, enemy, i );
+	}
+	this.enemies = [];
 };
 
 GameManager.prototype.explosion = function( x, y ) {
