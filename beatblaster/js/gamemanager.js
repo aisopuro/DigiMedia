@@ -8,6 +8,11 @@ function GameManager( stage, entities, fps ) {
     this.player = this.entities.player;
     this.score = 0;
     this.scoreBoard = new createjs.Text(this.score, "30px Monospace", "#ffffff");
+	this.endScreen = new createjs.Text("Game Over", "30px Monospace", "#ffffff");
+	this.endScreen.x = this.bounds.width/2;
+	this.endScreen.y = this.bounds.height/2;
+	this.endScreen.textAlign = "center";
+	this.endScreen.textBaseline = "middle";
     this.dummyEnemy; // @TEST
     this.enemies = [];
     this.projectiles = [];
@@ -28,6 +33,8 @@ function GameManager( stage, entities, fps ) {
     this.LEFT = 65;
     this.DOWN = 83;
     this.RIGHT = 68;
+	
+	this.gameover = false;
 
     this.bg = this.entities.bg;
     this.setUpListeners();
@@ -96,9 +103,13 @@ GameManager.prototype.moveProjectiles = function() {
 
 GameManager.prototype.removeEntity = function( array, entity, index ) {
     // remove from stage
-    this.stage.removeChild( entity.img );
+    var wasremoved = this.stage.removeChild( entity.img );
     // remove from array
     array.splice( index, 1 );
+	
+	if (!wasremoved) {
+		console.log("Couldn't remove",entity);
+	}
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
@@ -241,7 +252,7 @@ GameManager.prototype.getNextProjectileImage = function( projectile ) {
 
 GameManager.prototype.processEnemies = function() {
     console.log( this.enemies.length );
-    if ( this.enemies === undefined || this.enemies.length === 0 ) {
+    if ( this.gameover == false && (this.enemies === undefined || this.enemies.length === 0) ) {
         this.enemies = EnemyFactory.getNextWave( this.stage );
     }
     var enemy;
@@ -269,6 +280,9 @@ GameManager.prototype.destroy = function( enemy ) {
 
 GameManager.prototype.endEventReceiver = function( event ) {
     console.log( "It's all over" );
+	this.player.freeze(-1);
+	this.stage.addChild(this.endScreen);
+	this.gameover = true;
 };
 
 GameManager.prototype.explosion = function(x, y) {
