@@ -7,6 +7,7 @@ function GameManager( stage, entities, fps ) {
     console.log( this.entities );
     this.player = this.entities.player;
     this.score = 0;
+    this.scoreBoard = new createjs.Text(this.score, "30px Monospace", "#ffffff");
     this.dummyEnemy; // @TEST
     this.enemies = [];
     this.projectiles = [];
@@ -31,7 +32,7 @@ function GameManager( stage, entities, fps ) {
     this.bg = this.entities.bg;
     this.setUpListeners();
 
-    // maybe move this somewhere else
+    // difinitely move this somewhere else
     this.soundHandler.startMusic();
 
 }
@@ -41,6 +42,8 @@ GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keyup( this.keyUp.bind( this ) );
     console.log( this.player );
     console.log( this.buffer );
+    
+    this.stage.addChild(this.scoreBoard);
 
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     this.stage.addEventListener( "musicend", this.endEventReceiver.bind( this ) );
@@ -55,6 +58,7 @@ GameManager.prototype.frameTick = function( event ) {
     this.processEnemies();
     this.moveProjectiles();
     this.bg.updateStars( this.player.img.x, this.player.img.y );
+    this.scoreBoard.text = this.score;
     this.stage.update();
 };
 
