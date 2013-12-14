@@ -130,6 +130,7 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
     if ( !wasremoved ) {
         console.log( "Couldn't remove", entity );
 		entity.img.visible = false;
+		entity.img.x = -500;
     }
 };
 
