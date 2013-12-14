@@ -87,6 +87,14 @@ PlayerEntity.prototype.correctBoundaries = function() {
 
 };
 
+PlayerEntity.prototype.freeze = function( milliseconds ) {
+
+};
+
+PlayerEntity.prototype.unfreeze = function() {
+
+};
+
 PlayerEntity.prototype.setUpGuns = function() {
     
 	

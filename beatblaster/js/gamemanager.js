@@ -254,6 +254,7 @@ GameManager.prototype.processEnemies = function() {
         } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
             // Collision with player
             console.log("Crash!");
+			this.player.freeze(2500);
         }
 
     }
