@@ -291,6 +291,9 @@ GameManager.prototype.restartGame = function() {
 		this.removeEntity( this.enemies, enemy, i );
 	}
 	this.enemies = [];
+	this.soundhandler.resetData(GameManager.fullTimeline);
+	this.soundHandler.registerMusic(Constants.BGMUSIC_ID);
+	this.soundHandler.startMusic();
 };
 
 GameManager.prototype.explosion = function( x, y ) {

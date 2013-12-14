@@ -49,6 +49,7 @@ Builder.prototype.build = function() {
         } else if ( item.id === Constants.TIMELINE_ID ) {
             // Timeline JSON
             this.entities.soundHandler = new SoundHandler( this.stage, item.data );
+			GameManager.fullTimeline = item.data;
         } else if ( item.id === Constants.BGMUSIC_ID ) {
 			if (this.entities.soundHandler) {
 				this.entities.soundHandler.registerMusic(Constants.BGMUSIC_ID);
