@@ -53,7 +53,7 @@ Builder.prototype.build = function() {
 			if (this.entities.soundHandler) {
 				this.entities.soundHandler.registerMusic(Constants.BGMUSIC_ID);
 			} else {
-				console.log("no sound handler present, bug?");
+				console.log("no sound handler present, bug?"); // Not really, there aren't any guarantees which will emerge from the queue first
 			}
 		}
 

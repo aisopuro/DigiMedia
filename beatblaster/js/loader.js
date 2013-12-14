@@ -60,7 +60,6 @@ Loader.prototype.loadLibraries = function() {
             "constants.js",
             "gamemanager.js",
             "Queue.compressed.js",
-            "projectilebuilder.js",
             "entitybuilder.js",
             "entity.js",
             "gun.js",
