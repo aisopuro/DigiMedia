@@ -38,10 +38,8 @@ Game.prototype.setUpCanvas = function( canvas ) {
 // The function called when Loader is done
 Game.prototype.loadComplete = function( loadedAssets ) {
     console.log( "Load Complete" );
-    console.log( this.canvas[ 0 ] );
     this.stage = new createjs.Stage( this.canvas[ 0 ] );
     this.stage.setBounds( 0, 0, this.WIDTH, this.HEIGHT );
-    console.log( this.stage );
     this.builder = new Builder( this.stage, loadedAssets, this.buildComplete.bind( this ) );
 }
 
@@ -60,7 +58,6 @@ Game.prototype.loadingMode = function( canvas ) {
 // The function called when Builder is done
 Game.prototype.buildComplete = function( stage, entities ) {
     console.log( "Builder done" );
-    console.log( stage );
     this.waitToStart( stage, entities );
 };
 
@@ -103,16 +100,13 @@ Game.prototype.initGame = function( canvas ) {
     if ( !( canvas instanceof jQuery ) ) {
         canvas = jQuery( canvas );
     }
-    console.log( canvas );
     this.setUpCanvas( canvas );
-    console.log( canvas );
 
     this.loadingMode( canvas[ 0 ] );
 
     // Load resources
     var game = this;
     jQuery.getScript( "./beatblaster/js/loader.js", function( data, textStatus, jqxhr ) {
-        console.log( "Loader: " + textStatus );
         if ( jqxhr.status !== 200 ) {
             // Load failed, abort
             console.log( "Couldn't load loader, status: " + textStatus );

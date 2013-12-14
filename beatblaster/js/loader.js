@@ -1,7 +1,6 @@
 // Class for handling file loading. Returns a list of LoadQueue item-objects as 
 // an argument to the specified callback function
 function Loader( callback ) {
-    console.log( "init loader" );
     this.callback = callback;
     this.callbackName = "callbackName";
     this.queue;
@@ -11,7 +10,6 @@ function Loader( callback ) {
     // Load resources
     jQuery.getScript( "./beatblaster/js/preloadjs-0.4.0.min.js",
         function( data, textStatus, jqxhr ) {
-            console.log( "Preloader: " + textStatus );
             if ( jqxhr.status !== 200 ) {
                 // Load failed, abort
                 console.log( "Couldn't load preload, status: " + textStatus );
@@ -29,8 +27,6 @@ Loader.prototype.loadComplete = function() {
 
 Loader.prototype.fileLoaded = function( event ) {
     var item = event.item;
-    console.log( "File loaded:" );
-    console.log( item )
 };
 
 Loader.prototype.loadError = function( event ) {
@@ -119,7 +115,7 @@ Loader.prototype.loadAssets = function() {
 };
 
 Loader.prototype.assetLoaded = function( event ) {
-    console.log( event.item );
+
     var item = event.item;
     if ( item.type === createjs.LoadQueue.IMAGE ) {
 		item.data = event.result;
