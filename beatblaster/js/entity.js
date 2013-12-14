@@ -50,7 +50,9 @@ function PlayerEntity( stage, image, startX, startY ) {
 		
         this.correctBoundaries();
 		
-		this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 30, 3, 0, -90+(this.speedX) );
+		if (!this.frozen) {
+			this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 30, 3, 0, -90+(this.speedX) );
+		}
 		
     }
     //Entity.call( this, stage, image, moveFunction, startX, startY );
@@ -94,6 +96,7 @@ PlayerEntity.prototype.freeze = function( milliseconds ) {
 	if (this.frozen) return;
 	this.frozen = true;
 	this.stop();
+	this.img.graphics.clear();
 	setTimeout( this.unfreeze.bind(this), milliseconds );
 };
 
