@@ -5,6 +5,7 @@ EnemyFactory = {
 	BASIC_ENEMY: 1,
 	MEDIUM_ENEMY: 2,
 	HARD_ENEMY: 3,
+	LastSentWave: 0,
     buildEnemy: function( enemyType, stage, startOffsetX, startOffsetY ) {
         var enemy = {};
         enemy.hp = 1;
@@ -19,7 +20,7 @@ EnemyFactory = {
             enemy.hp = 2;
 			enemy.score = 10;
             enemy.move = function() {
-                this.img.y += 7;
+                this.img.y += 5;
             }.bind( enemy );
         } else if ( enemyType === this.BASIC_ENEMY ) {
             var img = EnemyFactory.bitmaps[Constants.ENEMY2_ID].clone();
@@ -30,9 +31,9 @@ EnemyFactory = {
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.hp = 10;
 			enemy.score = 20;
-			enemy.speedX = -2 + (Math.random()*4);
+			enemy.speedX = -1 + (Math.random()*2);
             enemy.move = function() {
-                this.img.y += 7;
+                this.img.y += 6;
 				this.img.x += this.speedX;
             }.bind( enemy );
         } else if ( enemyType === this.MEDIUM_ENEMY ) {
@@ -45,7 +46,7 @@ EnemyFactory = {
             enemy.hp = 20;
 			enemy.score = 30;
             enemy.move = function() {
-                this.img.y += 7;
+                this.img.y += 5;
             }.bind( enemy );
         } else if ( enemyType === this.HARD_ENEMY ) {
             var img = EnemyFactory.bitmaps[Constants.ENEMY4_ID].clone();
@@ -57,7 +58,7 @@ EnemyFactory = {
             enemy.hp = 40;
 			enemy.score = 40;
             enemy.move = function() {
-                this.img.y += 7;
+                this.img.y += 4;
             }.bind( enemy );
         }
 
@@ -86,11 +87,36 @@ EnemyFactory = {
         return enemy;
 
     },
+	waveData: [
+		[{mtype:0,count:3}],
+		[{mtype:0,count:4}],
+		[{mtype:0,count:5}],
+		[{mtype:0,count:3},{mtype:0,count:3}],
+		[{mtype:0,count:5},{mtype:0,count:5}],
+		[{mtype:1,count:5}],
+		[{mtype:1,count:6}],
+		[{mtype:1,count:5},{mtype:1,count:5}],
+		[{mtype:1,count:5},{mtype:1,count:6}],
+		[{mtype:1,count:5},{mtype:2,count:3}],
+		[{mtype:2,count:4}],
+		[{mtype:2,count:5},{mtype:2,count:5}],
+		[{mtype:3,count:3}],
+		[{mtype:3,count:4},{mtype:3,count:4}],
+		[{mtype:3,count:6},{mtype:3,count:6}],
+	],
     getNextWave: function( stage ) {
+		var stageBounds = stage.getBounds();
         var wave = [];
-        for ( var i = 0; i < 3; i++ ) {
-            wave.push( this.buildEnemy( this.BASIC_ENEMY, stage, 200 * i, -50 * i ) );
+		var toBeSent = this.LastSentWave % this.waveData.length;
+		var data = this.waveData[toBeSent];
+        for ( var i = 0; i < data.length; i++ ) {
+			var monster = data[i];
+			console.log("monster?",monster);
+			for ( var j = 0; j < monster.count; j++ ) {
+				wave.push( this.buildEnemy( monster.mtype, stage, -50+(stageBounds.width/monster.count)*j, -30 - 65*i ) );
+			}
         }
+		EnemyFactory.LastSentWave++;
         return wave;
     }
 }
