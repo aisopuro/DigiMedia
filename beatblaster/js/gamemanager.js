@@ -43,7 +43,7 @@ GameManager.prototype.setUpListeners = function() {
     console.log( this.buffer );
 
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
-    this.stage.addEventListener("musicend", this.endEventReceiver.bind(this));
+    this.stage.addEventListener( "musicend", this.endEventReceiver.bind( this ) );
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
@@ -77,7 +77,7 @@ GameManager.prototype.moveProjectiles = function() {
                 for ( var j in this.enemies ) {
                     var enemy = this.enemies[ j ];
                     var enemyBounds = this.getTranslatedEdges( enemy.img );
-                    if ( this.covers( enemyBounds, projectileBounds ) ) {
+                    if ( this.overlaps( enemyBounds, projectileBounds ) ) {
                         // Projectile is within enemy, hit
                         this.removeEntity( this.projectiles, projectile, i );
                         this.hitEnemy( enemy, projectile );
@@ -98,11 +98,11 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
-    var points = enemy.hitBy(projectile);
-    if (points >= 0) {
+    var points = enemy.hitBy( projectile );
+    if ( points >= 0 ) {
         // Enemy was killed
         this.score += points;
-        this.destroy(enemy);
+        this.destroy( enemy );
     }
 };
 
@@ -122,13 +122,13 @@ GameManager.prototype.contains = function( bounds, edges ) {
     );
 };
 
-GameManager.prototype.covers = function( bounds, edges ) {
+GameManager.prototype.overlaps = function( bounds, edges ) {
     // test for intersection
     return (
-        (edges.left < bounds.right) &&
-        (edges.right > bounds.left) &&
-        (edges.up < bounds.down) &&
-        (edges.down > bounds.up)
+        ( edges.left < bounds.right ) &&
+        ( edges.right > bounds.left ) &&
+        ( edges.up < bounds.down ) &&
+        ( edges.down > bounds.up )
     );
 
 };
@@ -247,15 +247,18 @@ GameManager.prototype.processEnemies = function() {
         enemy.move();
         if ( enemy.outOfBounds() ) {
             this.removeEntity( this.enemies, enemy, i );
+        } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
+            // Collision with player
+            console.log("Crash!");
         }
 
     }
 };
 
-GameManager.prototype.destroy = function(enemy) {
-    this.removeEntity(this.enemies, enemy, this.enemies.indexOf(enemy));
+GameManager.prototype.destroy = function( enemy ) {
+    this.removeEntity( this.enemies, enemy, this.enemies.indexOf( enemy ) );
 };
 
-GameManager.prototype.endEventReceiver = function(event) {
-    console.log("It's all over");
+GameManager.prototype.endEventReceiver = function( event ) {
+    console.log( "It's all over" );
 };
