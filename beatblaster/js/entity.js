@@ -1,5 +1,11 @@
-// A class representing entities in the game
-// moveFunction should never expect anything more than an inputVector as argument
+/* A class representing entities in the game
+moveFunction should never expect anything more than an inputVector as argument
+@stage: the stage the entity is to be drawn on
+@image: the entity's image
+@moveFunction: the function that describes how the entity is to move
+@startX: starting coordinates for the x-axis
+@startY: starting coordinates for the y-axis
+*/
 function Entity( stage, image, moveFunction, startX, startY ) {
     this.img = image;
     this.moveFunction = moveFunction;
@@ -14,10 +20,11 @@ function Entity( stage, image, moveFunction, startX, startY ) {
     this.stage.addChild( this.img );
 }
 
-// PlayerEntity inherits Entity
-//PlayerEntity.prototype = new Entity();
-//PlayerEntity.prototype.constructor = PlayerEntity;
-// Inheritance not working, skip it
+/* A speial entity depicting the player. Includes several additional functions
+over the basic Entity.
+Ideally, this would be an inherited class of Entity, but the inheritance code 
+refused to work, so there is a small amount of unavoidable copy-code.
+*/
 function PlayerEntity( stage, image, startX, startY ) {
     this.img = image;
     this.img.x = startX;
@@ -55,7 +62,6 @@ function PlayerEntity( stage, image, startX, startY ) {
 		}
 		
     }
-    //Entity.call( this, stage, image, moveFunction, startX, startY );
     this.guns = [];
     this.setUpGuns();
 }
