@@ -239,28 +239,10 @@ GameManager.prototype.setRight = function( isKeyDown ) {
     this.inputVector.right = isKeyDown;
 };
 
-GameManager.prototype.drawProjectile = function( entity, projectile ) {
-    // Relate spawn point to owning entity's coordinates
-    var coordinates = entity.getGunLocation();
-
-    // Get next image from the set of projectiles
-    var image = this.getNextProjectileImage( projectile );
-    image.x = coordinates.x;
-    image.y = coordinates.y;
-
-};
-
-GameManager.prototype.getNextProjectileImage = function( projectile ) {
-    if ( projectile.cursor >= projectile.imageCount )
-        projectile.cursor = 0;
-    var image = projectile.images[ projectile.cursor ];
-    projectile.cursor++;
-    image.active = true;
-    return image;
-};
-
+// Function for processing all active enemies on screen
 GameManager.prototype.processEnemies = function() {
-    console.log( this.enemies.length );
+    if ( this.enemies === undefined || this.enemies.length === 0 ) {
+        // There are no more enemies on screen, get the next wave
     if ( this.gameover == false && (this.enemies === undefined || this.enemies.length === 0) ) {
         this.enemies = EnemyFactory.getNextWave( this.stage );
     }
@@ -282,6 +264,7 @@ GameManager.prototype.processEnemies = function() {
     }
 };
 
+// Enemy destroyed on screen
 GameManager.prototype.destroy = function( enemy ) {
     this.explosion( enemy.img.x + 30, enemy.img.y + 55 );
     this.removeEntity( this.enemies, enemy, this.enemies.indexOf( enemy ) );
