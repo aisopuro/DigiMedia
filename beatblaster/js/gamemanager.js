@@ -98,7 +98,7 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
     var points = enemy.hitBy(projectile);
-    if (if points >= 0) {
+    if (points >= 0) {
         // Enemy was killed
         this.score += points;
         this.destroy(enemy);
