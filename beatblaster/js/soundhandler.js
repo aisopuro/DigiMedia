@@ -52,6 +52,8 @@ SoundHandler.prototype.registerMusic = function( music ) {
 SoundHandler.prototype.completeMusic = function( music ) {
     this.complete = true;
 	console.log("Music finished!");
+	var ev = new createjs.Event( "musicend", true, true );
+	this.eventStage.dispatchEvent( ev );
 };
 
 SoundHandler.prototype.startMusic = function() {
