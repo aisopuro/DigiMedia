@@ -31,6 +31,7 @@ Call this every tick (after startMusic has been called) so the events get sent:
 function SoundHandler( stage, data ) {
     this.musicfile = 0;
     this.ready = false;
+	this.complete = false;
     this.timerstart = Date.now();
     this.timeline = data.timeline.slice(); // makes a new copy
     this.eventStage = stage;
@@ -45,6 +46,12 @@ SoundHandler.SYNTH3 = 4;
 SoundHandler.prototype.registerMusic = function( music ) {
     this.musicfile = music;
     this.ready = true;
+	this.complete = false;
+};
+
+SoundHandler.prototype.completeMusic = function( music ) {
+    this.complete = true;
+	console.log("Music finished!");
 };
 
 SoundHandler.prototype.startMusic = function() {
@@ -54,7 +61,8 @@ SoundHandler.prototype.startMusic = function() {
 	}
     this.timerstart = Date.now();
 	createjs.Sound.setVolume(0.3);
-    createjs.Sound.play( this.musicfile );
+    var instance = createjs.Sound.play( this.musicfile );
+	instance.addEventListener("complete", this.startMusic.bind(this));
 };
 
 SoundHandler.prototype.peek = function() {
