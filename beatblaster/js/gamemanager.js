@@ -293,6 +293,8 @@ GameManager.prototype.restartGame = function() {
 	this.soundHandler.resetData(GameManager.fullTimeline);
 	this.soundHandler.registerMusic(Constants.BGMUSIC_ID);
 	this.soundHandler.startMusic();
+	this.gameover = false;
+	this.stage.removeChild(this.endScreen);
 };
 
 
