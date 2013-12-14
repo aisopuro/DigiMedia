@@ -43,6 +43,7 @@ GameManager.prototype.setUpListeners = function() {
     console.log( this.buffer );
 
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
+    this.stage.addEventListener("musicend", this.endEventReceiver.bind(this));
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
@@ -124,12 +125,6 @@ GameManager.prototype.contains = function( bounds, edges ) {
 GameManager.prototype.covers = function( bounds, edges ) {
     // test for intersection
     return (
-        /*
-        ( bounds.left <= edges.left && edges.left <= bounds.right ) ||
-        ( bounds.left <= edges.right && edges.right <= bounds.right ) ||
-        ( bounds.left <= edges.up && edges.up <= bounds.right ) ||
-        ( bounds.left <= edges.down && edges.down <= bounds.right )
-        */
         (edges.left < bounds.right) &&
         (edges.right > bounds.left) &&
         (edges.up < bounds.down) &&
@@ -259,4 +254,8 @@ GameManager.prototype.processEnemies = function() {
 
 GameManager.prototype.destroy = function(enemy) {
     this.removeEntity(this.enemies, enemy, this.enemies.indexOf(enemy));
+};
+
+GameManager.prototype.endEventReceiver = function(event) {
+    console.log("It's all over");
 };
