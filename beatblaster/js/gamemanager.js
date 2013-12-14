@@ -287,6 +287,10 @@ GameManager.prototype.restartGame = function() {
 		enemy = this.enemies[ i ];
 		this.removeEntity( this.enemies, enemy, i );
 	}
+	for ( var i in this.projectiles ) {
+		proj = this.projectiles[ i ];
+		this.removeEntity( this.projectiles, proj, i );
+	}
 	this.enemies = [];
 	EnemyFactory.LastSentWave = 0;
 	this.score = 0;
