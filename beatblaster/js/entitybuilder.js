@@ -1,4 +1,6 @@
-// An object for building entities
+/* A constructor object for building entities.
+@buildPlayer: a boolean indicating what kind of entity to build: true for player
+@specs: an object containing specifications */
 EntityBuilder = {
     build: function( buildPlayer, specs ) {
         var entity;

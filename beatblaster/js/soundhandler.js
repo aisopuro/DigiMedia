@@ -4,26 +4,26 @@ SoundHandler usage:
 
 Constructor:
 
-	var sh = new SoundHandler( stage, data );
-		stage: a target to send the music events for
-		data: an array containing the music events timeline
-	
-	
+    var sh = new SoundHandler( stage, data );
+        stage: a target to send the music events for
+        data: an array containing the music events timeline
+    
+    
 Music registration saves the music id (call this when the music file load event fires):
 
-	sh.registerMusic( music );
-		music: string identifier of the preloaded music file for SoundJS
-	
-	
+    sh.registerMusic( music );
+        music: string identifier of the preloaded music file for SoundJS
+    
+    
 Starts to play the music and resets the timeline counter:
-	
-	sh.startMusic();
-	
+    
+    sh.startMusic();
+    
 
 Call this every tick (after startMusic has been called) so the events get sent:
 
-	sh.tick();
-	
+    sh.tick();
+    
 
 */
 
@@ -31,7 +31,7 @@ Call this every tick (after startMusic has been called) so the events get sent:
 function SoundHandler( stage, data ) {
     this.musicfile = 0;
     this.ready = false;
-	this.complete = false;
+    this.complete = false;
     this.timerstart = Date.now();
     this.timeline = data.timeline.slice(); // makes a new copy
     this.eventStage = stage;
@@ -46,29 +46,29 @@ SoundHandler.SYNTH3 = 4;
 SoundHandler.prototype.registerMusic = function( music ) {
     this.musicfile = music;
     this.ready = true;
-	this.complete = false;
+    this.complete = false;
 };
 
 SoundHandler.prototype.resetData = function( data ) {
-	this.timeline = data.timeline.slice();
-}; 
+    this.timeline = data.timeline.slice();
+};
 
 SoundHandler.prototype.completeMusic = function( music ) {
     this.complete = true;
-	console.log("Music finished!");
-	var ev = new createjs.Event( "musicend", true, true );
-	this.eventStage.dispatchEvent( ev );
+    console.log( "Music finished!" );
+    var ev = new createjs.Event( "musicend", true, true );
+    this.eventStage.dispatchEvent( ev );
 };
 
 SoundHandler.prototype.startMusic = function() {
-	if (!this.ready) {
-		console.log("SoundHandler.startMusic called, but music not registered! (call registerMusic first)");
-		return;
-	}
+    if ( !this.ready ) {
+        console.log( "SoundHandler.startMusic called, but music not registered! (call registerMusic first)" );
+        return;
+    }
     this.timerstart = Date.now();
-	createjs.Sound.setVolume(0.3);
+    createjs.Sound.setVolume( 0.3 );
     var instance = createjs.Sound.play( this.musicfile );
-	instance.addEventListener("complete", this.completeMusic.bind(this));
+    instance.addEventListener( "complete", this.completeMusic.bind( this ) );
 };
 
 SoundHandler.prototype.peek = function() {
@@ -80,15 +80,15 @@ SoundHandler.prototype.peek = function() {
 };
 
 SoundHandler.prototype.pop = function() {
-	if ( this.timeline.length > 0 ) {
-		return this.timeline.shift();
-	} else {
+    if ( this.timeline.length > 0 ) {
+        return this.timeline.shift();
+    } else {
         return false;
     }
 };
 
 SoundHandler.prototype.process = function( e ) {
-	if (!this.ready) return;
+    if ( !this.ready ) return;
     if ( e.event == "musicevent" ) {
         var ev = new createjs.Event( "musicevent", true, true );
         ev.note = e.note;
@@ -98,7 +98,7 @@ SoundHandler.prototype.process = function( e ) {
 };
 
 SoundHandler.prototype.tick = function() {
-	if (!this.ready) return;
+    if ( !this.ready ) return;
     var difference = ( Date.now() - this.timerstart ) / 1000;
     var el = this.peek();
     while ( el && el.timestamp < difference ) {

@@ -4,7 +4,7 @@ function Builder( stage, loadedAssets, completionCallback ) {
     this.assets = loadedAssets;
     this.complete = completionCallback;
     this.entities = {};
-	this.bitmaps = {};
+    this.bitmaps = {};
 
     this.build()
 }
@@ -14,9 +14,9 @@ Builder.prototype.build = function() {
     console.log( "Building..." );
     console.log( this.stage );
     console.log( this.assets );
-	
-	this.entities.bg = new Background(this.stage, 50, 4);
-	
+
+    this.entities.bg = new Background( this.stage, 50, 4 );
+
     // Extract assets from asset list
     jQuery.each( this.assets, function( index, item ) {
         console.log( index );
@@ -36,32 +36,29 @@ Builder.prototype.build = function() {
                 player.projectiles = []; // Patch
 
                 this.entities.player = player;
-            } 
-			if (  item.id === Constants.ENEMY1_ID 
-				||item.id === Constants.ENEMY2_ID 
-				||item.id === Constants.ENEMY3_ID 
-				||item.id === Constants.ENEMY4_ID ) {
-				// do something?
-			}
-			
-			this.bitmaps[item.id] = img;
-			
+            }
+            if ( item.id === Constants.ENEMY1_ID || item.id === Constants.ENEMY2_ID || item.id === Constants.ENEMY3_ID || item.id === Constants.ENEMY4_ID ) {
+                // do something?
+            }
+
+            this.bitmaps[ item.id ] = img;
+
         } else if ( item.id === Constants.TIMELINE_ID ) {
             // Timeline JSON
             this.entities.soundHandler = new SoundHandler( this.stage, item.data );
-			GameManager.fullTimeline = item.data;
+            GameManager.fullTimeline = item.data;
         } else if ( item.id === Constants.BGMUSIC_ID ) {
-			if (this.entities.soundHandler) {
-				this.entities.soundHandler.registerMusic(Constants.BGMUSIC_ID);
-			} else {
-				console.log("no sound handler present, bug?"); // Not really, there aren't any guarantees which will emerge from the queue first
-			}
-		}
+            if ( this.entities.soundHandler ) {
+                this.entities.soundHandler.registerMusic( Constants.BGMUSIC_ID );
+            } else {
+                console.log( "no sound handler present, bug?" ); // Not really, there aren't any guarantees which will emerge from the queue first
+            }
+        }
 
     }.bind( this ) );
-	
-	EnemyFactory.bitmaps = this.bitmaps;
-	
+
+    EnemyFactory.bitmaps = this.bitmaps;
+
     // Building complete, return finished stage to caller
     this.complete( this.stage, this.entities );
 };

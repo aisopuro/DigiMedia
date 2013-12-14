@@ -71,6 +71,7 @@ PlayerEntity.prototype.stop = function() {
 	this.speedY = 0;
 }
 
+// Correct position so entity does not cross stage boundary
 PlayerEntity.prototype.correctBoundaries = function() {
     var boundaries = this.stage.getBounds();
     var edges = this.img.getTransformedBounds();
@@ -113,6 +114,7 @@ PlayerEntity.prototype.unfreeze = function() {
 	this.frozen = false;
 };
 
+// Set up the object that will handle spawning and orinting projectiles
 PlayerEntity.prototype.setUpGuns = function() {
     
 	

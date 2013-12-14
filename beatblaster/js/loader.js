@@ -1,5 +1,10 @@
-// Class for handling file loading. Returns a list of LoadQueue item-objects as 
-// an argument to the specified callback function
+/*Class for handling file loading. Returns a list of LoadQueue item-objects as 
+an argument to the specified callback function
+Loader's main duties are to ensure that all assets that cannot be preloaded 
+by the createjs classes that use them are preloaded here. The most important
+function is the loading of the necessary libraries.
+@callback: the function to call once loading is complete
+*/
 function Loader( callback ) {
     console.log( "init loader" );
     this.callback = callback;
@@ -27,12 +32,6 @@ Loader.prototype.loadComplete = function() {
     this.callback( this.loadedAssets );
 };
 
-Loader.prototype.fileLoaded = function( event ) {
-    var item = event.item;
-    console.log( "File loaded:" );
-    console.log( item )
-};
-
 Loader.prototype.loadError = function( event ) {
     console.log( "Load error: " );
     console.log( event );
@@ -43,7 +42,6 @@ Loader.prototype.loadLibraries = function() {
     this.queue = new createjs.LoadQueue( this.useXHR );
 
     // Add event listeners
-    this.queue.addEventListener( "fileload", this.fileLoaded.bind( this ) );
     this.queue.addEventListener( "error", this.loadError.bind( this ) );
     this.queue.addEventListener( "complete",
         this.librariesLoaded.bind( this ) );
@@ -63,7 +61,7 @@ Loader.prototype.loadLibraries = function() {
             "entitybuilder.js",
             "entity.js",
             "gun.js",
-			"background.js",
+            "background.js",
             "enemyfactory.js"
         ],
         true,
@@ -72,20 +70,20 @@ Loader.prototype.loadLibraries = function() {
 };
 
 Loader.prototype.librariesLoaded = function( event ) {
-    console.log( "Finished loading libs, load the rest" );
     this.loadAssets();
 };
 
+// The function that handles asset loading.
 Loader.prototype.loadAssets = function() {
     this.queue.removeAllEventListeners();
 
     this.queue.addEventListener( "fileload", this.assetLoaded.bind( this ) );
     this.queue.addEventListener( "error", this.loadError.bind( this ) );
     this.queue.addEventListener( "complete", this.assetsLoaded.bind( this ) );
-	
-	createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.FlashPlugin]);
-	this.queue.installPlugin(createjs.Sound);
-	
+
+    createjs.Sound.registerPlugins( [ createjs.WebAudioPlugin, createjs.FlashPlugin ] );
+    this.queue.installPlugin( createjs.Sound );
+
     this.queue.loadManifest( [ {
         id: Constants.IMAGE_ID_PLAYER,
         src: Constants.PATH_TO_PLAYER_IMAGE,
@@ -122,18 +120,18 @@ Loader.prototype.assetLoaded = function( event ) {
     console.log( event.item );
     var item = event.item;
     if ( item.type === createjs.LoadQueue.IMAGE ) {
-		item.data = event.result;
+        item.data = event.result;
         this.loadedAssets.push( item );
     } else if ( item.type === createjs.LoadQueue.SOUND ) {
         // Loaded sound
-		item.data = event.result;
+        item.data = event.result;
         this.loadedAssets.push( item );
     } else if ( item.type === createjs.LoadQueue.JSON ) {
         // Loaded json
-		item.data = event.result;
+        item.data = event.result;
         this.loadedAssets.push( item );
     }
-	
+
 };
 
 Loader.prototype.assetsLoaded = function( event ) {
