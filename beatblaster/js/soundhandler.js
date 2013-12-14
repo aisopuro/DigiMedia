@@ -49,6 +49,10 @@ SoundHandler.prototype.registerMusic = function( music ) {
 	this.complete = false;
 };
 
+SoundHandler.prototype.resetData = function( data ) {
+	this.timeline = data.timeline.slice();
+}; 
+
 SoundHandler.prototype.completeMusic = function( music ) {
     this.complete = true;
 	console.log("Music finished!");
