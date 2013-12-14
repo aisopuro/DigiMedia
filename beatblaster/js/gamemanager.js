@@ -1,27 +1,38 @@
-// A class for managing the basic gameplay loop
+/* 
+A class for managing the basic gameplay loop
+The GameManager class is responsible for overall control of the game canvas.
+It handles hit-and collision detection between entities and projectiles. It 
+also keeps the player's score and is responsible for managing th musicevents 
+at the heart of the game.
+@stage: the createjs.Stage instance to be managed
+@entities: an object containing the precosntructed entities to be used by 
+the class
+@fps: the framerate at which the game should run
+*/
 function GameManager( stage, entities, fps ) {
-    console.log( "manager" );
     this.stage = stage;
-    this.bounds = this.stage.getBounds();
+    this.bounds = this.stage.getBounds(); // The bounds of the stage
     this.entities = entities;
-    console.log( this.entities );
-    this.player = this.entities.player;
+    this.player = this.entities.player; // The player entity
     this.score = 0;
-    this.scoreBoard = new createjs.Text(this.score, "30px Monospace", "#ffffff");
+	
+    this.scoreBoard = new createjs.Text( 
+        this.score, 
+        "30px Monospace", 
+        "#ffffff" );
 	this.endScreen = new createjs.Text("Game Over", "30px Monospace", "#ffffff");
 	this.endScreen.x = this.bounds.width/2;
 	this.endScreen.y = this.bounds.height/2;
 	this.endScreen.textAlign = "center";
 	this.endScreen.textBaseline = "middle";
-    this.dummyEnemy; // @TEST
-    this.enemies = [];
-    this.projectiles = [];
-    this.projectileIndexes = [];
+	
+    this.enemies = []; // The list of active enemy entities
+    this.projectiles = []; // The list of active projectiles
+	
     this.fps = fps;
-    this.mspf = 1000 / fps; // ms per frame
-    this.buffer = new Queue(); // soundEvent buffer
-    this.soundHandler = this.entities.soundHandler; // Maybe do this in builder
-    this.inputVector = {
+    this.buffer = new Queue(); // musicevent buffer
+    this.soundHandler = this.entities.soundHandler;
+    this.inputVector = { // The structure that houses user input information
         up: false,
         left: false,
         down: false,
@@ -36,7 +47,9 @@ function GameManager( stage, entities, fps ) {
 	
 	this.gameover = false;
 
-    this.bg = this.entities.bg;
+    this.bg = this.entities.bg; // Background
+
+    this.stage.addChild( this.scoreBoard );
     this.setUpListeners();
 
     // difinitely move this somewhere else
@@ -44,20 +57,19 @@ function GameManager( stage, entities, fps ) {
 
 }
 
+// Set up necessary event listeners
 GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keydown( this.keyDown.bind( this ) );
     jQuery( document ).keyup( this.keyUp.bind( this ) );
-    console.log( this.player );
-    console.log( this.buffer );
     
-    this.stage.addChild(this.scoreBoard);
-
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     this.stage.addEventListener( "musicend", this.endEventReceiver.bind( this ) );
+    
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
 
+// The central tick handler. Basically called every frame refresh
 GameManager.prototype.frameTick = function( event ) {
     this.soundHandler.tick();
     this.movePlayer();
@@ -74,12 +86,13 @@ GameManager.prototype.movePlayer = function() {
 
 }
 
+// Move all active projectiles
 GameManager.prototype.moveProjectiles = function() {
     // loop through all projectiles
     for ( var i in this.projectiles ) {
         var projectile = this.projectiles[ i ];
         if ( projectile && projectile.img ) {
-            // first check if needs to be removed
+            // first check if projectile needs to be removed
             if ( this.outOfBounds( projectile.img ) ) {
                 this.removeEntity( this.projectiles, projectile, i );
             } else {
@@ -121,14 +134,14 @@ GameManager.prototype.hitEnemy = function( enemy, projectile ) {
     }
 };
 
-GameManager.prototype.outOfBounds = function( image ) {
     // Calculate whether given bounds are inside canvas
+GameManager.prototype.outOfBounds = function( image ) {
     var edges = this.getTranslatedEdges( image );
     return !this.contains( this.stage.getBounds(), edges );
 };
 
-GameManager.prototype.contains = function( bounds, edges ) {
     // Tests if the given edges are completely contained by the bounds
+GameManager.prototype.contains = function( bounds, edges ) {
     return (
         bounds.x <= edges.left &&
         bounds.y <= edges.up &&
@@ -137,8 +150,8 @@ GameManager.prototype.contains = function( bounds, edges ) {
     );
 };
 
+// Function for testing rectangle overlap
 GameManager.prototype.overlaps = function( bounds, edges ) {
-    // test for intersection
     return (
         ( edges.left < bounds.right ) &&
         ( edges.right > bounds.left ) &&
@@ -148,7 +161,8 @@ GameManager.prototype.overlaps = function( bounds, edges ) {
 
 };
 
-// Get an object containing the edge-coordinates of an image on the stage
+// Get an object containing the edge-coordinates of an image in relation to 
+// the stage's coordinate system
 GameManager.prototype.getTranslatedEdges = function( image ) {
     var dim = image.getTransformedBounds();
     return {
@@ -159,6 +173,7 @@ GameManager.prototype.getTranslatedEdges = function( image ) {
     }
 };
 
+// The central function for processing a set amount of the event buffer
 GameManager.prototype.processBuffer = function() {
     // Ensure that we don't process events that might arrive during processing
     var limit = this.buffer.getLength();
@@ -183,6 +198,8 @@ GameManager.prototype.beatHandler = function( event ) {
     }
 };
 
+// Handler function for musicevents. It stores events in a buffer for later 
+// processing
 GameManager.prototype.musicEventReceiver = function( event ) {
     this.buffer.enqueue( event );
 };
@@ -220,14 +237,6 @@ GameManager.prototype.setDown = function( isKeyDown ) {
 
 GameManager.prototype.setRight = function( isKeyDown ) {
     this.inputVector.right = isKeyDown;
-};
-
-GameManager.prototype.spawnProjectile = function( entity, beatType ) {
-    jQuery.each( entity.projectiles, function( index, projectile ) {
-        if ( projectile.beatType === beatType ) {
-            this.drawProjectile( entity, projectile );
-        }
-    }.bind( this ) );
 };
 
 GameManager.prototype.drawProjectile = function( entity, projectile ) {
@@ -274,7 +283,7 @@ GameManager.prototype.processEnemies = function() {
 };
 
 GameManager.prototype.destroy = function( enemy ) {
-	this.explosion( enemy.img.x+30, enemy.img.y+55 );
+    this.explosion( enemy.img.x + 30, enemy.img.y + 55 );
     this.removeEntity( this.enemies, enemy, this.enemies.indexOf( enemy ) );
 };
 
@@ -285,19 +294,19 @@ GameManager.prototype.endEventReceiver = function( event ) {
 	this.gameover = true;
 };
 
-GameManager.prototype.explosion = function(x, y) {
-	var circle = new createjs.Shape();
-	circle.x = x;
-	circle.y = y;
-	circle.graphics.beginStroke("#fd0").drawCircle(0,0,4);
-	circle.stage = this.stage;
-	circle.size = 12;
-	this.stage.addChild(circle);
-	circle.addEventListener("tick", function(e){
-		this.size += 4;
-		this.graphics.clear().beginFill("#fd0").drawCircle(0,0,this.size);
-		if (this.size > 40) {
-			this.stage.removeChild(this);
-		}
-	}.bind(circle) );
+GameManager.prototype.explosion = function( x, y ) {
+    var circle = new createjs.Shape();
+    circle.x = x;
+    circle.y = y;
+    circle.graphics.beginStroke( "#fd0" ).drawCircle( 0, 0, 4 );
+    circle.stage = this.stage;
+    circle.size = 12;
+    this.stage.addChild( circle );
+    circle.addEventListener( "tick", function( e ) {
+        this.size += 4;
+        this.graphics.clear().beginFill( "#fd0" ).drawCircle( 0, 0, this.size );
+        if ( this.size > 40 ) {
+            this.stage.removeChild( this );
+        }
+    }.bind( circle ) );
 }
