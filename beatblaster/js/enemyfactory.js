@@ -114,7 +114,6 @@ EnemyFactory = {
 		var data = this.waveData[toBeSent];
         for ( var i = 0; i < data.length; i++ ) {
 			var monster = data[i];
-			console.log("monster?",monster);
 			for ( var j = 0; j < monster.count; j++ ) {
 				wave.push( this.buildEnemy( monster.mtype, stage, -50+(stageBounds.width/monster.count)*j, -30 - 65*i ) );
 			}
