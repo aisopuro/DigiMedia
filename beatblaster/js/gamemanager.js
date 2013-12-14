@@ -260,9 +260,27 @@ GameManager.prototype.processEnemies = function() {
 };
 
 GameManager.prototype.destroy = function( enemy ) {
+	this.explosion( enemy.img.x+30, enemy.img.y+55 );
     this.removeEntity( this.enemies, enemy, this.enemies.indexOf( enemy ) );
 };
 
 GameManager.prototype.endEventReceiver = function( event ) {
     console.log( "It's all over" );
 };
+
+GameManager.prototype.explosion = function(x, y) {
+	var circle = new createjs.Shape();
+	circle.x = x;
+	circle.y = y;
+	circle.graphics.beginStroke("#fd0").drawCircle(0,0,4);
+	circle.stage = this.stage;
+	circle.size = 12;
+	this.stage.addChild(circle);
+	circle.addEventListener("tick", function(e){
+		this.size += 4;
+		this.graphics.clear().beginFill("#fd0").drawCircle(0,0,this.size);
+		if (this.size > 40) {
+			this.stage.removeChild(this);
+		}
+	}.bind(circle) );
+}
