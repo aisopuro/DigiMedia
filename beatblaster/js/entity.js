@@ -26,6 +26,7 @@ function PlayerEntity( stage, image, startX, startY ) {
     this.stage.addChild( this.img );
 	this.speedX = 0;
 	this.speedY = 0;
+	this.frozen = false;
     this.moveFunction = function( inputVector ) {
         var oldX = this.img.x;
         var oldY = this.img.y;
@@ -33,14 +34,16 @@ function PlayerEntity( stage, image, startX, startY ) {
 		this.speedX *= Constants.PLAYER_FRICTION;
 		this.speedY *= Constants.PLAYER_FRICTION;
 		
-        if ( inputVector.up )
-            this.speedY -= Constants.PLAYER_ACCELERATION;
-        if ( inputVector.left )
-            this.speedX -= Constants.PLAYER_ACCELERATION;
-        if ( inputVector.down )
-            this.speedY += Constants.PLAYER_ACCELERATION;
-        if ( inputVector.right )
-			this.speedX += Constants.PLAYER_ACCELERATION;
+		if (!this.frozen) {
+			if ( inputVector.up )
+				this.speedY -= Constants.PLAYER_ACCELERATION;
+			if ( inputVector.left )
+				this.speedX -= Constants.PLAYER_ACCELERATION;
+			if ( inputVector.down )
+				this.speedY += Constants.PLAYER_ACCELERATION;
+			if ( inputVector.right )
+				this.speedX += Constants.PLAYER_ACCELERATION;
+		}
 		
         this.img.x += this.speedX;
 		this.img.y += this.speedY;   
@@ -88,11 +91,14 @@ PlayerEntity.prototype.correctBoundaries = function() {
 };
 
 PlayerEntity.prototype.freeze = function( milliseconds ) {
-
+	if (this.frozen) return;
+	this.frozen = true;
+	this.stop();
+	setTimeout( this.unfreeze.bind(this), milliseconds );
 };
 
 PlayerEntity.prototype.unfreeze = function() {
-
+	this.frozen = false;
 };
 
 PlayerEntity.prototype.setUpGuns = function() {
