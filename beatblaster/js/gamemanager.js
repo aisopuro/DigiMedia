@@ -1,3 +1,4 @@
+
 /* 
 A class for managing the basic gameplay loop
 The GameManager class is responsible for overall control of the game canvas.
@@ -9,6 +10,7 @@ at the heart of the game.
 the class
 @fps: the framerate at which the game should run
 */
+
 function GameManager( stage, entities, fps ) {
     this.stage = stage;
     this.bounds = this.stage.getBounds(); // The bounds of the stage
