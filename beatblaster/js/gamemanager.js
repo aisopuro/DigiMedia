@@ -26,6 +26,12 @@ function GameManager( stage, entities, fps ) {
     this.endScreen.y = this.bounds.height / 2;
     this.endScreen.textAlign = "center";
     this.endScreen.textBaseline = "middle";
+	
+	this.endScreen2 = new createjs.Text( "Click to restart", "18px Monospace", "#ffffff" );
+    this.endScreen2.x = this.bounds.width / 2;
+    this.endScreen2.y = this.bounds.height / 2 + 30;
+    this.endScreen2.textAlign = "center";
+    this.endScreen2.textBaseline = "middle";
 
     this.enemies = []; // The list of active enemy entities
     this.projectiles = []; // The list of active projectiles
@@ -123,6 +129,7 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
 
     if ( !wasremoved ) {
         console.log( "Couldn't remove", entity );
+		this.stage.removeChild( entity.img );
     }
 };
 
@@ -273,6 +280,7 @@ GameManager.prototype.endEventReceiver = function( event ) {
     console.log( "It's all over" );
 	this.player.freeze(-1);
 	this.stage.addChild(this.endScreen);
+	this.stage.addChild(this.endScreen2);
 	this.gameover = true;
 	this.stage.addEventListener("click",  this.restartGame.bind(this) );
 };
@@ -299,6 +307,7 @@ GameManager.prototype.restartGame = function() {
 	this.soundHandler.startMusic();
 	this.gameover = false;
 	this.stage.removeChild(this.endScreen);
+	this.stage.removeChild(this.endScreen2);
 };
 
 
