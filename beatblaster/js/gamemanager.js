@@ -275,8 +275,6 @@ GameManager.prototype.endEventReceiver = function( event ) {
 	this.stage.addChild(this.endScreen);
 	this.gameover = true;
 	this.stage.addEventListener("click",  this.restartGame.bind(this) );
-	EnemyFactory.LastSentWave = 0;
-	this.score = 0;
 };
 
 GameManager.prototype.restartGame = function() {
@@ -290,6 +288,8 @@ GameManager.prototype.restartGame = function() {
 		this.removeEntity( this.enemies, enemy, i );
 	}
 	this.enemies = [];
+	EnemyFactory.LastSentWave = 0;
+	this.score = 0;
 	this.soundHandler.resetData(GameManager.fullTimeline);
 	this.soundHandler.registerMusic(Constants.BGMUSIC_ID);
 	this.soundHandler.startMusic();
