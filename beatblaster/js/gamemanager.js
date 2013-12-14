@@ -292,11 +292,11 @@ GameManager.prototype.restartGame = function() {
 	this.player.img.y = Constants.PLAYER_START_Y;
 	this.player.unfreeze();
 	this.score = 0;
-	while ( this.enemies.lenght > 0 ) {
+	while ( this.enemies.length > 0 ) {
 		enemy = this.enemies[ 0 ];
 		this.removeEntity( this.enemies, enemy, 0 );
 	}
-	while ( this.projectiles.lenght > 0 ) {
+	while ( this.projectiles.length > 0 ) {
 		proj = this.projectiles[ 0 ];
 		this.removeEntity( this.projectiles, proj, 0 );
 	}
