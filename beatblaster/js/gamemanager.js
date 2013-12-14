@@ -9,6 +9,7 @@ at the heart of the game.
 the class
 @fps: the framerate at which the game should run
 */
+
 function GameManager( stage, entities, fps ) {
     this.stage = stage;
     this.bounds = this.stage.getBounds(); // The bounds of the stage
@@ -245,52 +246,81 @@ GameManager.prototype.processEnemies = function() {
         // There are no more enemies on screen, get the next wave
         if ( this.gameover == false && ( this.enemies === undefined || this.enemies.length === 0 ) ) {
             this.enemies = EnemyFactory.getNextWave( this.stage );
-        }
-        var enemy;
-        for ( var i in this.enemies ) {
-            enemy = this.enemies[ i ];
-            enemy.move();
-            if ( enemy.outOfBounds() ) {
-                this.removeEntity( this.enemies, enemy, i );
-            } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
-                // Collision with player
-                if ( this.player.freeze( 2500 ) ) {
-                    this.explosion( this.player.img.x + 100, this.player.img.y + 100 );
-                    this.player.img.x = Constants.PLAYER_START_X;
-                    this.player.img.y = Constants.PLAYER_START_Y;
+            var enemy;
+            for ( var i in this.enemies ) {
+                enemy = this.enemies[ i ];
+                enemy.move();
+                if ( enemy.outOfBounds() ) {
+                    this.removeEntity( this.enemies, enemy, i );
+                } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
+                    // Collision with player
+                    if ( this.player.freeze( 2500 ) ) {
+                        this.explosion( this.player.img.x + 100, this.player.img.y + 100 );
+                        this.player.img.x = Constants.PLAYER_START_X;
+                        this.player.img.y = Constants.PLAYER_START_Y;
+                    }
+                }
+                var enemy;
+                for ( var i in this.enemies ) {
+                    enemy = this.enemies[ i ];
+                    enemy.move();
+                    if ( enemy.outOfBounds() ) {
+                        this.removeEntity( this.enemies, enemy, i );
+                    } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
+                        // Collision with player
+                        if ( this.player.freeze( 2500 ) ) {
+                            this.explosion( this.player.img.x + 100, this.player.img.y + 100 );
+                            this.player.img.x = Constants.PLAYER_START_X;
+                            this.player.img.y = Constants.PLAYER_START_Y;
+                        }
+                    }
+
                 }
             }
+        };
 
-        }
-    }
-};
+        // Enemy destroyed on screen
+        GameManager.prototype.destroy = function( enemy ) {
+            this.explosion( enemy.img.x + 30, enemy.img.y + 55 );
+            this.removeEntity( this.enemies, enemy, this.enemies.indexOf( enemy ) );
+        };
 
-// Enemy destroyed on screen
-GameManager.prototype.destroy = function( enemy ) {
-    this.explosion( enemy.img.x + 30, enemy.img.y + 55 );
-    this.removeEntity( this.enemies, enemy, this.enemies.indexOf( enemy ) );
-};
+        GameManager.prototype.endEventReceiver = function( event ) {
+            console.log( "It's all over" );
+            this.player.freeze( -1 );
+            this.stage.addChild( this.endScreen );
+            this.gameover = true;
+            this.stage.addEventListener( "click", this.restartGame.bind( this ) );
+            EnemyFactory.LastSentWave = 0;
+            this.score = 0;
+        };
 
-GameManager.prototype.endEventReceiver = function( event ) {
-    console.log( "It's all over" );
-    this.player.freeze( -1 );
-    this.stage.addChild( this.endScreen );
-    this.gameover = true;
-};
+        GameManager.prototype.restartGame = function() {
+            this.stage.removeAllEventListeners( "click" );
+            this.player.img.x = Constants.PLAYER_START_X;
+            this.player.img.y = Constants.PLAYER_START_Y;
+            this.player.unfreeze();
+            this.score = 0;
+            for ( var i in this.enemies ) {
+                enemy = this.enemies[ i ];
+                this.removeEntity( this.enemies, enemy, i );
+            }
+            this.enemies = [];
+        };
 
-GameManager.prototype.explosion = function( x, y ) {
-    var circle = new createjs.Shape();
-    circle.x = x;
-    circle.y = y;
-    circle.graphics.beginStroke( "#fd0" ).drawCircle( 0, 0, 4 );
-    circle.stage = this.stage;
-    circle.size = 12;
-    this.stage.addChild( circle );
-    circle.addEventListener( "tick", function( e ) {
-        this.size += 4;
-        this.graphics.clear().beginFill( "#fd0" ).drawCircle( 0, 0, this.size );
-        if ( this.size > 40 ) {
-            this.stage.removeChild( this );
-        }
-    }.bind( circle ) );
-};
+        GameManager.prototype.explosion = function( x, y ) {
+            var circle = new createjs.Shape();
+            circle.x = x;
+            circle.y = y;
+            circle.graphics.beginStroke( "#fd0" ).drawCircle( 0, 0, 4 );
+            circle.stage = this.stage;
+            circle.size = 12;
+            this.stage.addChild( circle );
+            circle.addEventListener( "tick", function( e ) {
+                this.size += 4;
+                this.graphics.clear().beginFill( "#fd0" ).drawCircle( 0, 0, this.size );
+                if ( this.size > 40 ) {
+                    this.stage.removeChild( this );
+                }
+            }.bind( circle ) );
+        };
