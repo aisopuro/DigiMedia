@@ -1,4 +1,3 @@
-
 /* 
 A class for managing the basic gameplay loop
 The GameManager class is responsible for overall control of the game canvas.
@@ -17,20 +16,20 @@ function GameManager( stage, entities, fps ) {
     this.entities = entities;
     this.player = this.entities.player; // The player entity
     this.score = 0;
-	
-    this.scoreBoard = new createjs.Text( 
-        this.score, 
-        "30px Monospace", 
+
+    this.scoreBoard = new createjs.Text(
+        this.score,
+        "30px Monospace",
         "#ffffff" );
-	this.endScreen = new createjs.Text("Game Over", "30px Monospace", "#ffffff");
-	this.endScreen.x = this.bounds.width/2;
-	this.endScreen.y = this.bounds.height/2;
-	this.endScreen.textAlign = "center";
-	this.endScreen.textBaseline = "middle";
-	
+    this.endScreen = new createjs.Text( "Game Over", "30px Monospace", "#ffffff" );
+    this.endScreen.x = this.bounds.width / 2;
+    this.endScreen.y = this.bounds.height / 2;
+    this.endScreen.textAlign = "center";
+    this.endScreen.textBaseline = "middle";
+
     this.enemies = []; // The list of active enemy entities
     this.projectiles = []; // The list of active projectiles
-	
+
     this.fps = fps;
     this.buffer = new Queue(); // musicevent buffer
     this.soundHandler = this.entities.soundHandler;
@@ -46,8 +45,8 @@ function GameManager( stage, entities, fps ) {
     this.LEFT = 65;
     this.DOWN = 83;
     this.RIGHT = 68;
-	
-	this.gameover = false;
+
+    this.gameover = false;
 
     this.bg = this.entities.bg; // Background
 
@@ -63,10 +62,10 @@ function GameManager( stage, entities, fps ) {
 GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keydown( this.keyDown.bind( this ) );
     jQuery( document ).keyup( this.keyUp.bind( this ) );
-    
+
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     this.stage.addEventListener( "musicend", this.endEventReceiver.bind( this ) );
-    
+
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
@@ -121,10 +120,10 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
     var wasremoved = this.stage.removeChild( entity.img );
     // remove from array
     array.splice( index, 1 );
-	
-	if (!wasremoved) {
-		console.log("Couldn't remove",entity);
-	}
+
+    if ( !wasremoved ) {
+        console.log( "Couldn't remove", entity );
+    }
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
@@ -136,13 +135,13 @@ GameManager.prototype.hitEnemy = function( enemy, projectile ) {
     }
 };
 
-    // Calculate whether given bounds are inside canvas
+// Calculate whether given bounds are inside canvas
 GameManager.prototype.outOfBounds = function( image ) {
     var edges = this.getTranslatedEdges( image );
     return !this.contains( this.stage.getBounds(), edges );
 };
 
-    // Tests if the given edges are completely contained by the bounds
+// Tests if the given edges are completely contained by the bounds
 GameManager.prototype.contains = function( bounds, edges ) {
     return (
         bounds.x <= edges.left &&
@@ -296,19 +295,20 @@ GameManager.prototype.restartGame = function() {
 	this.soundHandler.startMusic();
 };
 
+
 GameManager.prototype.explosion = function( x, y ) {
-    var circle = new createjs.Shape();
-    circle.x = x;
-    circle.y = y;
-    circle.graphics.beginStroke( "#fd0" ).drawCircle( 0, 0, 4 );
-    circle.stage = this.stage;
-    circle.size = 12;
-    this.stage.addChild( circle );
-    circle.addEventListener( "tick", function( e ) {
-        this.size += 4;
-        this.graphics.clear().beginFill( "#fd0" ).drawCircle( 0, 0, this.size );
-        if ( this.size > 40 ) {
-            this.stage.removeChild( this );
-        }
-    }.bind( circle ) );
-}
+	var circle = new createjs.Shape();
+	circle.x = x;
+	circle.y = y;
+	circle.graphics.beginStroke( "#fd0" ).drawCircle( 0, 0, 4 );
+	circle.stage = this.stage;
+	circle.size = 12;
+	this.stage.addChild( circle );
+	circle.addEventListener( "tick", function( e ) {
+		this.size += 4;
+		this.graphics.clear().beginFill( "#fd0" ).drawCircle( 0, 0, this.size );
+		if ( this.size > 40 ) {
+			this.stage.removeChild( this );
+		}
+	}.bind( circle ) );
+};
