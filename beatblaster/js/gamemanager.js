@@ -292,6 +292,11 @@ GameManager.prototype.endEventReceiver = function( event ) {
 	this.player.freeze(-1);
 	this.stage.addChild(this.endScreen);
 	this.gameover = true;
+	this.stage.addEventListener("click",  this.restartGame.bind(this) );
+};
+
+GameManager.prototype.restartGame = function() {
+	console.log( "Dummy restart" );
 };
 
 GameManager.prototype.explosion = function( x, y ) {
