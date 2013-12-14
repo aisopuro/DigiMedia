@@ -49,7 +49,7 @@ Game.prototype.loadingMode = function( canvas ) {
     c2.fillStyle = "rgb(80,80,80)";
     c2.fillRect( 0, 0, this.WIDTH, this.HEIGHT );
     c2.fillStyle = "rgb(0, 0, 0)";
-    c2.font = "24px Helvetica";
+    c2.font = "30px Monospace";
     c2.textAlign = "center";
     c2.textBaseline = "middle";
     c2.fillText( "Loading...", this.WIDTH / 2, this.HEIGHT / 2 );
@@ -73,7 +73,7 @@ Game.prototype.tickWait = function() {
             this.stars[ i ].y -= this.HEIGHT;
         }
     }
-    c2.font = "24px Helvetica";
+    c2.font = "24px Monospace";
     c2.textAlign = "center";
     c2.textBaseline = "middle";
     c2.fillText( "Click anywhere to start.", this.WIDTH / 2, this.HEIGHT / 2 - 20 );
