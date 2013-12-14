@@ -17,6 +17,7 @@ EnemyFactory = {
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.hp = 2;
+			enemy.score = 10;
             enemy.move = function() {
                 this.img.y += 7;
             }.bind( enemy );
@@ -28,8 +29,11 @@ EnemyFactory = {
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.hp = 10;
+			enemy.score = 20;
+			enemy.speedX = -2 + (Math.random()*4);
             enemy.move = function() {
                 this.img.y += 7;
+				this.img.x += this.speedX;
             }.bind( enemy );
         } else if ( enemyType === this.MEDIUM_ENEMY ) {
             var img = EnemyFactory.bitmaps[Constants.ENEMY3_ID].clone();
@@ -39,6 +43,7 @@ EnemyFactory = {
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.hp = 20;
+			enemy.score = 30;
             enemy.move = function() {
                 this.img.y += 7;
             }.bind( enemy );
@@ -50,6 +55,7 @@ EnemyFactory = {
 
             enemy.margin = this.MARGIN_MULTIPLIER * 100;
             enemy.hp = 40;
+			enemy.score = 40;
             enemy.move = function() {
                 this.img.y += 7;
             }.bind( enemy );
