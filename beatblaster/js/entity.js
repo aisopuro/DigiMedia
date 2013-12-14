@@ -97,7 +97,9 @@ PlayerEntity.prototype.freeze = function( milliseconds ) {
 	this.frozen = true;
 	this.stop();
 	this.img.graphics.clear();
-	setTimeout( this.unfreeze.bind(this), milliseconds );
+	if (milliseconds > 0) {
+		setTimeout( this.unfreeze.bind(this), milliseconds );
+	}
 	return true;
 };
 
