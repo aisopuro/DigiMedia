@@ -6,7 +6,6 @@ function is the loading of the necessary libraries.
 @callback: the function to call once loading is complete
 */
 function Loader( callback ) {
-    console.log( "init loader" );
     this.callback = callback;
     this.callbackName = "callbackName";
     this.queue;
@@ -16,7 +15,6 @@ function Loader( callback ) {
     // Load resources
     jQuery.getScript( "./beatblaster/js/preloadjs-0.4.0.min.js",
         function( data, textStatus, jqxhr ) {
-            console.log( "Preloader: " + textStatus );
             if ( jqxhr.status !== 200 ) {
                 // Load failed, abort
                 console.log( "Couldn't load preload, status: " + textStatus );
@@ -117,7 +115,7 @@ Loader.prototype.loadAssets = function() {
 };
 
 Loader.prototype.assetLoaded = function( event ) {
-    console.log( event.item );
+
     var item = event.item;
     if ( item.type === createjs.LoadQueue.IMAGE ) {
         item.data = event.result;

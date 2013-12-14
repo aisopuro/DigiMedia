@@ -11,23 +11,18 @@ function Builder( stage, loadedAssets, completionCallback ) {
 
 // main build function for putting everything together
 Builder.prototype.build = function() {
-    console.log( "Building..." );
-    console.log( this.stage );
-    console.log( this.assets );
 
     this.entities.bg = new Background( this.stage, 50, 4 );
-
     // Extract assets from asset list
     jQuery.each( this.assets, function( index, item ) {
-        console.log( index );
-        console.log( item );
+
         var data = item.data;
 
         if ( item.type === createjs.LoadQueue.IMAGE ) {
             var img = new createjs.Bitmap( item.src );
 
             if ( item.id === Constants.IMAGE_ID_PLAYER ) {
-                console.log( "playerImage:" );
+
                 var player = EntityBuilder.build( true, {
                     stage: this.stage,
                     startX: Constants.PLAYER_START_X,
