@@ -15,20 +15,20 @@ function GameManager( stage, entities, fps ) {
     this.entities = entities;
     this.player = this.entities.player; // The player entity
     this.score = 0;
-	
-    this.scoreBoard = new createjs.Text( 
-        this.score, 
-        "30px Monospace", 
+
+    this.scoreBoard = new createjs.Text(
+        this.score,
+        "30px Monospace",
         "#ffffff" );
-	this.endScreen = new createjs.Text("Game Over", "30px Monospace", "#ffffff");
-	this.endScreen.x = this.bounds.width/2;
-	this.endScreen.y = this.bounds.height/2;
-	this.endScreen.textAlign = "center";
-	this.endScreen.textBaseline = "middle";
-	
+    this.endScreen = new createjs.Text( "Game Over", "30px Monospace", "#ffffff" );
+    this.endScreen.x = this.bounds.width / 2;
+    this.endScreen.y = this.bounds.height / 2;
+    this.endScreen.textAlign = "center";
+    this.endScreen.textBaseline = "middle";
+
     this.enemies = []; // The list of active enemy entities
     this.projectiles = []; // The list of active projectiles
-	
+
     this.fps = fps;
     this.buffer = new Queue(); // musicevent buffer
     this.soundHandler = this.entities.soundHandler;
@@ -44,8 +44,8 @@ function GameManager( stage, entities, fps ) {
     this.LEFT = 65;
     this.DOWN = 83;
     this.RIGHT = 68;
-	
-	this.gameover = false;
+
+    this.gameover = false;
 
     this.bg = this.entities.bg; // Background
 
@@ -61,10 +61,10 @@ function GameManager( stage, entities, fps ) {
 GameManager.prototype.setUpListeners = function() {
     jQuery( document ).keydown( this.keyDown.bind( this ) );
     jQuery( document ).keyup( this.keyUp.bind( this ) );
-    
+
     this.stage.addEventListener( "musicevent", this.musicEventReceiver.bind( this ) );
     this.stage.addEventListener( "musicend", this.endEventReceiver.bind( this ) );
-    
+
     createjs.Ticker.setFPS( this.fps );
     createjs.Ticker.addEventListener( "tick", this.frameTick.bind( this ) );
 };
@@ -119,10 +119,10 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
     var wasremoved = this.stage.removeChild( entity.img );
     // remove from array
     array.splice( index, 1 );
-	
-	if (!wasremoved) {
-		console.log("Couldn't remove",entity);
-	}
+
+    if ( !wasremoved ) {
+        console.log( "Couldn't remove", entity );
+    }
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
@@ -134,13 +134,13 @@ GameManager.prototype.hitEnemy = function( enemy, projectile ) {
     }
 };
 
-    // Calculate whether given bounds are inside canvas
+// Calculate whether given bounds are inside canvas
 GameManager.prototype.outOfBounds = function( image ) {
     var edges = this.getTranslatedEdges( image );
     return !this.contains( this.stage.getBounds(), edges );
 };
 
-    // Tests if the given edges are completely contained by the bounds
+// Tests if the given edges are completely contained by the bounds
 GameManager.prototype.contains = function( bounds, edges ) {
     return (
         bounds.x <= edges.left &&
@@ -243,24 +243,25 @@ GameManager.prototype.setRight = function( isKeyDown ) {
 GameManager.prototype.processEnemies = function() {
     if ( this.enemies === undefined || this.enemies.length === 0 ) {
         // There are no more enemies on screen, get the next wave
-    if ( this.gameover == false && (this.enemies === undefined || this.enemies.length === 0) ) {
-        this.enemies = EnemyFactory.getNextWave( this.stage );
-    }
-    var enemy;
-    for ( var i in this.enemies ) {
-        enemy = this.enemies[ i ];
-        enemy.move();
-        if ( enemy.outOfBounds() ) {
-            this.removeEntity( this.enemies, enemy, i );
-        } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
-            // Collision with player
-			if (this.player.freeze(2500)) { 
-				this.explosion( this.player.img.x+100, this.player.img.y+100 );
-				this.player.img.x = Constants.PLAYER_START_X;
-				this.player.img.y = Constants.PLAYER_START_Y;
-			}
+        if ( this.gameover == false && ( this.enemies === undefined || this.enemies.length === 0 ) ) {
+            this.enemies = EnemyFactory.getNextWave( this.stage );
         }
+        var enemy;
+        for ( var i in this.enemies ) {
+            enemy = this.enemies[ i ];
+            enemy.move();
+            if ( enemy.outOfBounds() ) {
+                this.removeEntity( this.enemies, enemy, i );
+            } else if ( this.overlaps( this.getTranslatedEdges( this.player.img ), this.getTranslatedEdges( enemy.img ) ) ) {
+                // Collision with player
+                if ( this.player.freeze( 2500 ) ) {
+                    this.explosion( this.player.img.x + 100, this.player.img.y + 100 );
+                    this.player.img.x = Constants.PLAYER_START_X;
+                    this.player.img.y = Constants.PLAYER_START_Y;
+                }
+            }
 
+        }
     }
 };
 
@@ -272,9 +273,9 @@ GameManager.prototype.destroy = function( enemy ) {
 
 GameManager.prototype.endEventReceiver = function( event ) {
     console.log( "It's all over" );
-	this.player.freeze(-1);
-	this.stage.addChild(this.endScreen);
-	this.gameover = true;
+    this.player.freeze( -1 );
+    this.stage.addChild( this.endScreen );
+    this.gameover = true;
 };
 
 GameManager.prototype.explosion = function( x, y ) {
@@ -292,4 +293,4 @@ GameManager.prototype.explosion = function( x, y ) {
             this.stage.removeChild( this );
         }
     }.bind( circle ) );
-}
+};
