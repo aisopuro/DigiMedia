@@ -6,6 +6,7 @@ function GameManager( stage, entities, fps ) {
     this.entities = entities;
     console.log( this.entities );
     this.player = this.entities.player;
+    this.score = 0;
     this.dummyEnemy; // @TEST
     this.enemies = [];
     this.projectiles = [];
@@ -96,8 +97,10 @@ GameManager.prototype.removeEntity = function( array, entity, index ) {
 };
 
 GameManager.prototype.hitEnemy = function( enemy, projectile ) {
-    if (enemy.hitBy(projectile)) {
+    var points = enemy.hitBy(projectile);
+    if (if points >= 0) {
         // Enemy was killed
+        this.score += points;
         this.destroy(enemy);
     }
 };

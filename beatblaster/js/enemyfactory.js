@@ -8,6 +8,7 @@ EnemyFactory = {
     buildEnemy: function( enemyType, stage, startOffsetX, startOffsetY ) {
         var enemy = {};
         enemy.hp = 1;
+        enemy.score = 0;
         if ( enemyType === this.EASY_ENEMY ) {
             var img = EnemyFactory.bitmaps[Constants.ENEMY1_ID].clone();
             img.setBounds( 0, 0, 60, 60 );
@@ -70,7 +71,10 @@ EnemyFactory = {
 
         enemy.hitBy = function( projectile ) {
             this.hp -= projectile.img.damageValue;
-            return this.hp <= 0;
+            var result = -1;
+            if (this.hp <= 0)
+                result = this.score;
+            return result;
         }
 
         return enemy;
