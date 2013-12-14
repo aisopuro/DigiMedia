@@ -26,6 +26,7 @@ function PlayerEntity( stage, image, startX, startY ) {
     this.stage.addChild( this.img );
 	this.speedX = 0;
 	this.speedY = 0;
+	this.frozen = false;
     this.moveFunction = function( inputVector ) {
         var oldX = this.img.x;
         var oldY = this.img.y;
@@ -33,21 +34,25 @@ function PlayerEntity( stage, image, startX, startY ) {
 		this.speedX *= Constants.PLAYER_FRICTION;
 		this.speedY *= Constants.PLAYER_FRICTION;
 		
-        if ( inputVector.up )
-            this.speedY -= Constants.PLAYER_ACCELERATION;
-        if ( inputVector.left )
-            this.speedX -= Constants.PLAYER_ACCELERATION;
-        if ( inputVector.down )
-            this.speedY += Constants.PLAYER_ACCELERATION;
-        if ( inputVector.right )
-			this.speedX += Constants.PLAYER_ACCELERATION;
+		if (!this.frozen) {
+			if ( inputVector.up )
+				this.speedY -= Constants.PLAYER_ACCELERATION;
+			if ( inputVector.left )
+				this.speedX -= Constants.PLAYER_ACCELERATION;
+			if ( inputVector.down )
+				this.speedY += Constants.PLAYER_ACCELERATION;
+			if ( inputVector.right )
+				this.speedX += Constants.PLAYER_ACCELERATION;
+		}
 		
         this.img.x += this.speedX;
 		this.img.y += this.speedY;   
 		
         this.correctBoundaries();
 		
-		this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 30, 3, 0, -90+(this.speedX) );
+		if (!this.frozen) {
+			this.img.graphics.clear().beginFill( "00F" ).drawPolyStar( 100, 100, 30, 3, 0, -90+(this.speedX) );
+		}
 		
     }
     //Entity.call( this, stage, image, moveFunction, startX, startY );
@@ -85,6 +90,19 @@ PlayerEntity.prototype.correctBoundaries = function() {
 		this.stop();
     }
 
+};
+
+PlayerEntity.prototype.freeze = function( milliseconds ) {
+	if (this.frozen) return false;
+	this.frozen = true;
+	this.stop();
+	this.img.graphics.clear();
+	setTimeout( this.unfreeze.bind(this), milliseconds );
+	return true;
+};
+
+PlayerEntity.prototype.unfreeze = function() {
+	this.frozen = false;
 };
 
 PlayerEntity.prototype.setUpGuns = function() {
